@@ -1,14 +1,3 @@
-"""Command-line runner.
-
-Examples
---------
-python main.py --mode all
-python main.py --mode decoder
-python main.py --mode pso --iterations 120 --swarm 30
-python main.py --mode report
-python main.py --mode tests
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -257,7 +246,6 @@ def main(argv: list[str] | None = None) -> int:
     if args.mode == "report":
         return run_report(data, args)
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())
