@@ -1,0 +1,263 @@
+"""Command-line runner.
+
+Examples
+--------
+python main.py --mode all
+python main.py --mode decoder
+python main.py --mode pso --iterations 120 --swarm 30
+python main.py --mode report
+python main.py --mode tests
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+import unittest
+from pathlib import Path
+
+import numpy as np
+
+from src.data_loader import ProblemData, load_problem
+from src.decoder import DecoderConfig, check_solution, decode_tour
+from src.pso import MemeticPSO, PSOConfig, nearest_neighbor_tour
+from src.report import generate_report, load_payload
+
+
+def _permutation_ok(customers: list[int], n: int) -> bool:
+    return len(customers) == n and sorted(customers) == list(range(1, n + 1))
+
+
+def print_solution_summary(data: ProblemData, sol) -> None:
+    print(
+        f"  true EUR cost : {sol.true_cost_eur:10.2f}\n"
+        f"  penalty       : {sol.penalty:10.2f}\n"
+        f"  feasible      : {sol.feasible}\n"
+        f"  trips         : {sol.n_trips}\n"
+        f"  distance      : {sol.total_distance_km:10.1f} km\n"
+        f"  working time  : {sol.total_time_min / 60:10.2f} h\n"
+        f"  overtime      : {sol.shift_over_min / 60:10.2f} h\n"
+        f"  day OT cost   : {sol.day_overtime_cost:10.2f} EUR\n"
+        f"  load          : {sol.total_weight_kg:10.1f} kg / "
+        f"{sol.total_volume_m3:8.2f} m3\n"
+        f"  method        : {sol.method}"
+    )
+    for k, v in enumerate(data.vehicles):
+        trips = [t for t in sol.trips if t.vehicle_index == k]
+        if not trips:
+            continue
+        base = sum(t.metrics.base_cost_eur for t in trips)
+        ot = sol.vehicle_overtime_cost[k]
+        print(
+            f"    vehicle {v.vehicle_id} ({v.type_id:8s}): "
+            f"{len(trips):2d} trips, "
+            f"{sol.vehicle_total_min[k] / 60:6.2f} h, "
+            f"OT {sol.vehicle_overtime_min[k] / 60:5.2f} h, "
+            f"EUR {base + ot:8.2f}"
+        )
+
+
+def run_decoder_checks(data: ProblemData) -> None:
+    print("=" * 78)
+    print("1) First 20 customers -- decoder sanity check")
+    print("=" * 78)
+    tour20 = list(range(1, 21))
+    cfg20 = DecoderConfig(enforce_min_customers=True, use_greedy_baseline=False)
+    sol20 = decode_tour(data, tour20, cfg20)
+    seen20 = [c for t in sol20.trips for c in t.customers]
+    print(f"  every customer exactly once: {_permutation_ok(seen20, 20)}")
+    print(f"  trips: {sol20.n_trips}")
+    for t in sol20.trips:
+        print(
+            f"    vehicle {t.vehicle_id}: {len(t.customers):2d} customers, "
+            f"{t.time_min:7.2f} min, EUR {t.cost_eur:8.2f}, "
+            f"{t.metrics.weight_kg:7.1f} kg, {t.metrics.volume_m3:6.3f} m3, "
+            f"capacity_ok={t.metrics.capacity_ok}, "
+            f"min_ok={t.metrics.min_customers_ok}"
+        )
+    print(f"  all trips 10-50 customers: {all(10 <= len(t.customers) <= 50 for t in sol20.trips)}")
+    print(f"  all capacity checks pass : {all(t.metrics.capacity_ok for t in sol20.trips)}")
+    print(f"  solution penalty         : {sol20.penalty:.2f}")
+    print()
+
+    print("=" * 78)
+    print("2) Full 250 customers -- coverage, limits, and timing")
+    print("=" * 78)
+    tour = nearest_neighbor_tour(data)
+    cfg = DecoderConfig()
+    sol = decode_tour(data, tour, cfg)
+    errors = check_solution(data, sol)
+    print(f"  every customer exactly once: {_permutation_ok([c for t in sol.trips for c in t.customers], data.n_customers)}")
+    print(f"  no trip over 50 customers  : {all(len(t.customers) <= 50 for t in sol.trips)}")
+    print(f"  all capacity checks pass   : {all(t.metrics.capacity_ok for t in sol.trips)}")
+    print(f"  checker errors             : {errors if errors else 'none'}")
+    print_solution_summary(data, sol)
+
+    times = []
+    for _ in range(20):
+        t0 = time.perf_counter()
+        decode_tour(data, tour, cfg)
+        times.append(time.perf_counter() - t0)
+    print(
+        f"  decoder time (20 runs)     : "
+        f"mean {np.mean(times) * 1000:.1f} ms, "
+        f"median {np.median(times) * 1000:.1f} ms, "
+        f"min {np.min(times) * 1000:.1f} ms, "
+        f"max {np.max(times) * 1000:.1f} ms"
+    )
+    print()
+
+
+def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
+    print("=" * 78)
+    print("3) Split-based memetic random-key PSO")
+    print("=" * 78)
+    cfg = PSOConfig(
+        swarm_size=args.swarm,
+        iterations=args.iterations,
+        seed=args.seed,
+        local_search_interval=args.ls_interval,
+        local_search_budget=args.ls_budget,
+        final_local_search_budget=args.final_ls_budget,
+        max_seconds=args.time_limit,
+        verbose=True,
+        log_interval=max(1, args.log_interval),
+        decoder=DecoderConfig(),
+    )
+    result = MemeticPSO(data, cfg).run()
+
+    print()
+    print(f"PSO finished in {result.runtime_sec:.1f} s, {result.evaluations} decoder calls")
+    if result.seed_solution is not None:
+        print(
+            f"Deterministic feasible seed: EUR {result.seed_solution.true_cost_eur:.2f}, "
+            f"penalty {result.seed_solution.penalty:.1f}"
+        )
+    if result.best_feasible_solution is not None:
+        print("\nBest FEASIBLE solution (benchmark number):")
+        print_solution_summary(data, result.best_feasible_solution)
+    else:
+        print("\nNo feasible solution found (penalty > 0 for all candidates).")
+
+    print("\nBest overall (may include penalty):")
+    print_solution_summary(data, result.best_solution)
+
+    out_dir = Path(args.output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    chosen = (
+        result.best_feasible_solution
+        if result.best_feasible_solution is not None
+        else result.best_solution
+    )
+    check_errors = check_solution(data, chosen)
+    print(
+        "\nFinal check_solution: "
+        + ("no errors" if not check_errors else "; ".join(check_errors))
+    )
+    payload = {
+        "dataset": str(args.dataset),
+        "config": {
+            "swarm_size": cfg.swarm_size,
+            "iterations": cfg.iterations,
+            "seed": cfg.seed,
+            "local_search_interval": cfg.local_search_interval,
+            "local_search_budget": cfg.local_search_budget,
+            "final_local_search_budget": cfg.final_local_search_budget,
+        },
+        "runtime_sec": result.runtime_sec,
+        "evaluations": result.evaluations,
+        "best_feasible_cost": result.best_feasible_score
+        if result.best_feasible_solution is not None
+        else None,
+        "check_errors": check_errors,
+        "best_solution": chosen.as_dict(),
+        "history": result.history,
+    }
+    path = out_dir / "best_solution.json"
+    with path.open("w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
+    print(f"\nSaved {path}")
+
+    report_dir = Path(args.report_dir) if args.report_dir else out_dir / "report"
+    report_path = generate_report(data, payload, report_dir)
+    print(f"Saved report {report_path}")
+
+
+def run_report(data: ProblemData, args: argparse.Namespace) -> int:
+    input_path = (
+        Path(args.input)
+        if args.input
+        else Path(args.output_dir) / "best_solution.json"
+    )
+    if not input_path.exists():
+        print(
+            f"Input not found: {input_path}. "
+            "Run 'python main.py --mode pso' first."
+        )
+        return 1
+    payload = load_payload(input_path)
+    report_dir = (
+        Path(args.report_dir)
+        if args.report_dir
+        else input_path.parent / "report"
+    )
+    report_path = generate_report(data, payload, report_dir)
+    print(f"Saved report {report_path}")
+    return 0
+
+
+def run_tests() -> int:
+    suite = unittest.TestLoader().discover("tests")
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    return 0 if result.wasSuccessful() else 1
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--mode",
+        choices=["all", "decoder", "pso", "report", "tests"],
+        default="all",
+    )
+    parser.add_argument("--dataset", default="dataset")
+    parser.add_argument("--output-dir", default="output")
+    parser.add_argument(
+        "--input",
+        default=None,
+        help="Solution JSON for --mode report (default: <output-dir>/best_solution.json)",
+    )
+    parser.add_argument(
+        "--report-dir",
+        default=None,
+        help="Report directory (default: <output-dir>/report or <input>/report)",
+    )
+    parser.add_argument("--swarm", type=int, default=30)
+    parser.add_argument("--iterations", type=int, default=120)
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--ls-interval", type=int, default=5)
+    parser.add_argument("--ls-budget", type=int, default=40)
+    parser.add_argument("--final-ls-budget", type=int, default=120)
+    parser.add_argument("--time-limit", type=float, default=0.0)
+    parser.add_argument("--log-interval", type=int, default=10)
+    args = parser.parse_args(argv)
+
+    if args.mode == "tests":
+        return run_tests()
+
+    data = load_problem(args.dataset)
+    print(f"Loaded: {data.summary()}")
+    print()
+
+    if args.mode in ("decoder", "all"):
+        run_decoder_checks(data)
+    if args.mode in ("pso", "all"):
+        run_pso(data, args)
+    if args.mode == "report":
+        return run_report(data, args)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

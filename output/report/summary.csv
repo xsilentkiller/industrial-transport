@@ -1,0 +1,22 @@
+﻿section,key,value
+Solution,True cost,"1,177.30 EUR"
+Solution,Penalty,0.00 EUR
+Solution,Objective,"1,177.30 EUR"
+Solution,Feasible,yes
+Solution,Trips,15
+Solution,Distance,762.1 km
+Solution,Working time,57.92 h
+Solution,Overtime,18.05 h
+Solution,Vehicle-day overtime cost,231.43 EUR
+Solution,Total weight,"5,265.2 kg"
+Solution,Total volume,123.98 m3
+Solution,Method,trip-2opt
+Search,Runtime,128.3 s
+Search,Decoder evaluations,"4,708"
+Search,Best feasible cost,"1,177.30 EUR"
+Search,Final check_solution,no errors
+Config,Swarm size,30
+Config,Iterations,120
+Config,Seed,42
+Config,Local search,"every 5 iterations, budget 40"
+Config,Final local search budget,120
