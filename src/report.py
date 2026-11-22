@@ -197,6 +197,35 @@ def _vehicle_records(
     return records
 
 
+def _day_window_rows(payload: dict, solution: dict) -> list[tuple[str, str, str]]:
+    rows: list[tuple[str, str, str]] = []
+    window = payload.get("day_window") or {}
+    if window.get("hard_day_end"):
+        rows.append((
+            "Daily window",
+            "Rule",
+            f"start {window.get('day_start')}, overtime 2x after 8 h, last delivery by "
+            f"{window.get('last_delivery_by')}, back by {window.get('hard_day_end')}",
+        ))
+    if solution.get("longest_day_min") is not None:
+        rows.append(("Daily window", "Longest vehicle-day",
+                     f"{_num(solution.get('longest_day_min')) / 60:,.2f} h"))
+    ots = payload.get("overtime_summary") or {}
+    if ots:
+        rows.append(("Daily window", "Unavoidable overtime",
+                     f"{_num(ots.get('unavoidable_overtime_h')):,.2f} h"))
+        rows.append(("Daily window", "Avoidable overtime",
+                     f"{_num(ots.get('avoidable_overtime_h')):,.2f} h"))
+    for row in payload.get("day_schedule") or []:
+        if row.get("finish"):
+            rows.append((
+                "Daily window",
+                f"Vehicle {row['vehicle_id']}",
+                f"{row['start']}-{row['finish']}, last delivery {row['last_delivery']}",
+            ))
+    return rows
+
+
 def _summary_rows(payload: dict, solution: dict) -> list[tuple[str, str, str]]:
     config = payload.get("config", {})
     check_errors = payload.get("check_errors") or []
@@ -218,6 +247,7 @@ def _summary_rows(payload: dict, solution: dict) -> list[tuple[str, str, str]]:
         ("Solution", "Total weight", f"{_num(solution.get('total_weight_kg')):,.1f} kg"),
         ("Solution", "Total volume", f"{_num(solution.get('total_volume_m3')):,.2f} m3"),
         ("Solution", "Method", str(solution.get("method", ""))),
+        *_day_window_rows(payload, solution),
         ("Search", "Runtime", f"{_num(payload.get('runtime_sec')):,.1f} s"),
         ("Search", "Decoder evaluations", f"{int(_num(payload.get('evaluations'))):,}"),
         (
@@ -376,9 +406,14 @@ def _plot_convergence(
 
 
 def _plot_vehicle_timeline(data: ProblemData, solution: dict, path: Path) -> None:
+    """Gantt chart of each vehicle-day on the wall clock (08:00 start)."""
+    p = data.params
+    t0 = p.minutes_after_start("00:00")  # negative: minutes from midnight
+    start_h = -t0 / 60.0                 # day start as a clock hour (8.0)
     fig, ax = plt.subplots(figsize=(13, 5.0))
-    max_end = 8.5
+    max_end = start_h + 8.5
     trips = solution.get("trips", [])
+    last_delivery = solution.get("vehicle_last_delivery_min") or []
 
     for k, vehicle in enumerate(data.vehicles):
         color = VEHICLE_COLORS[k % len(VEHICLE_COLORS)]
@@ -387,7 +422,7 @@ def _plot_vehicle_timeline(data: ProblemData, solution: dict, path: Path) -> Non
             for index, trip in enumerate(trips, 1)
             if int(trip["vehicle_index"]) == k
         ]
-        start = 0.0
+        start = start_h
         for j, (trip_index, trip) in enumerate(vehicle_trips):
             duration = _num(trip.get("time_min")) / 60.0
             ax.barh(
@@ -412,27 +447,58 @@ def _plot_vehicle_timeline(data: ProblemData, solution: dict, path: Path) -> Non
                 )
             start += duration
         max_end = max(max_end, start)
-        ax.text(
-            start + 0.08,
-            k,
-            f"{start:.1f} h",
-            va="center",
-            fontsize=8,
-            color="#2C3E50",
-        )
+        if vehicle_trips and k < len(last_delivery):
+            ld = start_h + _num(last_delivery[k]) / 60.0
+            ax.plot([ld], [k], marker="v", color="#1B2631", ms=6, zorder=5)
+        if vehicle_trips:
+            ax.text(
+                start + 0.08,
+                k,
+                p.clock((start - start_h) * 60.0),
+                va="center",
+                fontsize=8,
+                color="#2C3E50",
+            )
 
-    ax.axvline(8, color=OVERTIME_COLOR, ls="--", lw=1.5, label="8 h shift")
-    if max_end > 8:
-        ax.axvspan(8, max_end, color=OVERTIME_COLOR, alpha=0.06)
+    shift_end = start_h + p.shift_minutes / 60.0
+    ax.axvline(shift_end, color=OVERTIME_COLOR, ls="--", lw=1.5,
+               label=f"shift ends {p.clock(p.shift_minutes)} (2x after)")
+    night = p.night_from_min
+    day_end = p.day_end_min
+    last_by = p.last_delivery_min
+    if night is None and last_by is not None and day_end is not None:
+        ld_h = start_h + last_by / 60.0
+        ax.axvspan(shift_end, start_h + day_end / 60.0, color=OVERTIME_COLOR, alpha=0.06)
+        ax.axvline(ld_h, color="#8E44AD", ls="--", lw=1.2,
+                   label=f"{p.last_delivery_by}: last delivery")
+    elif night is not None:
+        night_h = start_h + night / 60.0
+        ax.axvspan(shift_end, night_h, color=OVERTIME_COLOR, alpha=0.06)
+        ax.axvline(night_h, color="#8E44AD", ls="--", lw=1.2,
+                   label=f"{p.night_rate_from}: last delivery, night rate "
+                         f"x{p.night_multiplier:g}")
+        if day_end is not None:
+            ax.axvspan(night_h, start_h + day_end / 60.0, color="#8E44AD", alpha=0.08)
+    elif max_end > shift_end:
+        ax.axvspan(shift_end, max_end, color=OVERTIME_COLOR, alpha=0.06)
+    if day_end is not None:
+        end_h = start_h + day_end / 60.0
+        ax.axvline(end_h, color="#C0392B", lw=1.8,
+                   label=f"{p.hard_day_end}: hard end of day")
+        max_end = max(max_end, end_h)
+    ax.plot([], [], "v", color="#1B2631", label="last delivery")
     ax.set_yticks(range(len(data.vehicles)))
     ax.set_yticklabels(
         [f"V{v.vehicle_id}\n{v.type_id}" for v in data.vehicles]
     )
     ax.invert_yaxis()
-    ax.set_xlabel("Elapsed work time (h)")
-    ax.set_title("Vehicle-day timeline (trips in solution order)")
-    ax.set_xlim(0, max_end + 1.0)
-    ax.legend(loc="lower right")
+    ticks = list(range(int(start_h), int(max_end) + 2, 2))
+    ax.set_xticks(ticks)
+    ax.set_xticklabels([f"{h:02d}:00" for h in ticks])
+    ax.set_xlabel("Clock time")
+    ax.set_title("Vehicle-day timeline")
+    ax.set_xlim(start_h, max_end + 1.0)
+    ax.legend(loc="lower right", fontsize=8)
     ax.grid(axis="x", alpha=0.25, ls="--")
 
     fig.tight_layout()
@@ -786,7 +852,7 @@ def _build_html(
             "Vehicle-day timeline",
             charts["vehicle_timeline"],
             "Each bar is one trip; trips are shown sequentially in solution order. "
-            "The dashed line is the 8-hour shift and the shaded area is overtime.",
+            "Each bar is one trip. Everything after the 8-hour shift is overtime at 2x. The last customer must be served by the last-delivery line; after it only the drive back is allowed, until the hard end of the day. Triangles mark each vehicle's last delivery.",
         ),
         (
             "Cost breakdown",

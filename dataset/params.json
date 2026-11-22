@@ -8,6 +8,10 @@
 
   "shift_hours": 8,
   "overtime_multiplier": 2.0,
+
+  "day_start": "08:00",
+  "last_delivery_by": "22:00",
+  "hard_day_end": "23:00",
   "fuel_price_per_l": 1.60,
 
   "packing_mode": 1,

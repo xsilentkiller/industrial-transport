@@ -21,7 +21,9 @@ from .cost import (
     PenaltyWeights,
     SegmentStats,
     TripMetrics,
-    day_overtime_extra,
+    day_metrics,
+    overtime_lower_bound_min,
+    return_leg_min,
     segment_stats,
     trip_metrics_from_stats,
 )
@@ -122,6 +124,10 @@ class Solution:
     vehicle_overtime_cost: np.ndarray
     day_overtime_cost: float
     method: str
+    # Daily window, per vehicle (minutes after day start).
+    vehicle_night_min: np.ndarray | None = None
+    vehicle_last_delivery_min: np.ndarray | None = None
+    vehicle_day_penalty: np.ndarray | None = None
 
     def __iter__(self):
         return iter(self.trips)
@@ -157,8 +163,80 @@ class Solution:
             "vehicle_total_min": self.vehicle_total_min.tolist(),
             "vehicle_overtime_min": self.vehicle_overtime_min.tolist(),
             "vehicle_overtime_cost": self.vehicle_overtime_cost.tolist(),
+            "longest_day_min": self.longest_day_min,
+            "vehicle_night_min": _list(self.vehicle_night_min),
+            "vehicle_last_delivery_min": _list(self.vehicle_last_delivery_min),
+            "vehicle_day_penalty": _list(self.vehicle_day_penalty),
             "trips": [t.as_dict() for t in self.trips],
         }
+
+    @property
+    def longest_day_min(self) -> float:
+        return float(self.vehicle_total_min.max()) if len(self.vehicle_total_min) else 0.0
+
+    def day_schedule(self, data: ProblemData) -> list[dict]:
+        """Per-vehicle working day as wall-clock times (for reports)."""
+        p = data.params
+        rows = []
+        for k in range(len(self.vehicle_total_min)):
+            T = float(self.vehicle_total_min[k])
+            trips = [t for t in self.trips if t.vehicle_index == k]
+            clock = 0.0
+            trip_rows = []
+            for t in trips:
+                trip_rows.append(
+                    {"start": p.clock(clock), "end": p.clock(clock + t.time_min),
+                     "customers": len(t.customers)}
+                )
+                clock += t.time_min
+            last = (
+                None if self.vehicle_last_delivery_min is None or T <= 0
+                else float(self.vehicle_last_delivery_min[k])
+            )
+            rows.append(
+                {
+                    "vehicle_id": data.vehicles[k].vehicle_id,
+                    "model": data.vehicles[k].model,
+                    "trips": len(trips),
+                    "work_h": T / 60.0,
+                    "start": p.clock(0.0) if trips else None,
+                    "last_delivery": p.clock(last) if last is not None else None,
+                    "finish": p.clock(T) if trips else None,
+                    "overtime_h": float(self.vehicle_overtime_min[k]) / 60.0,
+                    "night_h": (
+                        0.0 if self.vehicle_night_min is None
+                        else float(self.vehicle_night_min[k]) / 60.0
+                    ),
+                    "premium_eur": float(self.vehicle_overtime_cost[k]),
+                    "window_penalty": (
+                        0.0 if self.vehicle_day_penalty is None
+                        else float(self.vehicle_day_penalty[k])
+                    ),
+                    "trip_times": trip_rows,
+                }
+            )
+        return rows
+
+    def overtime_summary(self, data: ProblemData) -> dict:
+        """Overtime used vs the minimum no plan with this much work can avoid."""
+        total = float(self.vehicle_total_min.sum())
+        lb = overtime_lower_bound_min(data, total)
+        used = float(self.vehicle_overtime_min.sum())
+        return {
+            "total_work_h": total / 60.0,
+            "overtime_h": used / 60.0,
+            "unavoidable_overtime_h": lb / 60.0,
+            "avoidable_overtime_h": max(0.0, used - lb) / 60.0,
+            "night_h": (
+                0.0 if self.vehicle_night_min is None
+                else float(self.vehicle_night_min.sum()) / 60.0
+            ),
+            "longest_day_h": self.longest_day_min / 60.0,
+        }
+
+
+def _list(arr) -> list | None:
+    return None if arr is None else np.asarray(arr, dtype=float).tolist()
 
 
 # ---------------------------------------------------------------------------
@@ -480,15 +558,30 @@ def assign_trips(
         [[metrics[i][k].penalty for k in range(V)] for i in range(m)],
         dtype=np.float64,
     )
+    # Return leg of each trip on each vehicle: decides when the last delivery
+    # of a vehicle-day happens (the trip with the longest return goes last).
+    rets = np.array(
+        [
+            [return_leg_min(data, k, segments[i].customers[-1]) for k in range(V)]
+            for i in range(m)
+        ],
+        dtype=np.float64,
+    )
 
     shift_min = data.params.shift_minutes
     shift_w = weights.per_minute_over_shift
 
-    def ot(k: int, t: float) -> float:
-        return day_overtime_extra(data, k, t)
+    def day_obj(k: int, t: float, r: float) -> float:
+        """Overtime/night premium + daily-window penalty of one vehicle-day."""
+        dm = day_metrics(data, k, t, r, weights)
+        return dm.extra_cost + dm.penalty + shift_w * max(0.0, t - shift_min)
 
-    def shift_pen(t: float) -> float:
-        return shift_w * max(0.0, t - shift_min)
+    def max_ret(k: int, exclude: tuple[int, ...] = (), add: int = -1) -> float:
+        best = rets[add, k] if add >= 0 else 0.0
+        for idx in np.flatnonzero(assign == k):
+            if idx not in exclude and rets[idx, k] > best:
+                best = rets[idx, k]
+        return float(best)
 
     # Most constrained first: large volume, then large weight, then count.
     order = sorted(
@@ -502,19 +595,20 @@ def assign_trips(
 
     assign = np.full(m, -1, dtype=np.int64)
     vehicle_times = np.zeros(V, dtype=np.float64)
+    vehicle_rets = np.zeros(V, dtype=np.float64)
 
     for i in order:
         best_k = -1
         best_delta = np.inf
         best_time = np.inf
         for k in range(V):
+            t_new = vehicle_times[k] + times[i, k]
+            r_new = max(vehicle_rets[k], rets[i, k])
             delta = (
                 base[i, k]
                 + pens[i, k]
-                + ot(k, vehicle_times[k] + times[i, k])
-                - ot(k, vehicle_times[k])
-                + shift_pen(vehicle_times[k] + times[i, k])
-                - shift_pen(vehicle_times[k])
+                + day_obj(k, t_new, r_new)
+                - day_obj(k, vehicle_times[k], vehicle_rets[k])
             )
             # Equal-cost assignments go to the less-loaded vehicle, so the
             # fleet is not needlessly concentrated on one van.
@@ -532,6 +626,7 @@ def assign_trips(
             best_k = 0
         assign[i] = best_k
         vehicle_times[best_k] += times[i, best_k]
+        vehicle_rets[best_k] = max(vehicle_rets[best_k], rets[i, best_k])
 
     # Move local search: relocate one trip to another vehicle.
     if config.assignment_refine:
@@ -540,6 +635,7 @@ def assign_trips(
             for i in range(m):
                 a = int(assign[i])
                 Ta = vehicle_times[a]
+                Ra_new = max_ret(a, exclude=(i,))
                 old_max = float(vehicle_times.max())
                 best_b = -1
                 best_delta = 0.0
@@ -551,18 +647,14 @@ def assign_trips(
                     old = (
                         base[i, a]
                         + pens[i, a]
-                        + ot(a, Ta)
-                        + ot(b, Tb)
-                        + shift_pen(Ta)
-                        + shift_pen(Tb)
+                        + day_obj(a, Ta, vehicle_rets[a])
+                        + day_obj(b, Tb, vehicle_rets[b])
                     )
                     new = (
                         base[i, b]
                         + pens[i, b]
-                        + ot(a, Ta - times[i, a])
-                        + ot(b, Tb + times[i, b])
-                        + shift_pen(Ta - times[i, a])
-                        + shift_pen(Tb + times[i, b])
+                        + day_obj(a, Ta - times[i, a], Ra_new)
+                        + day_obj(b, Tb + times[i, b], max(vehicle_rets[b], rets[i, b]))
                     )
                     delta = new - old
                     trial = vehicle_times.copy()
@@ -583,6 +675,8 @@ def assign_trips(
                     vehicle_times[a] -= times[i, a]
                     vehicle_times[best_b] += times[i, best_b]
                     assign[i] = best_b
+                    vehicle_rets[a] = max_ret(a)
+                    vehicle_rets[best_b] = max_ret(best_b)
                     improved = True
             if not improved:
                 break
@@ -604,38 +698,50 @@ def assign_trips(
                         + base[j, b]
                         + pens[i, a]
                         + pens[j, b]
-                        + ot(a, Ta)
-                        + ot(b, Tb)
-                        + shift_pen(Ta)
-                        + shift_pen(Tb)
+                        + day_obj(a, Ta, vehicle_rets[a])
+                        + day_obj(b, Tb, vehicle_rets[b])
                     )
                     new = (
                         base[i, b]
                         + base[j, a]
                         + pens[i, b]
                         + pens[j, a]
-                        + ot(a, Ta - times[i, a] + times[j, a])
-                        + ot(b, Tb - times[j, b] + times[i, b])
-                        + shift_pen(Ta - times[i, a] + times[j, a])
-                        + shift_pen(Tb - times[j, b] + times[i, b])
+                        + day_obj(a, Ta - times[i, a] + times[j, a],
+                                  max_ret(a, exclude=(i,), add=j))
+                        + day_obj(b, Tb - times[j, b] + times[i, b],
+                                  max_ret(b, exclude=(j,), add=i))
                     )
                     if new < old - 1e-9:
                         vehicle_times[a] += times[j, a] - times[i, a]
                         vehicle_times[b] += times[i, b] - times[j, b]
                         assign[i], assign[j] = b, a
+                        vehicle_rets[a] = max_ret(a)
+                        vehicle_rets[b] = max_ret(b)
                         improved = True
                         a = b
             if not improved:
                 break
 
+    # Trip order inside each vehicle-day: keep the decoded order, but run the
+    # trip with the longest return leg last (earliest possible last delivery).
+    trip_order: list[int] = []
+    for k in range(V):
+        idxs = [int(i) for i in np.flatnonzero(assign == k)]
+        if idxs:
+            last = max(idxs, key=lambda i: (rets[i, k], -i))
+            idxs.remove(last)
+            idxs.append(last)
+        trip_order.extend(idxs)
+
     trips: list[TripPlan] = []
     total_distance = total_time = total_weight = total_volume = 0.0
-    for i, k in enumerate(assign):
-        mm = metrics[i][int(k)]
+    for i in trip_order:
+        k = int(assign[i])
+        mm = metrics[i][k]
         trips.append(
             TripPlan(
-                vehicle_index=int(k),
-                vehicle_id=data.vehicles[int(k)].vehicle_id,
+                vehicle_index=k,
+                vehicle_id=data.vehicles[k].vehicle_id,
                 customers=segments[i].customers,
                 metrics=mm,
             )
@@ -646,25 +752,29 @@ def assign_trips(
         total_volume += mm.volume_m3
 
     vehicle_total_min = np.zeros(V, dtype=np.float64)
-    for trip in trips:
-        vehicle_total_min[trip.vehicle_index] += trip.metrics.total_min
+    vehicle_max_ret = np.zeros(V, dtype=np.float64)
+    for i, k in enumerate(assign):
+        vehicle_total_min[k] += times[i, k]
+        vehicle_max_ret[k] = max(vehicle_max_ret[k], rets[i, k])
 
-    vehicle_overtime_min = np.maximum(
-        0.0, vehicle_total_min - data.params.shift_minutes
-    )
-    vehicle_overtime_cost = np.array(
-        [day_overtime_extra(data, k, vehicle_total_min[k]) for k in range(V)],
-        dtype=np.float64,
-    )
+    days = [
+        day_metrics(data, k, vehicle_total_min[k], vehicle_max_ret[k], weights)
+        for k in range(V)
+    ]
+    vehicle_overtime_min = np.array([d.beyond_shift_min for d in days])
+    vehicle_overtime_cost = np.array([d.extra_cost for d in days])
     day_overtime_cost = float(vehicle_overtime_cost.sum())
+    day_penalty = float(sum(d.penalty for d in days))
 
     # Base cost = fuel + maintenance + all hours at the normal wage rate.
-    # The vehicle-day overtime premium is added once here, not per trip.
+    # The vehicle-day overtime and night premiums are added once here.
     true_cost = sum(
         trip.metrics.base_cost_eur for trip in trips
     ) + day_overtime_cost
-    penalty = sum(trip.metrics.penalty for trip in trips) + shift_w * float(
-        vehicle_overtime_min.sum()
+    penalty = (
+        sum(trip.metrics.penalty for trip in trips)
+        + day_penalty
+        + shift_w * float(np.maximum(0.0, vehicle_total_min - shift_min).sum())
     )
     feasible = penalty <= 1e-7
 
@@ -683,6 +793,9 @@ def assign_trips(
         vehicle_overtime_cost=vehicle_overtime_cost,
         day_overtime_cost=day_overtime_cost,
         method=method,
+        vehicle_night_min=np.array([d.night_min for d in days]),
+        vehicle_last_delivery_min=np.array([d.last_delivery_min for d in days]),
+        vehicle_day_penalty=np.array([d.penalty for d in days]),
     )
 
 
@@ -779,6 +892,16 @@ def check_solution(
             )
         if trip.vehicle_index < 0 or trip.vehicle_index >= data.n_vehicles:
             errors.append(f"trip {t}: invalid vehicle index {trip.vehicle_index}")
+
+    if solution.vehicle_day_penalty is not None:
+        for k, pen in enumerate(solution.vehicle_day_penalty):
+            if pen > 1e-7:
+                T = float(solution.vehicle_total_min[k])
+                last = float(solution.vehicle_last_delivery_min[k])
+                errors.append(
+                    f"vehicle {data.vehicles[k].vehicle_id}: daily window violated "
+                    f"(last delivery {p.clock(last)}, back {p.clock(T)})"
+                )
 
     if len(seen) != n:
         errors.append(f"customer count {len(seen)} != {n}")

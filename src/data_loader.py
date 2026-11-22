@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import csv
 import json
-from dataclasses import dataclass, field
+from dataclasses import MISSING, dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -46,17 +46,78 @@ class Params:
     must_return_to_depot: bool
     loading_counts_as_work_time: bool
 
+    # Daily working window (optional; None = no limit, the original V0 model).
+    # Clock times are "HH:MM" strings; every vehicle starts at day_start.
+    day_start: str = "08:00"
+    night_rate_from: str | None = None   # wage x night_multiplier after this
+    night_multiplier: float | None = None
+    last_delivery_by: str | None = None  # last customer served by this time
+    hard_day_end: str | None = None      # vehicle back at the depot by this time
+
     @property
     def shift_minutes(self) -> float:
         return float(self.shift_hours) * 60.0
 
+    def minutes_after_start(self, clock: str | None) -> float | None:
+        """'22:00' -> minutes after day_start (840 for an 08:00 start)."""
+        if clock is None:
+            return None
+        return _clock_min(clock) - _clock_min(self.day_start)
+
+    @property
+    def night_from_min(self) -> float | None:
+        return self.minutes_after_start(self.night_rate_from)
+
+    @property
+    def last_delivery_min(self) -> float | None:
+        return self.minutes_after_start(self.last_delivery_by)
+
+    @property
+    def day_end_min(self) -> float | None:
+        return self.minutes_after_start(self.hard_day_end)
+
+    def clock(self, minutes_after_start: float) -> str:
+        """Minutes after day_start -> 'HH:MM' wall-clock time."""
+        total = int(round(_clock_min(self.day_start) + minutes_after_start))
+        return f"{total // 60:02d}:{total % 60:02d}"
+
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> "Params":
-        names = {f.name for f in cls.__dataclass_fields__.values()}
-        missing = names.difference(d)
+        fields = cls.__dataclass_fields__.values()
+        required = {
+            f.name for f in fields
+            if f.default is MISSING and f.default_factory is MISSING
+        }
+        missing = required.difference(d)
         if missing:
             raise ValueError(f"params.json is missing keys: {sorted(missing)}")
-        return cls(**{name: d[name] for name in names})
+        names = {f.name for f in fields}
+        params = cls(**{name: d[name] for name in names if name in d})
+        params.validate_day_window()
+        return params
+
+    def validate_day_window(self) -> None:
+        if (self.night_rate_from is None) != (self.night_multiplier is None):
+            raise ValueError("night_rate_from and night_multiplier must be set together")
+        checks = [
+            ("night_rate_from", self.night_from_min),
+            ("last_delivery_by", self.last_delivery_min),
+            ("hard_day_end", self.day_end_min),
+        ]
+        for name, value in checks:
+            if value is not None and value < self.shift_minutes:
+                raise ValueError(f"{name} must be at or after the end of the normal shift")
+        if (
+            self.day_end_min is not None
+            and self.last_delivery_min is not None
+            and self.last_delivery_min > self.day_end_min
+        ):
+            raise ValueError("last_delivery_by must not be after hard_day_end")
+
+
+def _clock_min(clock: str) -> float:
+    hh, mm = clock.strip().split(":")
+    return int(hh) * 60.0 + int(mm)
 
 
 @dataclass(frozen=True)

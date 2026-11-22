@@ -1,6 +1,6 @@
 ﻿vehicle_id,type,model,trips,customers,distance_km,time_h,overtime_h,fuel_cost_eur,maintenance_cost_eur,wage_base_cost_eur,overtime_cost_eur,total_cost_eur
-1,caddy,VW Caddy Cargo SWB,2,42,127.478,8.786,0.786,10.912,10.198,105.435,9.435,135.98
-2,caddy,VW Caddy Cargo SWB,3,48,154.717,10.414,2.414,13.244,12.377,124.972,28.972,179.565
-3,sprinter,Mercedes Sprinter 315 CDI L2H2,4,54,250.522,14.563,6.563,36.276,30.063,189.313,85.313,340.964
-4,sprinter,Mercedes Sprinter 315 CDI L2H2,5,70,183.933,16.285,8.285,26.633,22.072,211.709,107.709,368.123
-5,man_tgl,MAN TGL 12.190 box,1,36,45.462,7.877,0.0,15.275,11.366,126.025,0.0,152.666
+1,caddy,VW Caddy Cargo SWB,2,42,128.997,8.817,0.817,11.042,10.32,105.799,9.799,136.96
+2,caddy,VW Caddy Cargo SWB,3,51,154.173,10.847,2.847,13.197,12.334,130.162,34.162,189.854
+3,sprinter,Mercedes Sprinter 315 CDI L2H2,4,54,215.264,14.031,6.031,31.17,25.832,182.407,78.407,317.817
+4,sprinter,Mercedes Sprinter 315 CDI L2H2,4,58,200.042,14.394,6.394,28.966,24.005,187.125,83.125,323.221
+5,man_tgl,MAN TGL 12.190 box,2,45,76.116,10.223,2.223,25.575,19.029,163.566,35.566,243.737

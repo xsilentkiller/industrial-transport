@@ -162,6 +162,33 @@ feasible  = (penalty <= 1e-7)
 
 ---
 
+## Daily working window
+
+Every vehicle starts at 08:00 and drives its trips back to back. The rules are
+set in `dataset/params.json` and enforced in `src/cost.py` (`day_metrics`):
+
+| Time | Rule | Wage |
+|---|---|---|
+| 08:00-16:00 | normal 8 h shift | 1x |
+| 16:00-23:00 | overtime | 2x (`overtime_multiplier`) |
+| 22:00 | last customer must be served (`last_delivery_by`) | |
+| 22:00-23:00 | only the drive back to the depot | 2x |
+| 23:00 | vehicle must be back (`hard_day_end`) | |
+
+Overtime is real money and part of the true cost. A late
+last delivery or a return after 23:00 is a planning penalty of 1,000 EUR per
+minute, reported separately and never part of the true cost. Inside a
+vehicle-day, the trip with the longest return leg runs last, so the last
+delivery is as early as possible. The trip-to-vehicle assignment prices every
+move with these rules.
+
+Each run also reports the longest vehicle-day, each vehicle's start, last
+delivery and finish time, and overtime against the unavoidable minimum
+(total work minus 8 h per vehicle). Remove the window keys (`last_delivery_by`, `hard_day_end`) from
+`params.json` to get the original model without a daily limit.
+
+---
+
 ## Solution format
 
 `Solution.trips` is the required list of trips. Each `TripPlan` contains:

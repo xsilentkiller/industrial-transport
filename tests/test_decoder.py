@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import time
 import unittest
 
@@ -83,11 +84,24 @@ class TestDecoder(unittest.TestCase):
             self.assertLessEqual(s.count, 50)
 
     def test_full_250_and_timing(self) -> None:
-        tour = nearest_neighbor_tour(self.data)
+        # A single nearest-neighbour tour is not expected to fit the daily
+        # window (see test_day_window.py); here the decoder is checked on the
+        # original model without the window.
+        data = dataclasses.replace(
+            self.data,
+            params=dataclasses.replace(
+                self.data.params,
+                night_rate_from=None,
+                night_multiplier=None,
+                last_delivery_by=None,
+                hard_day_end=None,
+            ),
+        )
+        tour = nearest_neighbor_tour(data)
         cfg = DecoderConfig(use_greedy_baseline=True)
 
-        sol = decode_tour(self.data, tour, cfg)
-        errors = check_solution(self.data, sol)
+        sol = decode_tour(data, tour, cfg)
+        errors = check_solution(data, sol)
         self.assertEqual(errors, [])
         self.assert_permutation(
             [c for t in sol.trips for c in t.customers], self.data.n_customers

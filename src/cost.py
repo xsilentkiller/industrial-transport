@@ -36,6 +36,9 @@ class PenaltyWeights:
     per_minute_over_shift: float = 0.0  # 0 because vehicle-day overtime is paid
     per_customer_under_min: float = 2_000.0
     per_customer_over_max: float = 1_000_000.0
+    # Daily window (hard rules, priced so that breaking them never pays):
+    per_minute_past_day_end: float = 1_000.0     # back at depot after 23:00
+    per_minute_late_delivery: float = 1_000.0    # last customer after 22:00
 
 
 DEFAULT_WEIGHTS = PenaltyWeights()
@@ -289,17 +292,124 @@ def trip_metrics(
     )
 
 
+# ---------------------------------------------------------------------------
+# Vehicle-day evaluation (the daily working window)
+# ---------------------------------------------------------------------------
+@dataclass(frozen=True)
+class DayMetrics:
+    """Cost and time-window check of one vehicle's whole working day.
+
+    Every vehicle starts at ``day_start`` (08:00) and drives its trips back to
+    back.  Wages for all minutes at the normal rate are already in the trips'
+    ``base_cost_eur``; this object holds only the *extra* premiums on top:
+
+    * shift end (16:00) .. night_rate_from (22:00): overtime_multiplier (2x)
+    * after night_rate_from (22:00):                night_multiplier   (3x)
+
+    Two hard rules are priced as penalties (never real money):
+
+    * the last customer must be served by ``last_delivery_by`` (22:00)
+    * the vehicle must be back at the depot by ``hard_day_end`` (23:00)
+    """
+
+    total_min: float
+    overtime_min: float          # minutes paid at the overtime rate
+    night_min: float             # minutes paid at the night rate
+    overtime_cost: float         # extra premium EUR for overtime minutes
+    night_cost: float            # extra premium EUR for night minutes
+    last_delivery_min: float     # minutes after day start of the last delivery
+    late_delivery_min: float     # minutes past last_delivery_by
+    past_day_end_min: float      # minutes past hard_day_end
+    penalty: float
+
+    @property
+    def extra_cost(self) -> float:
+        """Real money on top of the normal wage (overtime + night premiums)."""
+        return self.overtime_cost + self.night_cost
+
+    @property
+    def beyond_shift_min(self) -> float:
+        return self.overtime_min + self.night_min
+
+    @property
+    def feasible(self) -> bool:
+        return self.penalty <= 1e-9
+
+
+def return_leg_min(data: ProblemData, vehicle_index: int, last_customer: int) -> float:
+    """Driving minutes from a trip's last customer back to the depot."""
+    v = data.vehicles[vehicle_index]
+    return float(data.distance[int(last_customer), 0]) / v.avg_speed_kmh * 60.0
+
+
+def day_metrics(
+    data: ProblemData,
+    vehicle_index: int,
+    total_day_min: float,
+    max_return_min: float = 0.0,
+    weights: PenaltyWeights = DEFAULT_WEIGHTS,
+) -> DayMetrics:
+    """Evaluate one vehicle-day.
+
+    ``max_return_min`` is the longest return leg among the vehicle's trips.
+    The trips of a day can run in any order, so the best order puts that trip
+    last: the last delivery then happens at ``total_day_min - max_return_min``,
+    the earliest possible.
+    """
+    p = data.params
+    v = data.vehicles[vehicle_index]
+    T = float(total_day_min)
+    wage_min = v.wage_per_h / 60.0
+    shift = p.shift_minutes
+
+    night_from = p.night_from_min
+    ot_until = T if night_from is None else min(T, night_from)
+    overtime_min = max(0.0, ot_until - shift)
+    night_min = 0.0 if night_from is None else max(0.0, T - max(night_from, shift))
+
+    overtime_cost = overtime_min * wage_min * max(0.0, p.overtime_multiplier - 1.0)
+    night_cost = (
+        0.0 if night_from is None
+        else night_min * wage_min * max(0.0, float(p.night_multiplier) - 1.0)
+    )
+
+    if T <= 0.0:
+        last_delivery = 0.0
+    else:
+        last_delivery = max(0.0, T - max_return_min)
+    late = 0.0
+    if p.last_delivery_min is not None and T > 0.0:
+        late = max(0.0, last_delivery - p.last_delivery_min)
+    past_end = 0.0
+    if p.day_end_min is not None:
+        past_end = max(0.0, T - p.day_end_min)
+
+    penalty = (
+        weights.per_minute_late_delivery * late
+        + weights.per_minute_past_day_end * past_end
+    )
+    return DayMetrics(
+        total_min=T,
+        overtime_min=overtime_min,
+        night_min=night_min,
+        overtime_cost=overtime_cost,
+        night_cost=night_cost,
+        last_delivery_min=last_delivery,
+        late_delivery_min=late,
+        past_day_end_min=past_end,
+        penalty=penalty,
+    )
+
+
 def day_overtime_extra(
     data: ProblemData,
     vehicle_index: int,
     total_day_min: float,
 ) -> float:
-    """Extra 1x overtime premium for a vehicle-day, in EUR."""
-    v = data.vehicles[vehicle_index]
-    overtime_min = max(0.0, total_day_min - data.params.shift_minutes)
-    return (
-        overtime_min
-        / 60.0
-        * v.wage_per_h
-        * max(0.0, data.params.overtime_multiplier - 1.0)
-    )
+    """Extra overtime + night premium for a vehicle-day, in EUR (real money)."""
+    return day_metrics(data, vehicle_index, total_day_min).extra_cost
+
+
+def overtime_lower_bound_min(data: ProblemData, total_work_min: float) -> float:
+    """Overtime that no assignment can avoid: work beyond V x normal shift."""
+    return max(0.0, total_work_min - data.n_vehicles * data.params.shift_minutes)

@@ -45,7 +45,25 @@ def print_solution_summary(data: ProblemData, sol) -> None:
             f"{sol.vehicle_total_min[k] / 60:6.2f} h, "
             f"OT {sol.vehicle_overtime_min[k] / 60:5.2f} h, "
             f"EUR {base + ot:8.2f}"
+            + _day_window_text(data, sol, k)
         )
+    ots = sol.overtime_summary(data)
+    print(
+        f"  longest day   : {ots['longest_day_h']:10.2f} h\n"
+        f"  overtime used : {ots['overtime_h']:10.2f} h "
+        f"(unavoidable {ots['unavoidable_overtime_h']:.2f} h, "
+        f"avoidable {ots['avoidable_overtime_h']:.2f} h)"
+    )
+
+
+def _day_window_text(data: ProblemData, sol, k: int) -> str:
+    if sol.vehicle_last_delivery_min is None:
+        return ""
+    p = data.params
+    return (
+        f", {p.day_start}-{p.clock(sol.vehicle_total_min[k])}"
+        f" (last delivery {p.clock(sol.vehicle_last_delivery_min[k])})"
+    )
 
 
 def run_decoder_checks(data: ProblemData) -> None:
@@ -162,6 +180,14 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
         else None,
         "check_errors": check_errors,
         "best_solution": chosen.as_dict(),
+        "day_window": {
+            "day_start": data.params.day_start,
+            "overtime_multiplier": data.params.overtime_multiplier,
+            "last_delivery_by": data.params.last_delivery_by,
+            "hard_day_end": data.params.hard_day_end,
+        },
+        "day_schedule": chosen.day_schedule(data),
+        "overtime_summary": chosen.overtime_summary(data),
         "history": result.history,
     }
     path = out_dir / "best_solution.json"
