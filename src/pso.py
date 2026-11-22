@@ -32,8 +32,8 @@ from .decoder import (
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
 class PSOConfig:
-    swarm_size: int = 30
-    iterations: int = 120
+    swarm_size: int = 20
+    iterations: int = 200
     inertia: float = 0.72
     c1: float = 1.49
     c2: float = 1.49
