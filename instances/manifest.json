@@ -1,0 +1,3026 @@
+{
+ "scale_n1000_4001": {
+  "set": "scaling",
+  "customers": 1000,
+  "seed": 4001,
+  "sha256": {
+   "locations.csv": "247487a4bdd99ad1f370d97acebac45a4f8ba6827bd6a0273a50cfdee7bc157f",
+   "orders.csv": "eb4a94007733d695df3c518a1287d86cef3bfc9fa89e415b504e29bb706f3348",
+   "distances.csv": "23c7853009de191d788f271b26e4224b843d936bb271a98dd7da64c67cf7be63",
+   "vehicles.csv": "6d1780d9108ac88b15bf59665e9bd30ee0ead9f5a7146aa45b9332d3d0057d70",
+   "params.json": "2bb76f4f9c81964ba45f1d3c9322fe15a7062885a74d1ddde881ec0f5acca545"
+  },
+  "stats": {
+   "customers": 1000,
+   "vehicles": 20,
+   "volume_m3": 465.86,
+   "weight_kg": 20691.5,
+   "service_h": 167.79,
+   "fleet_rounds_by_volume": 1.85,
+   "service_h_per_vehicle": 8.39
+  }
+ },
+ "scale_n1000_4002": {
+  "set": "scaling",
+  "customers": 1000,
+  "seed": 4002,
+  "sha256": {
+   "locations.csv": "3bc71fbf57de4d94f27701a48963e4b09e0729731a2de775c00c5d2697ca7c5b",
+   "orders.csv": "1dcd5d5c59d1c4d52a46b1774678807e2196b6866d11d953469ccdd011b1ae8e",
+   "distances.csv": "770622b1f2ddf9409568f2cdddb1bc8b0ae66efb53724114aed844667de5975a",
+   "vehicles.csv": "6d1780d9108ac88b15bf59665e9bd30ee0ead9f5a7146aa45b9332d3d0057d70",
+   "params.json": "95c09665825e0269c441e6bbd17da1e6c94281bc63151a0b6d45dd3a71972e1e"
+  },
+  "stats": {
+   "customers": 1000,
+   "vehicles": 20,
+   "volume_m3": 467.36,
+   "weight_kg": 20629.5,
+   "service_h": 167.63,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "scale_n1000_4003": {
+  "set": "scaling",
+  "customers": 1000,
+  "seed": 4003,
+  "sha256": {
+   "locations.csv": "21fc85083d6e6481e31c1f1cc3852841623bd466b6000d802e973c77c85b8744",
+   "orders.csv": "8721480938184d025bf33b11a6ad4a3113d05416009fb77aedfe4a66604d1ff4",
+   "distances.csv": "3f8bbdd5a4ce6d81113d05bf85605d5295fbe0eb2399a7e6fb90a9dc7c01ca20",
+   "vehicles.csv": "6d1780d9108ac88b15bf59665e9bd30ee0ead9f5a7146aa45b9332d3d0057d70",
+   "params.json": "66fe31225048bf590994c5b2d6d547203cee2a67c0bf62386933f76249e0f9d4"
+  },
+  "stats": {
+   "customers": 1000,
+   "vehicles": 20,
+   "volume_m3": 461.43,
+   "weight_kg": 20362.6,
+   "service_h": 167.22,
+   "fleet_rounds_by_volume": 1.83,
+   "service_h_per_vehicle": 8.36
+  }
+ },
+ "scale_n1000_4004": {
+  "set": "scaling",
+  "customers": 1000,
+  "seed": 4004,
+  "sha256": {
+   "locations.csv": "70ed597751d4d0bfb4d543b97f66408da1db36edfbd507517cb151b6121269ba",
+   "orders.csv": "8fa826ec5b927befe0b61c7f6c0e62deffc4024ab8dad0238d99176007886a47",
+   "distances.csv": "44da8ad3053db1d4aca65f056c0a896b8d73ff9fce76ed412b4b6025dc9fec59",
+   "vehicles.csv": "6d1780d9108ac88b15bf59665e9bd30ee0ead9f5a7146aa45b9332d3d0057d70",
+   "params.json": "937f975867441b0bd6fb13aff79ede769890e317bcbaa80c1b23aade04c990b4"
+  },
+  "stats": {
+   "customers": 1000,
+   "vehicles": 20,
+   "volume_m3": 468.09,
+   "weight_kg": 20091.8,
+   "service_h": 166.8,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "scale_n100_4001": {
+  "set": "scaling",
+  "customers": 100,
+  "seed": 4001,
+  "sha256": {
+   "locations.csv": "984986208f4d6ca0b7fb3edf126a7cd30f8921121c38fd9f2d7462d97dc79e21",
+   "orders.csv": "1a2807b418fb237c379f1dec2ff9c11b48661280e65ad4bd2a56b6bef4fa37f0",
+   "distances.csv": "62ffff87eabde52d70f8e626dbf85fd588e67574732d469f0a092d6293933352",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "3c9695904735f801209113570fd71dc415117429d94495c8c5e278464fed5f0f"
+  },
+  "stats": {
+   "customers": 100,
+   "vehicles": 5,
+   "volume_m3": 45.41,
+   "weight_kg": 2050.4,
+   "service_h": 16.74,
+   "fleet_rounds_by_volume": 0.72,
+   "service_h_per_vehicle": 3.35
+  }
+ },
+ "scale_n100_4002": {
+  "set": "scaling",
+  "customers": 100,
+  "seed": 4002,
+  "sha256": {
+   "locations.csv": "eb967dd12b04c1ecf4dbd43284a9484123a1e72498daa1b15b5e3459407e4740",
+   "orders.csv": "5f2231581682ce4c6fa1edae840f2710727a92e17beace3a02aefd3d45eb5b02",
+   "distances.csv": "d1b8cdb87549b7fb71d5aaeabfea715f881ebeb5a12d2d773ef5f2269918cf39",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "c3804212d53bfaa78153338bf43bcae3f0dfaa8db8d74f93df67d43d992ec1d4"
+  },
+  "stats": {
+   "customers": 100,
+   "vehicles": 5,
+   "volume_m3": 45.19,
+   "weight_kg": 1961.2,
+   "service_h": 16.59,
+   "fleet_rounds_by_volume": 0.72,
+   "service_h_per_vehicle": 3.32
+  }
+ },
+ "scale_n100_4003": {
+  "set": "scaling",
+  "customers": 100,
+  "seed": 4003,
+  "sha256": {
+   "locations.csv": "d8e471960c13ad580ee493eca15a32467a7cc20532c815c622b28ae68bd85ff4",
+   "orders.csv": "573b5cc2d197b73e6c7ddc5c212c0e8d0acf39b175a5985e429cb73403b5cc79",
+   "distances.csv": "65336de1f26c483a1a2df37be2eb019aa0163f75c8ac9b336afcfa42806d041e",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "0b830c7b8e14d04af080303e77b3caca17f55a7dc634f75a34fbcaf2d070d2a1"
+  },
+  "stats": {
+   "customers": 100,
+   "vehicles": 5,
+   "volume_m3": 49.37,
+   "weight_kg": 2125.1,
+   "service_h": 16.86,
+   "fleet_rounds_by_volume": 0.78,
+   "service_h_per_vehicle": 3.37
+  }
+ },
+ "scale_n100_4004": {
+  "set": "scaling",
+  "customers": 100,
+  "seed": 4004,
+  "sha256": {
+   "locations.csv": "d1d0a61200ac1d652c3f6743869e8a28dc68defc047bd7b2c82873e08fb7209e",
+   "orders.csv": "a274f7c03e4ea3f3bd9ec35d62234fb5b853b0f3a82b8ec9bb7fba4c6ad4af12",
+   "distances.csv": "35825c276843f620dd82ce126731583ac91fb92226b5a00f50488d14780af8f6",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "89a8b61c82534d7bba09beaf1cbc90d07eeefe56c2673d518852cb72e291201a"
+  },
+  "stats": {
+   "customers": 100,
+   "vehicles": 5,
+   "volume_m3": 46.42,
+   "weight_kg": 1960.6,
+   "service_h": 16.6,
+   "fleet_rounds_by_volume": 0.74,
+   "service_h_per_vehicle": 3.32
+  }
+ },
+ "scale_n250_4001": {
+  "set": "scaling",
+  "customers": 250,
+  "seed": 4001,
+  "sha256": {
+   "locations.csv": "23dc1cf72340a122b2f1ef8aec8f2fef225cfd5898c22ac31ea75efffcb078bf",
+   "orders.csv": "81e5a731e5ae06564cbeee2ccc50d2bb6aa96c23962db1a83fb9c278dff88541",
+   "distances.csv": "7d13b077a3e30aad5d699d87cb93fee9897cfbc34e5016d07b5eeef16458955f",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "db628a98d1b95934de4823e7cd91de15c018b2e9eeb1628df1441239a688a7c2"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 119.31,
+   "weight_kg": 5162.5,
+   "service_h": 41.92,
+   "fleet_rounds_by_volume": 1.9,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "scale_n250_4002": {
+  "set": "scaling",
+  "customers": 250,
+  "seed": 4002,
+  "sha256": {
+   "locations.csv": "469740dfc14ef5be4bff41b13bd2159f489d160fd374f9515668952056fccd22",
+   "orders.csv": "ad3443a634421969149a8ce3a7f88b91345e4b2e593b0c899c52470c0e0c4726",
+   "distances.csv": "9e6ab6ec747c8977446eb05f2ebc4c2ae61546294ce87d591acdd422521498ca",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "1032f763a77fd92ba0da1bb581bbf2f84a61fdc9ccd6bbb88fd5294e5833096a"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 111.15,
+   "weight_kg": 4960.4,
+   "service_h": 41.58,
+   "fleet_rounds_by_volume": 1.77,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "scale_n250_4003": {
+  "set": "scaling",
+  "customers": 250,
+  "seed": 4003,
+  "sha256": {
+   "locations.csv": "bd875a6bce775adcd4b14359e96ed21e5d6de6bc788a9d0513848dd1b6511965",
+   "orders.csv": "d27c6241e83f8d8be1e6ac8bdaeefde70188bad41ca1faae3e78ce5c0deffae1",
+   "distances.csv": "d4230a187f7bee32e8361dd22c16424c66a5477b99d04b0c904e8bc1045ddefa",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "eff81844bdf16e52de598e20501cf25a4c96e636e9d0ace98216a5321d731a60"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 119.88,
+   "weight_kg": 5135.8,
+   "service_h": 41.88,
+   "fleet_rounds_by_volume": 1.91,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "scale_n250_4004": {
+  "set": "scaling",
+  "customers": 250,
+  "seed": 4004,
+  "sha256": {
+   "locations.csv": "e334077f5e48793c18b23f67a8132d3a829efa1032ee2f49bdd2e93daae27bef",
+   "orders.csv": "847146d646c103a854b617093644c9b0e88daf09f95427cdd023f9aaab84b99f",
+   "distances.csv": "0669d84cd24240eff6af85ea43c5708bb1de0d86e738bef3e2ff6b7eab3eaae6",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "c64c0550b412bac1b9d79fdd552199d71c6689017d6a529b1f123136f0a93fe4"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.9,
+   "weight_kg": 5111.8,
+   "service_h": 41.84,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "scale_n500_4001": {
+  "set": "scaling",
+  "customers": 500,
+  "seed": 4001,
+  "sha256": {
+   "locations.csv": "60d4ed0086f28e064e418959c4eced1db739cb67b48a7aee156f349fd1c7d427",
+   "orders.csv": "aee6c630c6df2a833c85c4cf63b4e456b90b9442fbfa6abb35855d4838247475",
+   "distances.csv": "ce5830a2f66b6bffef7a427c879a90aee5e3006c7ef10f978841403605d50e2b",
+   "vehicles.csv": "3a75c15b1fbc004d02ba9c2faec6dd9ce296e7e17b3c80f2a83e0b0957c573f1",
+   "params.json": "cee2607bb9ceed3b58c5139a4531861f0d5ff003a53eab844a0dfedc6c78fcd6"
+  },
+  "stats": {
+   "customers": 500,
+   "vehicles": 10,
+   "volume_m3": 234.83,
+   "weight_kg": 10452.7,
+   "service_h": 84.07,
+   "fleet_rounds_by_volume": 1.87,
+   "service_h_per_vehicle": 8.41
+  }
+ },
+ "scale_n500_4002": {
+  "set": "scaling",
+  "customers": 500,
+  "seed": 4002,
+  "sha256": {
+   "locations.csv": "998ad3bc57b55740d1c7ec3bfe17bb6505254df9d4575ffba22ee5d9779ee4ba",
+   "orders.csv": "56d43daa439c6543b89b80bd2cc2c39d01d92deed8d62615bc303343e91ba7ac",
+   "distances.csv": "23e7dc87733d04eb34f9f48235c6f5eca682ced887ebac4b9a96f17318425ef6",
+   "vehicles.csv": "3a75c15b1fbc004d02ba9c2faec6dd9ce296e7e17b3c80f2a83e0b0957c573f1",
+   "params.json": "1a96ce3ef597091a6b10bb6404905671d9dcb89d1aed3c0b991225cee6f73316"
+  },
+  "stats": {
+   "customers": 500,
+   "vehicles": 10,
+   "volume_m3": 225.57,
+   "weight_kg": 10087.8,
+   "service_h": 83.43,
+   "fleet_rounds_by_volume": 1.79,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "scale_n500_4003": {
+  "set": "scaling",
+  "customers": 500,
+  "seed": 4003,
+  "sha256": {
+   "locations.csv": "35da079b075040f5fd52fb628d887e958afba8ca97f309be3baf12b5d9551788",
+   "orders.csv": "62c809574eea08504b149fee2c75da853a957fbac73a7a8d3979e9f86d098661",
+   "distances.csv": "576703871b204c0c80cc058573c38c2ea422fb4857f5847a72780770e4f8cbfb",
+   "vehicles.csv": "3a75c15b1fbc004d02ba9c2faec6dd9ce296e7e17b3c80f2a83e0b0957c573f1",
+   "params.json": "a7ad028cd1973301a36b5291675fd294c1cfa612bbbb6326baa3ea341ab33b9d"
+  },
+  "stats": {
+   "customers": 500,
+   "vehicles": 10,
+   "volume_m3": 237.23,
+   "weight_kg": 10288.0,
+   "service_h": 83.79,
+   "fleet_rounds_by_volume": 1.89,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "scale_n500_4004": {
+  "set": "scaling",
+  "customers": 500,
+  "seed": 4004,
+  "sha256": {
+   "locations.csv": "73110b6bb6f6dce1c4097ac568618c4bfc607b2c1d4e1f1024ba4ce6c75bf64a",
+   "orders.csv": "322a575f7cc1f8c8282bfa36c283791e101bdfc56bad9514117fb94daf3008af",
+   "distances.csv": "b2fe506ea7cc2366a7ab30a34c76e81be6a83ebe142ce59258c090a5ceefe8b1",
+   "vehicles.csv": "3a75c15b1fbc004d02ba9c2faec6dd9ce296e7e17b3c80f2a83e0b0957c573f1",
+   "params.json": "66d933c596a1d1136ea97f04c559afd984bf7c8d61fa09d36934da34875137d5"
+  },
+  "stats": {
+   "customers": 500,
+   "vehicles": 10,
+   "volume_m3": 234.63,
+   "weight_kg": 10046.1,
+   "service_h": 83.4,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "scale_n50_4001": {
+  "set": "scaling",
+  "customers": 50,
+  "seed": 4001,
+  "sha256": {
+   "locations.csv": "0f518b58717a225335331ffe64e4ac9c0f013bafcc537996802090a686bc5c98",
+   "orders.csv": "32466935c32aa828cd52c42c972eceb0959daa21b219815c6970835d2c4bdf28",
+   "distances.csv": "9d32a6bf8b29b31f360806646ab2340dae2bd0074bf28d1e4cb35db349c3e8a8",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "ce75cd25b090e44ce95969ea81c0aa636f445e79b66747b2205efa74f8fb4848"
+  },
+  "stats": {
+   "customers": 50,
+   "vehicles": 5,
+   "volume_m3": 24.5,
+   "weight_kg": 1125.4,
+   "service_h": 8.54,
+   "fleet_rounds_by_volume": 0.39,
+   "service_h_per_vehicle": 1.71
+  }
+ },
+ "scale_n50_4002": {
+  "set": "scaling",
+  "customers": 50,
+  "seed": 4002,
+  "sha256": {
+   "locations.csv": "6f9283a81c4eaa294e48317b14aaf687ca7a5ecd19509b0a50335ed2381b65b7",
+   "orders.csv": "5b61379ff3776bed08c0f366ef9340dfd150e948fa9cb254a4a1a450998398f6",
+   "distances.csv": "a955f6ed443266fd43dda90cd84c3afee4501ed6effa11eb1887e446aa1762cf",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "a60bddf896232c5989641ef7d2d74e0f8ea73a7da75d92dde395838cb32cde35"
+  },
+  "stats": {
+   "customers": 50,
+   "vehicles": 5,
+   "volume_m3": 21.33,
+   "weight_kg": 998.9,
+   "service_h": 8.32,
+   "fleet_rounds_by_volume": 0.34,
+   "service_h_per_vehicle": 1.66
+  }
+ },
+ "scale_n50_4003": {
+  "set": "scaling",
+  "customers": 50,
+  "seed": 4003,
+  "sha256": {
+   "locations.csv": "ddf7e2d2e0be7357ed4881ab3a3ba8cf550f57a0df478139aa030a5094dbf14b",
+   "orders.csv": "60e3fba8ab643513607036193571134c039a43c8dc36d97640596fc94fed1630",
+   "distances.csv": "344de2a239b44d3f52319239b5c9c83c43b8915df5af68654751ee7757737107",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "ac7c6cd03599d4a390db552e4001b8cc614dbda68d4331c6513de7a2b9186060"
+  },
+  "stats": {
+   "customers": 50,
+   "vehicles": 5,
+   "volume_m3": 26.54,
+   "weight_kg": 1229.8,
+   "service_h": 8.71,
+   "fleet_rounds_by_volume": 0.42,
+   "service_h_per_vehicle": 1.74
+  }
+ },
+ "scale_n50_4004": {
+  "set": "scaling",
+  "customers": 50,
+  "seed": 4004,
+  "sha256": {
+   "locations.csv": "91d04013daab9d42d3fd04e1756ef24b8cfbbccc4c3badedfa17368e0a19a34a",
+   "orders.csv": "cceba759df467bc015b9f34492271b62bb060db19cff24ebe1902a34f845d091",
+   "distances.csv": "c0e13bfe58cc92b7286dd48f9e6e3c9fe0fcbeb67aa0884e292906d2580e98df",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f95587c9dbd1da0e8d02653fe37a45558ff5857973c28f32c123fa13b6dce171"
+  },
+  "stats": {
+   "customers": 50,
+   "vehicles": 5,
+   "volume_m3": 23.47,
+   "weight_kg": 979.3,
+   "service_h": 8.3,
+   "fleet_rounds_by_volume": 0.37,
+   "service_h_per_vehicle": 1.66
+  }
+ },
+ "test_3001": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3001,
+  "sha256": {
+   "locations.csv": "816c4a5cbdc11c9a0cb7ab80c758641db33c66ce01a3672d72858b0a8157439c",
+   "orders.csv": "5e6c6a6e27cb9921a187d976a2c4b0ffd6f6d1c99e28d491b7b5d7f6daa48597",
+   "distances.csv": "f3912c8e87b6081df9150087c7ea2b17cd0329ea23c38c98a1d2f22284e0eefc",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "802e6fc0888075559acb7f5bb5d1acd10ba898dbe49c8038ca539834bc337c48"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 122.7,
+   "weight_kg": 5283.2,
+   "service_h": 42.13,
+   "fleet_rounds_by_volume": 1.95,
+   "service_h_per_vehicle": 8.43
+  }
+ },
+ "test_3002": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3002,
+  "sha256": {
+   "locations.csv": "0e5a1528339a62871eefc992f0b40366bea7403424648205c2e95f5d0912a309",
+   "orders.csv": "1d21f3fe70b1385d9a261fc3750e9d9a57795209d66732ddeb1d798ddeb4601d",
+   "distances.csv": "052a8ebeddd3622011dfd633141627006f868399eca1bfdd1e62c6c5e97edac0",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "08869255893a231da522015add932569a38d35bc640d685c1ec85a21c03505b8"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 117.78,
+   "weight_kg": 5006.2,
+   "service_h": 41.64,
+   "fleet_rounds_by_volume": 1.87,
+   "service_h_per_vehicle": 8.33
+  }
+ },
+ "test_3003": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3003,
+  "sha256": {
+   "locations.csv": "73c0445c1369e58bd1aa8e5c62957c0ba9ce6ea0e125a80132d66337d6a05a20",
+   "orders.csv": "8969d135fd6245e6a9ff279f294d25647246d851c1f636d0cfe4ce9a8816aa6b",
+   "distances.csv": "a2c3e4cecfdb49f46a7892c8d1c5545a380f8564933b5d740f0ef55e2943df97",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "ec0af6715b4a02f8947bce0da766cd82e0269ab933aa0d682d6e567057df40fe"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 109.65,
+   "weight_kg": 5116.8,
+   "service_h": 41.87,
+   "fleet_rounds_by_volume": 1.74,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "test_3004": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3004,
+  "sha256": {
+   "locations.csv": "56d80777b7d6a9c4a5181cc26e656d536d13ff4082c2950dc5dc69dd75dadcf5",
+   "orders.csv": "3779abb74ea7a058020c7f8995614957f7b931c468c317caa362648a05876877",
+   "distances.csv": "a5334838d906593531f1463bd102cb64b46b9242a44da4de71b0efbee9094713",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d33d009b3004a5c70e8266df5b9a4626eec83b7498b503d6f1ea9e5e6fb4a5e8"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 125.86,
+   "weight_kg": 5275.0,
+   "service_h": 42.11,
+   "fleet_rounds_by_volume": 2.0,
+   "service_h_per_vehicle": 8.42
+  }
+ },
+ "test_3005": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3005,
+  "sha256": {
+   "locations.csv": "582389d5d0c1ae9f76e10e0f6092c9a7272e23d49fd4cb5a2c3379748fd38dc8",
+   "orders.csv": "f43e94c06616a3b8b845042047428e1e43b4cfc119123554cdf993dbd9753b03",
+   "distances.csv": "de426135a49a28964d0d9129e1a858148f47ce6b4d009249ec3c217bca77c3e6",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "0122b15d1c15af2a7b228ed5cc656d87bbbb41b26f256cd2de2d5a2151ccfbfb"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.92,
+   "weight_kg": 5257.6,
+   "service_h": 42.14,
+   "fleet_rounds_by_volume": 1.83,
+   "service_h_per_vehicle": 8.43
+  }
+ },
+ "test_3006": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3006,
+  "sha256": {
+   "locations.csv": "0d192937c2822cd60321079d753fdd5c746a612e3903c11259cb951aa3c75d19",
+   "orders.csv": "9ceb0670dd9d19b147764ffa1a575dc7301cc8cd711e324e789edbf73345b7b2",
+   "distances.csv": "79c1ca881d280e64eaa93764de48d99d7666285056a5d1e76eb81236afdc8fbd",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "12cf26d9299b05d7e2b33215b1fa59943534e9ad3e47038d4422511996ca9161"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 112.98,
+   "weight_kg": 5265.7,
+   "service_h": 42.08,
+   "fleet_rounds_by_volume": 1.8,
+   "service_h_per_vehicle": 8.42
+  }
+ },
+ "test_3007": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3007,
+  "sha256": {
+   "locations.csv": "8adb62188c56f17a63acfa1879854fc99a28cac592ab0137ce3208f45c024aef",
+   "orders.csv": "54d80cc9bcd8b2f9a0da1c7408e28bac8117b85d3596c3c390a4a906812bf1fe",
+   "distances.csv": "934b106fecb3217df2bf784c890c25ac1bc1a594be289fb865da73ff6a3389f1",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d167e9235183c54ce06a27097b435e66a4fb365ffc1a914e1cf2b73782646d1b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.17,
+   "weight_kg": 5368.3,
+   "service_h": 42.3,
+   "fleet_rounds_by_volume": 1.93,
+   "service_h_per_vehicle": 8.46
+  }
+ },
+ "test_3008": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3008,
+  "sha256": {
+   "locations.csv": "adc2bb2afda163575569574008c23e6fc1abb1189ec71b87c7f8d11d42068e19",
+   "orders.csv": "7c87f2f26a224ecd876d1abe67e430d431e4a5b0913299c18914472a61188c64",
+   "distances.csv": "81a29251d16a5f4c79b9188e9ac4fa760731faa5d813c00d4560ca4e91036acf",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f0c85c1dccfc5fbb231de9953a253ff9c2626e36a527629869726427f09298c7"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.17,
+   "weight_kg": 5118.8,
+   "service_h": 41.87,
+   "fleet_rounds_by_volume": 1.83,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "test_3009": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3009,
+  "sha256": {
+   "locations.csv": "b9c6e8551be0615ea812e3e12ec05dcb0defd21a8d9efd18aea45068c4a7d356",
+   "orders.csv": "84d1e397226a26a6be771405eb9cd96670aecc553e4a7019ace15208a1d2fe63",
+   "distances.csv": "fc5b0c077eeda3a54672b1e484ea90825ee26a8b91672d36bf02417825e3f88a",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e8dd8b3ca7aadb21d5f1f45c10c2cce36b08a6e28b3e889fd70e121d9a770856"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.04,
+   "weight_kg": 5207.7,
+   "service_h": 41.99,
+   "fleet_rounds_by_volume": 1.88,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "test_3010": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3010,
+  "sha256": {
+   "locations.csv": "e03c6b096dd0347521eafb2a4d383b7d38fcc2ff3930973af7799279550c099e",
+   "orders.csv": "5112b2e7bfc45cc10a0057e195f8f7fb5264fca2a321e9325a7d29248c89c87e",
+   "distances.csv": "d8517eadc2dc5f30e1db1db80fc194c30863d2e944e3798ccf847a5d5a16a572",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "badf95dc9c1ad6affd2028bd849c6ca1fe1b2cf2bb645ba2f33a713d5121a9c7"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 113.37,
+   "weight_kg": 4974.2,
+   "service_h": 41.62,
+   "fleet_rounds_by_volume": 1.8,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "test_3011": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3011,
+  "sha256": {
+   "locations.csv": "436b4749c23a59ef989df98bc1bde51cd9bb8c86331b2c6f6a678b1e805db988",
+   "orders.csv": "747c2a8b910d1a61af828303893c6dbcc4d392714a2f16664c473d3f465feecb",
+   "distances.csv": "78da9c5ede875ef79b936f924618a0e37b47b19ef215e756b9fb7c66d42f8233",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fc6a861eba113135b244a6c153001ab27e4df2e1f6d88e5494568e72a12e7152"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.07,
+   "weight_kg": 5423.9,
+   "service_h": 42.36,
+   "fleet_rounds_by_volume": 1.92,
+   "service_h_per_vehicle": 8.47
+  }
+ },
+ "test_3012": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3012,
+  "sha256": {
+   "locations.csv": "1c34d39b1d2d4f046e70aeaa748be9434afb33491f17bfbf20b5211af8ae82b4",
+   "orders.csv": "b7d94978e1fec695d4d1b25192176f6d8f380ccc9c6123a62924006d8148ad5e",
+   "distances.csv": "99dc1c5bf65979e3efe993b269dd193ee5d8608b4887de7c4f9993bdf6d7ed3a",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d72aba6fe63355aad20080836f0660f2e887eb1b31e4d26882469e7a7e91d1d8"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.24,
+   "weight_kg": 5206.3,
+   "service_h": 41.98,
+   "fleet_rounds_by_volume": 1.85,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "test_3013": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3013,
+  "sha256": {
+   "locations.csv": "e217f8a708ec46b70dc8941d5702daa38e57325616ae9d83ea81c6865f3e7fe4",
+   "orders.csv": "4f720d5c02da4ca7d663ea7508f7c27ce59d5cc4d05d671510b21bd5bba605d4",
+   "distances.csv": "7cc9d01082c9bb3cfa9ecea2231912c2393db7b0fac7bd3a13b25c721da3f0ae",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "72172554789b6ba9f8829809a5ca3fe2503f4f36f9a5aa8461e943da7144e348"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 112.64,
+   "weight_kg": 5076.5,
+   "service_h": 41.78,
+   "fleet_rounds_by_volume": 1.79,
+   "service_h_per_vehicle": 8.36
+  }
+ },
+ "test_3014": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3014,
+  "sha256": {
+   "locations.csv": "d4a0a8dd6b1f497c5253b250ea7864b14ce7acff860a526f9be8c6f8152b086b",
+   "orders.csv": "e8f28ea081c646ecd85d546451071c828bec16c14a5e14ce10e8b16d9ca9d569",
+   "distances.csv": "a8afc98dce0d39064e6610ee9fc8a756ff12467e01e3457b0648ace3f4f48459",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "004bca35750b64896594df13d5fa58667f18193a04eb40997eb4e88f3cb89048"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.38,
+   "weight_kg": 5026.9,
+   "service_h": 41.72,
+   "fleet_rounds_by_volume": 1.93,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "test_3015": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3015,
+  "sha256": {
+   "locations.csv": "6101c1619a9ae01e1e8dd30e68339fc43a4fd8eddab8c0c5f7fef1fee9a67f0c",
+   "orders.csv": "d1e9a946c55292f591354d9ef3e6e27865974e8dcf2cd2e9236958caf9b53a09",
+   "distances.csv": "69adaba12712448a4bbba73ba9f4f735bd7340cb6c3458a0e1f8db6b3c30c673",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f0a4000fafff07a29f23c312a5fa3ebf6697e14da2354269724b080df6585491"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 117.21,
+   "weight_kg": 5094.0,
+   "service_h": 41.81,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.36
+  }
+ },
+ "test_3016": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3016,
+  "sha256": {
+   "locations.csv": "317956c3f4364d414d7597b2ea8f3d72aca5d94f13e3f9e0d37801b1939422fa",
+   "orders.csv": "3e0d84779455085f766a397b58b22e83cf823e7ed4bd6fe43d61d0a599cbbf28",
+   "distances.csv": "a9d2e3be39bbb15f38535a7e1cda5434635aeda56415db9ec8957a22afce80e2",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d5569b52f9a38f5c80ceacd8f8adcb5a04829413b58d7b50177c1fc78e0e3ca8"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 119.65,
+   "weight_kg": 5419.7,
+   "service_h": 42.35,
+   "fleet_rounds_by_volume": 1.9,
+   "service_h_per_vehicle": 8.47
+  }
+ },
+ "test_3017": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3017,
+  "sha256": {
+   "locations.csv": "ea6798d0f3a05f80d1f3b46d4983ff0b9baadc71ef8e744d6651597b7bd0b62d",
+   "orders.csv": "b73089ee35ab38ea19711d7b64ceb5673a05ddc64aa1484f0b2f6eb50c106dea",
+   "distances.csv": "8323262a916a47b8a11da06172f7b1db61a4cde5173de4d931f309ed8de1c67a",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "30cf476a00b4f2674ac7091e559683698c5a1736f9823f310c02ec7e5003939c"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 119.92,
+   "weight_kg": 5218.4,
+   "service_h": 42.03,
+   "fleet_rounds_by_volume": 1.91,
+   "service_h_per_vehicle": 8.41
+  }
+ },
+ "test_3018": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3018,
+  "sha256": {
+   "locations.csv": "95df6b6bc6549471552b7e5c9bdb0aa78d2095fbf26b98854b2a7ac9dbfd0d25",
+   "orders.csv": "6a2077b8b3f8a2f28d518ea63a0f8bd68aa6daa557633eac698221c14da869d0",
+   "distances.csv": "57be3914d246fb87ed5498ebd9a39c97303c554ca3b79147c7945a7d363f2a16",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "314ce5bef60c4341f03ef000653f7f0e41078a1111e5ed4929aff3168be4ba95"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 109.55,
+   "weight_kg": 5006.6,
+   "service_h": 41.69,
+   "fleet_rounds_by_volume": 1.74,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "test_3019": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3019,
+  "sha256": {
+   "locations.csv": "399007b222112e57205c070a4d7bbaae8a8ef2e16911be9c50b08fa2d014a4d2",
+   "orders.csv": "81bb958db2824db5c50d4c4491901a35e21d56935319a09cc34f85583723a9e7",
+   "distances.csv": "3f966836137bd2d59f6c7f9a85da5bbbd0f8d35f955fa2825dd56e64cb7d743d",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "73bca3105f6ed30ca9beb5d5aff0da7094527a98f7ba40eaaba2664e8de30df0"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 120.68,
+   "weight_kg": 5116.7,
+   "service_h": 41.83,
+   "fleet_rounds_by_volume": 1.92,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "test_3020": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3020,
+  "sha256": {
+   "locations.csv": "3ac2f87051ed011728260064d3ba55293ae0239376ce2972330ee219ee7e7f28",
+   "orders.csv": "607b218fd873284eec9185dbeb19ca6050da848888295dc5836d5482062ff2d9",
+   "distances.csv": "fc35ebc04d143459200a903460ea4ec3bbc4368ee247db4105751ca29b171373",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fdace88b6eb7ec0f472075605e61f394cfb25dbea2bbad3a415d6ce1688c1494"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.52,
+   "weight_kg": 5176.3,
+   "service_h": 41.95,
+   "fleet_rounds_by_volume": 1.93,
+   "service_h_per_vehicle": 8.39
+  }
+ },
+ "test_3021": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3021,
+  "sha256": {
+   "locations.csv": "da1f080160bb1b6d6e4a231b3ba3e80b9e872753115d4e9275f57e02513bd322",
+   "orders.csv": "de5eefddc039b36428fd091ed21b4d1b2c37e29253fabd04dfb57cfc7299b513",
+   "distances.csv": "0df087cddd3d68a69a246770093f8ff8b10558b108c31d515b55be1f5975eb54",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "5d3645ecdb83004ef7bb0ba21375f3e151c118a4c5e1134bc2b37ead8fcb8176"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 111.1,
+   "weight_kg": 4706.3,
+   "service_h": 41.17,
+   "fleet_rounds_by_volume": 1.77,
+   "service_h_per_vehicle": 8.23
+  }
+ },
+ "test_3022": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3022,
+  "sha256": {
+   "locations.csv": "e824bd8255e394aee569d95087d4f68bc4f24a2173e587b7107da1b9cbd238bc",
+   "orders.csv": "571b3c37f6a12eddd2bbed98bfb1298d5be392cc97886be7fd32e6472717ed3e",
+   "distances.csv": "f2fafaa4bd5f78511b29fa1117fc6923e460c796750c7b19d71f840eb5ef6c22",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "0b617b2021e556f726ce8275072f87aeebc3545903731a5df8b69ea7219e6d49"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.45,
+   "weight_kg": 5027.4,
+   "service_h": 41.69,
+   "fleet_rounds_by_volume": 1.84,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "test_3023": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3023,
+  "sha256": {
+   "locations.csv": "0ca522399a265f2e6cc6575fd292738f64b94dcd10d289bfcad3e644403b0187",
+   "orders.csv": "fafaea8b95bf7e70ced954a248a4ec243f2cc7932f747773c3e344f34815a54f",
+   "distances.csv": "25211b90cd69df6ad7914d3e0c6a7bea5998eda8ce0cd8eb2857b9c256192709",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "096be11ea9d2e8acbecddc6d2b7f476bb7d6d24266c24817204f5f9570da6b99"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 112.93,
+   "weight_kg": 4962.6,
+   "service_h": 41.6,
+   "fleet_rounds_by_volume": 1.8,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "test_3024": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3024,
+  "sha256": {
+   "locations.csv": "bacf4675075b49b92239cc2804007456635f304b0d9c002c755b9ede33784a14",
+   "orders.csv": "1b84361f278d3f4ce0cb3c4009cb66e573a08455bc8b9145fbf43bc5b0b5589c",
+   "distances.csv": "ea26c4504799384f6de572ebdd3db4288383a9e3f5c32e0f3ecf71c9e1b9bcf8",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "b8098774b07caf92d67e781908654e396763db12cb193a444480d457508db3cd"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.76,
+   "weight_kg": 4836.7,
+   "service_h": 41.4,
+   "fleet_rounds_by_volume": 1.82,
+   "service_h_per_vehicle": 8.28
+  }
+ },
+ "test_3025": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3025,
+  "sha256": {
+   "locations.csv": "7fca69748ee32e8a22c15d18f731a13477c0939dc93f36082d254c227fab8a7c",
+   "orders.csv": "2b6eff4ac1892167cd318e105afb63336998dbe2c7906bab6825990284632f0d",
+   "distances.csv": "74a45c88a400f2eac93cb32104d36cddbbfd6490b72aacf8886e8067d275f5d0",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "21111a4f1076204ff83a989acb447c21d3fb86720da94e4eb2908176f9774582"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.93,
+   "weight_kg": 5132.6,
+   "service_h": 41.87,
+   "fleet_rounds_by_volume": 1.83,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "test_3026": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3026,
+  "sha256": {
+   "locations.csv": "44c685452acacda9f3abcaf65ac2cd3f80e164d2aed5182689ecdf56606660db",
+   "orders.csv": "895a0fc15d74cb1ee82522cd63b2aee85654bad3d93fc149aac88e284b060663",
+   "distances.csv": "a6804e75bce0d2ea9ae16f68598bb62f174ce077b52b8acb0a49923aa2360355",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "38d64c27668eceb8c0c28b851f9ca79054bde39f0e3fb485fa63fda511bf8f60"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 119.68,
+   "weight_kg": 4948.5,
+   "service_h": 41.59,
+   "fleet_rounds_by_volume": 1.9,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "test_3027": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3027,
+  "sha256": {
+   "locations.csv": "d7442145c2629c8459850f7b025808a8f0bde20f0bffe68a98719b320543ee59",
+   "orders.csv": "15a8d4700bd3437e5b92bc203b62547a034ec993a787192648b51eefa10d3cb4",
+   "distances.csv": "d220d81be7e69af2133e705c46b00343317ab1cfd9b9fc54dd11ee73c9272030",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "0ca89cb8c78b5a2f42313b7f8bd97252fdfd6e269f4d26833c25bdbbcc8d8984"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.36,
+   "weight_kg": 5270.6,
+   "service_h": 42.1,
+   "fleet_rounds_by_volume": 1.82,
+   "service_h_per_vehicle": 8.42
+  }
+ },
+ "test_3028": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3028,
+  "sha256": {
+   "locations.csv": "902b9e1b2333f883b0bbb77db8194bf611c772196c7e12932035d417286a6b30",
+   "orders.csv": "bad6b310d30497ab4901ae59888fd7bb73e66f5adac03529a51eb420e3b2ed4b",
+   "distances.csv": "a740902cfcc76033c12f23f5f0f1a24d852b877b882a4e45d25320a1b6ce3a07",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e6eef1132d32a3610e8e606ced3fee3567db435096b7f24b43d714077d43bd49"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.27,
+   "weight_kg": 5358.5,
+   "service_h": 42.25,
+   "fleet_rounds_by_volume": 1.88,
+   "service_h_per_vehicle": 8.45
+  }
+ },
+ "test_3029": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3029,
+  "sha256": {
+   "locations.csv": "48200f0167ab5c17e8a00ce36b8b995fc1e2d2a1ca81a34afaf6c74e4e598a1b",
+   "orders.csv": "7d3c42513e341c17c7df5fb188256cee11689fd1580938e7593b0f25c76408c8",
+   "distances.csv": "06f2af1e19e612a0ebeca0e8d46b8ad352d5681fe4558a5a23eb83139d49b9e5",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "b5e47601d6f4e3d84cb0947b107673e9a80c2bc10eebcd6eccba823ad3fa3a04"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.26,
+   "weight_kg": 5133.4,
+   "service_h": 41.89,
+   "fleet_rounds_by_volume": 1.83,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "test_3030": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3030,
+  "sha256": {
+   "locations.csv": "b4cb35e87792ff126ce284df3ad8f52d95a95a2909146357898e028ec692eaee",
+   "orders.csv": "34741c01a329d1a61802187829ad07e266c74e7021b648bfc44081f5a90c9dd5",
+   "distances.csv": "289239a94cd4fbab81a327c3ede3edc77eca916ca7ba1cf17f5972cbf5246f6c",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "28438fe4dd6296bcb91a5b699fdf7c391e8608ecf097f663e427d03198691a04"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 113.91,
+   "weight_kg": 5026.6,
+   "service_h": 41.7,
+   "fleet_rounds_by_volume": 1.81,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "test_3031": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3031,
+  "sha256": {
+   "locations.csv": "37e14e7b9d3541a9d259c8dbd312863f5151df84309300499e3bce423b965820",
+   "orders.csv": "6f197527ee0477244edc3e1bcff7a3c4dd980875d688057a45d5a94bf221b06c",
+   "distances.csv": "6821b9b5bac313a86003737dbfaae016e93d9e6eaf38d5c926bfd4dbe2432ee4",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fa3031bbf46ccbaf9826fb3964ee8549e4a2ceb4d95ff24ceb7e39378d745ae3"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 108.17,
+   "weight_kg": 5109.3,
+   "service_h": 41.84,
+   "fleet_rounds_by_volume": 1.72,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "test_3032": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3032,
+  "sha256": {
+   "locations.csv": "cb675bcbc247d5ffe723a29db840e065d49f53eb5ff13a7f8db21ad5bf506410",
+   "orders.csv": "db4bc450b616e4f61ff2f9e9616199640e7c195deb63a37cc4c9ff2996bb37aa",
+   "distances.csv": "2479fe5fed1ea5b4f81d976235c34d7acfd8a64c0867c964d54b4faeeb09c3dc",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "da539860154686c17ce96efd8a05d9ef067c39afb4fb83308e40b8ef6b996649"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 111.41,
+   "weight_kg": 4968.8,
+   "service_h": 41.62,
+   "fleet_rounds_by_volume": 1.77,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "test_3033": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3033,
+  "sha256": {
+   "locations.csv": "52a9e19616d1a274ae1853cb982a6dd094c9570130660262846f3d7badf7e028",
+   "orders.csv": "2355b4cd810b893b3de4164096829d8f4e91dd3d47df37d82464066004578c5c",
+   "distances.csv": "f7bcbf7d4fff3abff717e44fc33f6a3cdb343d92d0c396356cfcf793ea3ac720",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f05a946ddcc16c23fd8f6ad3e27bf6902f982906b421bdd7e37b89312e579764"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 113.4,
+   "weight_kg": 4999.7,
+   "service_h": 41.64,
+   "fleet_rounds_by_volume": 1.8,
+   "service_h_per_vehicle": 8.33
+  }
+ },
+ "test_3034": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3034,
+  "sha256": {
+   "locations.csv": "3fbabc2d4c95e777d3bd4001ebd51c910e27e04621850d73e088e5b5533bd2d5",
+   "orders.csv": "bce88bfee8116876db8d21553b3246cf47e53bbacae5265151db3b6a8245c5cc",
+   "distances.csv": "a4e4058cc4bd4fed21789741b794a55b211a7a99a2ef5350691cf50ffd8bbff1",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e8b744ae5d4b34da7103e9bd71921895b9960e9ae2afbc28266729f793157cbc"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 120.19,
+   "weight_kg": 5051.3,
+   "service_h": 41.75,
+   "fleet_rounds_by_volume": 1.91,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "test_3035": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3035,
+  "sha256": {
+   "locations.csv": "9f442c8e529628d8513468fe64931ebe50d13c8281c32d5f3c4ebcc7f15391a6",
+   "orders.csv": "00dd004bf7f3af14a54ecde43fc41d0154ab2c948e23ef1110a3688c556f049a",
+   "distances.csv": "48b920339ecc39d3c3bf5c44a4b3ac89c6f6b7de17162c1dbcd7f2f33e26cfae",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "46ce5f18c8ac900aae71efa5cdb3084d5ef8c07a361798bb4fc20a2b04a902b1"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.8,
+   "weight_kg": 5008.3,
+   "service_h": 41.66,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.33
+  }
+ },
+ "test_3036": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3036,
+  "sha256": {
+   "locations.csv": "0fefe1e794bf9cbadbec7b4d605555332285f0f968ede22335767a64988b8fd5",
+   "orders.csv": "6d65e9e8087f43e5ffc2493c451811f0b950b06bae368fac45957e154412017b",
+   "distances.csv": "b495b5a590400fd1b92af45192f82c34519f6c102b5ff64e1ccb891f087fb347",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e5b9b086b0254950acd83b6ed7edf67ff66035951b760d759ffec329de880a7f"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 112.67,
+   "weight_kg": 4911.8,
+   "service_h": 41.52,
+   "fleet_rounds_by_volume": 1.79,
+   "service_h_per_vehicle": 8.3
+  }
+ },
+ "test_3037": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3037,
+  "sha256": {
+   "locations.csv": "0aa3a0d62346d817dbdfbc5544d4469a11b2e79cf4213416864b49097b220544",
+   "orders.csv": "f576619b54c192292f2ec66d4cda7da6bb919f46e8aa1931db73bb09476505ef",
+   "distances.csv": "ef77c100a5316dd33efcdd50844c84b123647808b88c6568ebb6dc709255ee6b",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "0fac9b3d1237725ac611fb93bb1de63de9802ac26873006f11568a133da9f76f"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.32,
+   "weight_kg": 5158.5,
+   "service_h": 41.92,
+   "fleet_rounds_by_volume": 1.85,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "test_3038": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3038,
+  "sha256": {
+   "locations.csv": "313723f58c8442e3deb76821743d53510c30f8a2d850b9ff2959ba512640be88",
+   "orders.csv": "29ea274325d897e74b24e90917c6e55e2a18a2ce95a28b53b7eac104ed8922dd",
+   "distances.csv": "947d8a814c10be150844e383b61cd99865b06470f3d1f11e81b2bc0c28e3cd73",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "241a994cab2be41f6afd6816d06f80e29e26620bd6373de32844220a66b2534a"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 104.18,
+   "weight_kg": 4986.1,
+   "service_h": 41.6,
+   "fleet_rounds_by_volume": 1.66,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "test_3039": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3039,
+  "sha256": {
+   "locations.csv": "c99b0a14f5d00d19b8d2927148e352d5965fea39afc9ccb5d99d4eae6a0c09a3",
+   "orders.csv": "dc84b6b207d01169c291be4de744bccc5978f04c64b2af902e8c453fac3c2a80",
+   "distances.csv": "3d398504091fecca96f4a1066c012293680b8bbaaaf152904969c1c24452d33f",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "462a076185fb312a31df0bff3ae82fe4fb8b03c447ca0be382df7fd4f2ae237e"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 122.46,
+   "weight_kg": 5403.4,
+   "service_h": 42.31,
+   "fleet_rounds_by_volume": 1.95,
+   "service_h_per_vehicle": 8.46
+  }
+ },
+ "test_3040": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3040,
+  "sha256": {
+   "locations.csv": "33e7140b8b67da49e38617830a75d207ce6e8ad8fd19aa25b91ffeb4083c0609",
+   "orders.csv": "8c317ed27f5bf1bd5e567e782751d8845a9e797668d43c4bae7006de6ccc8674",
+   "distances.csv": "449ba63c36ec83fb9a3ffff5f043f77659bb97cd5f28ca58b94345eee0a4b7a7",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "c6266c0d9de8f9e1550f9afa63e29d00073c797c6b1d5a62410676e97247ad8a"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 112.88,
+   "weight_kg": 5220.9,
+   "service_h": 42.02,
+   "fleet_rounds_by_volume": 1.79,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "test_3041": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3041,
+  "sha256": {
+   "locations.csv": "9c2e921a1d0f9a4a8528d175310883f4ea4f3e56f7d2a398111d4860ef2365ff",
+   "orders.csv": "c77b34ae3a787dbeebc1125dacf7dd104e384a9fb9db81fe8d04eae6baeaf3cf",
+   "distances.csv": "93f2b3f608dfa6292282c87dbad09f82f5cb9d6f0c1533ad37ecf85c340d5ec4",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "1b10db2dc20c8d9f166c5bfa98d45d158b8b6867a65519e491ecf52afdb5fde9"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.02,
+   "weight_kg": 5328.3,
+   "service_h": 42.17,
+   "fleet_rounds_by_volume": 1.88,
+   "service_h_per_vehicle": 8.43
+  }
+ },
+ "test_3042": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3042,
+  "sha256": {
+   "locations.csv": "e546376347d313f29b44b9ad4f7d308358f6495107476b321c781712bf320ead",
+   "orders.csv": "87b26b9087e27f451e22352d7248cd33c26d98f204b94be810e04d6195ef5c84",
+   "distances.csv": "5a92c670a505cf639d07000a79af90b29e7f37c936d448435ff3af7a5897cc66",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "4c1cc4fe5c1a56782136d50bb3766858070f8e38032c3981cbc661ac42da18c3"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 123.13,
+   "weight_kg": 5279.6,
+   "service_h": 42.1,
+   "fleet_rounds_by_volume": 1.96,
+   "service_h_per_vehicle": 8.42
+  }
+ },
+ "test_3043": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3043,
+  "sha256": {
+   "locations.csv": "6f7075b760e82b35cb42b8783b6516f8d9e81dcc1b0eec60796d8019e8220c36",
+   "orders.csv": "78bfc32866feae67c08c8c553762872331a9213e5af40728b6011eff89cd7ad9",
+   "distances.csv": "8cfeef9f49c9533c2564232a439bf891662af5a4a0dd9176b31316d64032227a",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e071677894efd74907c3008e83f14706e0734fde24fb86682a03f22b200bcc79"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.18,
+   "weight_kg": 5391.1,
+   "service_h": 42.35,
+   "fleet_rounds_by_volume": 1.88,
+   "service_h_per_vehicle": 8.47
+  }
+ },
+ "test_3044": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3044,
+  "sha256": {
+   "locations.csv": "b14f9b790d7180204b53c14b979843a75bc967f5c1c581f3e18fa54cb9348ae9",
+   "orders.csv": "91f10f7b3230c63afec68ef52645a9a213a3d69fe6a1c78d3cdf121213be9c80",
+   "distances.csv": "12ce216038d80add873c7e26e1b6460100dd295a3beec823ef1757d5e0ff8dc1",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "5a033175b9681a1db1240ba65870934a5d2c91344beebfbfb7056a79399c0b20"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 123.91,
+   "weight_kg": 5238.8,
+   "service_h": 42.04,
+   "fleet_rounds_by_volume": 1.97,
+   "service_h_per_vehicle": 8.41
+  }
+ },
+ "test_3045": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3045,
+  "sha256": {
+   "locations.csv": "263ec350593597171a3418b6d236184b833119f2ce56567d53b3c297c3c9d861",
+   "orders.csv": "a94a5ba6f778d42eca3e7ea21043103b0c12e22d71da14f819cef02bb41eefa5",
+   "distances.csv": "31a3afc81cfcbdd921b3dfd2b1f295a8c7a81c1085827728eafee48e833c4675",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e37e116235fe83a70294a21d5127d7e3519a2b65f4add86dda09fc58b7634663"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 122.69,
+   "weight_kg": 5396.8,
+   "service_h": 42.34,
+   "fleet_rounds_by_volume": 1.95,
+   "service_h_per_vehicle": 8.47
+  }
+ },
+ "test_3046": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3046,
+  "sha256": {
+   "locations.csv": "a6fc3e2fb6bb6822e7115585ce14f7d3298ca1f3649ecc08972bdfb8be954330",
+   "orders.csv": "3d7dcc342492bc35ff53388d2c5026e9cb500e8a687ec5b7586079bfa0105908",
+   "distances.csv": "8b7d6f27a906a47258b15c6582fb21d198afaf5e7339a16a72f584bdea01e7f0",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "9b011930cb55682b856d80aa3f848781eea38f55139a87128eab267bcd7ec27f"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.66,
+   "weight_kg": 5192.3,
+   "service_h": 41.94,
+   "fleet_rounds_by_volume": 1.84,
+   "service_h_per_vehicle": 8.39
+  }
+ },
+ "test_3047": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3047,
+  "sha256": {
+   "locations.csv": "5a731085a80c553ff8e354d7630300b831f6d50cb5af265bdcfdb12d36feb7b1",
+   "orders.csv": "f108b2eaad9b6e60fd7120b23472f082864ac932b43398db51716380fee40bfd",
+   "distances.csv": "655101064899157bc639d6c81b8064290af4a4b5cf956a39c41468329e4cfb18",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fd616a11ed22cf7b8bfd7e992e39c6a1477eb716c9d26ef917d5769270a4ef85"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 111.71,
+   "weight_kg": 4710.1,
+   "service_h": 41.15,
+   "fleet_rounds_by_volume": 1.78,
+   "service_h_per_vehicle": 8.23
+  }
+ },
+ "test_3048": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3048,
+  "sha256": {
+   "locations.csv": "ebf224bb90ed8374e91ec6aff7dc09e1d0d2d91f3a35a43cdc8fb5d7b3f230e7",
+   "orders.csv": "90ed667343e47d7a47a20d9ac3fb0d8a75fd084230e2eb34b7915f2ba977bf72",
+   "distances.csv": "836abf079501b32925c5dfd5554e0bec0f61be847a30f01b44d7dfdb1149bcf0",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fd1567c3ef0be746ea397645e92e8ea265158903357ad146a6c747140200f41a"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 122.2,
+   "weight_kg": 5096.2,
+   "service_h": 41.79,
+   "fleet_rounds_by_volume": 1.94,
+   "service_h_per_vehicle": 8.36
+  }
+ },
+ "test_3049": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3049,
+  "sha256": {
+   "locations.csv": "441fc9fb74fe3f8dbfb9585e4b226d94c97d857ae6212837ca89fc795184c6be",
+   "orders.csv": "3744d11e41ce3ac2cea67336873fe6123df29e5cdbd3533a97c8e1dc1ce323cf",
+   "distances.csv": "0bceb56eb509b2e4ed4f6df4d390489a8e54aa814386314089bb8181ef300974",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f7953ed8e88bf7a91cdeb0f7dc50668b4751765155c0d5a12bf0429a2266a8b2"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 127.17,
+   "weight_kg": 5237.4,
+   "service_h": 42.04,
+   "fleet_rounds_by_volume": 2.02,
+   "service_h_per_vehicle": 8.41
+  }
+ },
+ "test_3050": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3050,
+  "sha256": {
+   "locations.csv": "0e858434956c2f67fb7b9b43b26ec201e47df4c0246f24e84dea112b38bf404b",
+   "orders.csv": "066c46a9be2e34b639ed4e6253922b4286dafb7b5ca67757393131e294bc7848",
+   "distances.csv": "10ee3b3235b133fc8563e6e25c2bd7c49a084d45ad944850a19a0ae44971cd66",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "70b160a24d3562ecfc8d999176613bb8406367f9bc5f738b1c00eb7d69075c5e"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.63,
+   "weight_kg": 4963.8,
+   "service_h": 41.59,
+   "fleet_rounds_by_volume": 1.84,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "test_3051": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3051,
+  "sha256": {
+   "locations.csv": "47e64ef93b9384c75ac5892d38c8b68b064ccf98bad044570693ae954038485a",
+   "orders.csv": "ce6e686bebc7091f850ef4915332401315db24ccf0b55e2544ef33532a700936",
+   "distances.csv": "0296316ec4192093ab2f4e6eee2ff326c5a62dc726689137a5ec95242669f324",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "df928b1fdb1a4d2a3b6e40dd71f8bccf0010fe319210e273c5d74ac2ff74fc25"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 109.47,
+   "weight_kg": 4984.7,
+   "service_h": 41.63,
+   "fleet_rounds_by_volume": 1.74,
+   "service_h_per_vehicle": 8.33
+  }
+ },
+ "test_3052": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3052,
+  "sha256": {
+   "locations.csv": "3ee18e416377f1931553c0451028ed9a0250edef625f2475050f2f73da507e59",
+   "orders.csv": "78e01190f47c5a1754a74686740139c99c4df71407d935518f1d786356032cc8",
+   "distances.csv": "b324d2b4824bf4ff51d914e4cb4d81d6f8daea539d992e4220dad0a18d820dec",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "bfa4a4ce37ed08120b3319b47825fdd5c98902cdfb67825b63582fee0e90b181"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.59,
+   "weight_kg": 5469.6,
+   "service_h": 42.45,
+   "fleet_rounds_by_volume": 1.93,
+   "service_h_per_vehicle": 8.49
+  }
+ },
+ "test_3053": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3053,
+  "sha256": {
+   "locations.csv": "84b0bb85e4b01a1fb62b43a1993ea5afeef90f2b02a75f5acf9c0cd6826936c1",
+   "orders.csv": "509e659eb63099ccd2f64c7099a7f1ee30935addaa4b0bd1e01ebb34e35c48b4",
+   "distances.csv": "cf6587eb4839a241212bbf2d3a4a8a9b2ce5323e2418cee85e980c157de5c49b",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "87ec3a3ed91c1a8f317f9f551b165311242954c4c48659b2ad24135a7f9929fa"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 113.82,
+   "weight_kg": 5165.1,
+   "service_h": 41.92,
+   "fleet_rounds_by_volume": 1.81,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "test_3054": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3054,
+  "sha256": {
+   "locations.csv": "76d58ecccfb3c69fd944ada0028ef04de8a4172040cbb2692bcd7659b46b8f06",
+   "orders.csv": "2e27265490f5e942ef3ef2a29958ede4a85a890fa222feedd64a9920bef1e6d1",
+   "distances.csv": "4ed66ab5196622e2f0e2b7eb6d55ca7c796bf33c3f4ca3482c5edfcb5644b3aa",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "29c5b39047399cbb59bfc384698558389fbae362bbc01c78ad64f3c5321b3ce4"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 106.71,
+   "weight_kg": 4879.7,
+   "service_h": 41.45,
+   "fleet_rounds_by_volume": 1.7,
+   "service_h_per_vehicle": 8.29
+  }
+ },
+ "test_3055": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3055,
+  "sha256": {
+   "locations.csv": "4116ab3a60bd5888e6bd6d753c037f8c9d45e4473449be06f4146155eb6d46c6",
+   "orders.csv": "cb44ac691d4615c6e748e3fd0e6d93b58103b9eb95f737eed0672cecfb9a8f8e",
+   "distances.csv": "ff2be3d18a871456b66afc26707453d6637b02afb571fcaa9e7173295a60d419",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "056ac388163c14746f3a9c5150aeb887a1d4980a5cab39bc8a893192824cc531"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 128.34,
+   "weight_kg": 5473.8,
+   "service_h": 42.43,
+   "fleet_rounds_by_volume": 2.04,
+   "service_h_per_vehicle": 8.49
+  }
+ },
+ "test_3056": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3056,
+  "sha256": {
+   "locations.csv": "23212679d05f99bca889a527e17f9a24b1a1a1aad28380c2414acc06fa92b3dc",
+   "orders.csv": "29dc532838ac65dc5633903195e49ec9002eeb1cd13ef7a13d56b2e0f12cad43",
+   "distances.csv": "2b1579cb7d4c979bb721a6b4244dcdafe934eba7f7703ced25413da2d891d092",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "66a9368f08e0bf16b1700273ec8f4203d2a8aba231b5d2f46d543477c5eca6dd"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 122.3,
+   "weight_kg": 5317.0,
+   "service_h": 42.21,
+   "fleet_rounds_by_volume": 1.94,
+   "service_h_per_vehicle": 8.44
+  }
+ },
+ "test_3057": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3057,
+  "sha256": {
+   "locations.csv": "044a1b2eeba54f1a7488c85c5775decabf64f239960bb3a4355a0ac99d117bca",
+   "orders.csv": "e161a1d1be084d4350acc4ad2dcfc1873d553432449f0b13be490c2c8a511a9b",
+   "distances.csv": "eabe21e7a95b1c2488605c39f3df7bd7cbbff72987a60bb3d7133370d7da5531",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "bb4143bbeb5073760174639d293b31a9083d4a8d0b5879e4dcd5c2243d84b138"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.44,
+   "weight_kg": 5144.6,
+   "service_h": 41.88,
+   "fleet_rounds_by_volume": 1.88,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "test_3058": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3058,
+  "sha256": {
+   "locations.csv": "c5f999be61606a18519cda57140667b85acdc2cb5270b6122dbb8990958c91c5",
+   "orders.csv": "c546297f0b069d931ef371a6d5ff940a5f82ec9e3050aa5a28a00a6fd84797e0",
+   "distances.csv": "67bfcf05819762a91e2840670fe2ba4b2e8a4e179f78e9860779f53efb3ef64c",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "699c92402ab5a8d4dbd2b719481879a2f6fb057e7a0c91af5a64027c82fad915"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.15,
+   "weight_kg": 5154.5,
+   "service_h": 41.93,
+   "fleet_rounds_by_volume": 1.81,
+   "service_h_per_vehicle": 8.39
+  }
+ },
+ "test_3059": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3059,
+  "sha256": {
+   "locations.csv": "d401de2c1e3b57ef9d553ce4ed836e06649f65f7f8042225a99fa8c299679a2c",
+   "orders.csv": "3acd46d1a7ae9ee5a8f9582c0b40333ba4a0708718e650a2c3d72ff0bf6f8d4c",
+   "distances.csv": "d2ccffceb0de5b4808f08a7c97d6844f279263a2189b08c63b8b2e703154a228",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "46398952b8054edff105a48b5e73e235be2cdde22b23236ee5734d8600b22810"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 110.41,
+   "weight_kg": 5075.3,
+   "service_h": 41.77,
+   "fleet_rounds_by_volume": 1.76,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "test_3060": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3060,
+  "sha256": {
+   "locations.csv": "431ba25cdaa25b78256ba426785fe9b9493cd5aa31db4d51caa52eb64d056921",
+   "orders.csv": "662e26a1184b2d80f710dc562fe907a52027bf7782da0c62b1f73e44e071b7e6",
+   "distances.csv": "032027bea7374e4990ae67a8629e2f64267b49ef1ae7d793601b376f520b32f1",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "1e536a7bfe467e06a2b72953a42e0e8239f2d7b87e83538ea0e42afc6de89de5"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.4,
+   "weight_kg": 5080.0,
+   "service_h": 41.78,
+   "fleet_rounds_by_volume": 1.85,
+   "service_h_per_vehicle": 8.36
+  }
+ },
+ "test_3061": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3061,
+  "sha256": {
+   "locations.csv": "c57274e87e38cf93ae7409d628289912d9e819666e0084bf6937b9bd13e9c27b",
+   "orders.csv": "b036005a6afa4b9116a7064aa6135482bcd591ff3f850d8aeb0e2a05ab69dc92",
+   "distances.csv": "b2e073da4ed8a3740508198672e5570c81781aef0ff06cd70c8d128f64eacfe7",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "22abd7fe297c01b47f9dd0a244b9091616730982b107b431ffa1131b11ac4160"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 105.39,
+   "weight_kg": 4858.7,
+   "service_h": 41.46,
+   "fleet_rounds_by_volume": 1.68,
+   "service_h_per_vehicle": 8.29
+  }
+ },
+ "test_3062": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3062,
+  "sha256": {
+   "locations.csv": "618750e86c609c0731afe89bd82095d46e1116f37b918a0e3f982c1c285a0fb7",
+   "orders.csv": "70d49111d24e8b12fa8835f7f54df627fee42f033da6bd8d66ec5614e883778a",
+   "distances.csv": "f5405a11f4dd0925f25b125c632eb93f634f6249dbd21dc2941060ecfb4f02d9",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "03a740b690fe416dfe590b5e996d5405caff4f812997b7b012d69c5ee295c7e1"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 110.99,
+   "weight_kg": 5041.5,
+   "service_h": 41.71,
+   "fleet_rounds_by_volume": 1.76,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "test_3063": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3063,
+  "sha256": {
+   "locations.csv": "91c8c0892cb9d2a97e18104bea8d2397b07e78754ec73bf230cb129d1d6d9376",
+   "orders.csv": "e174f92b0a4c89a5d5f62710ec0d3195ff6d99f09fa027ac34c04eee565ebc61",
+   "distances.csv": "859ac6feab03171f894a807762477a0c2d61abac8753577071254b34bace2d94",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fdaca84c117cc7172fa3a8ef247d3a652a66b79f6f13d86a1d2eb97f299ed138"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 124.92,
+   "weight_kg": 5542.7,
+   "service_h": 42.57,
+   "fleet_rounds_by_volume": 1.99,
+   "service_h_per_vehicle": 8.51
+  }
+ },
+ "test_3064": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3064,
+  "sha256": {
+   "locations.csv": "af2d577821db756ab3d534d8dcc781091d4f952fbd6e12bdcbecd40044898026",
+   "orders.csv": "97773d116fe5bfc64e5876154e524afcc83cbfb65230ed1211ef570ae15a4163",
+   "distances.csv": "45867d6a92f8dd0a67216ce03422956823d98365a7240f06a6ff79e16710c2f9",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "8428021a75b96274f2f58a9f7c84cce0df2835115c672fa5512f8a2b8e08db74"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 113.97,
+   "weight_kg": 5271.2,
+   "service_h": 42.11,
+   "fleet_rounds_by_volume": 1.81,
+   "service_h_per_vehicle": 8.42
+  }
+ },
+ "test_3065": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3065,
+  "sha256": {
+   "locations.csv": "e9cefe63488944b5113e929f916f54f4f6c0e39e259fa95ded10b229af6f78e2",
+   "orders.csv": "72fcc15a8d4dc03ebb597a02953f22332b2055d2fd470a5e784e04c645c07740",
+   "distances.csv": "7510208856c97f774cde1a6695d7e93a13a61842fb375bdc68c4d0fe35f0f7c8",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "56673d4354c2d7d131bba033b40908d24cc07ac16525779b09127d2fd550ef5b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 111.97,
+   "weight_kg": 4914.8,
+   "service_h": 41.51,
+   "fleet_rounds_by_volume": 1.78,
+   "service_h_per_vehicle": 8.3
+  }
+ },
+ "test_3066": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3066,
+  "sha256": {
+   "locations.csv": "6f21dd7c143958347d1ee64d9a3c4357a7fad5a433ca7f436f8732d012163b45",
+   "orders.csv": "a6a61b3c91615ea1e9b6bea28a9a5ec4c1a5ac80c02ed663b9d28dcf999181f1",
+   "distances.csv": "09b286a42edf59fa78a467433686231e7f6509df5e2ae45045b344324ea2bdcf",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d0ddf9b49bdb50cd5c7c7dd4ed2e96e3fae41c33cce261dc77c368ac75456d55"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 111.5,
+   "weight_kg": 5166.3,
+   "service_h": 41.91,
+   "fleet_rounds_by_volume": 1.77,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "test_3067": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3067,
+  "sha256": {
+   "locations.csv": "f288941f95730eaca980d8c1b5552029d051d03022c7543f3617ddd580f95573",
+   "orders.csv": "ec992c981df07a661cef5a8d434a49e8119e37db7a77a992e6b57a0d7599262e",
+   "distances.csv": "d2c7aec35034e2f1574085f9f2c3802e00cc4d768b111991285e0ad6f27e0797",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "0abd73596a642e2d453cf0cf1ec7d301fdec3aba0688d9960a8751be1fde0729"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 107.77,
+   "weight_kg": 4722.9,
+   "service_h": 41.18,
+   "fleet_rounds_by_volume": 1.71,
+   "service_h_per_vehicle": 8.24
+  }
+ },
+ "test_3068": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3068,
+  "sha256": {
+   "locations.csv": "2d30fbe0d4893129624dbbe469057fffcd9e656f6b86b68d104f6be78fd9b11d",
+   "orders.csv": "b5f318022aee881d15b823a6542687c1ce0f56aa371361a26ce48d77c1b3696e",
+   "distances.csv": "19eeae23fd32283e9f7403db14d65d5173aab143dd1ec98e349fbf6740ab2455",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "33795503715554cd5f37a90eef9cd882b786765f2de7d385ba3bb3960db44b9d"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 119.01,
+   "weight_kg": 5239.1,
+   "service_h": 42.05,
+   "fleet_rounds_by_volume": 1.89,
+   "service_h_per_vehicle": 8.41
+  }
+ },
+ "test_3069": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3069,
+  "sha256": {
+   "locations.csv": "8254adb7098dcd2d8a5337e0266807c841ef77fb04179b6398c55d8946bd47c9",
+   "orders.csv": "87c63822a7b21cbd32a67439940b241d486049e55c20e503d7e79835a13abc1f",
+   "distances.csv": "7fc170a468eae59b40fc4bd603ad5e4197994eb3b6b668011a76cd9fb924877f",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e64bbab072bad416bce2db3f3934a7503a50d2448c7fe97c40207f1058e58c17"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 113.82,
+   "weight_kg": 4973.5,
+   "service_h": 41.63,
+   "fleet_rounds_by_volume": 1.81,
+   "service_h_per_vehicle": 8.33
+  }
+ },
+ "test_3070": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3070,
+  "sha256": {
+   "locations.csv": "c59f28caf914ffa8357f512961c43cf6a1d6e0fa544b03e7e9f1e4a70cad8dbf",
+   "orders.csv": "14f88c3817db9593e548142a7cecc3cb7abd3dfa76f07b54b9ddbc2082cf4689",
+   "distances.csv": "266c4eb91d61622dee01e33803ab2bb62f336bfe8fcdb16bf05f82cc77b51844",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "b7397a71fb5d81fa393669fe78c76e3dd25b0ef22189586f6f6aeed6b8bdf89e"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 109.75,
+   "weight_kg": 5075.5,
+   "service_h": 41.77,
+   "fleet_rounds_by_volume": 1.74,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "test_3071": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3071,
+  "sha256": {
+   "locations.csv": "35423e43ccf54b4325b6965419a93c04b5cef4ca424ca16eef4bacfe0b621d75",
+   "orders.csv": "691b8169f6e52dfbcdc8ac4c22f44f3fb925e8b258d24a89662f927e4b6e41fd",
+   "distances.csv": "77dc1bdabb78aff942f006d69dd86f89acd3246901a085a920446f7c6a88a16e",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "92ac628676c3d1c5df56a0b2fb573cebfcef49c406d8b7672de8120932f70ef8"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.75,
+   "weight_kg": 5211.6,
+   "service_h": 42.03,
+   "fleet_rounds_by_volume": 1.89,
+   "service_h_per_vehicle": 8.41
+  }
+ },
+ "test_3072": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3072,
+  "sha256": {
+   "locations.csv": "19de5ce86460a513a94795f1ef71bec9eacafa23612d5f3496a4435a54a7f3fb",
+   "orders.csv": "2878f5c89aa32e21838e942cd88767808f53f84a07ecb66f3150664c0567fa41",
+   "distances.csv": "4d6e1d1120b20a7fd7718864b105a57f96115eb46300cd2648408bcb722ef0c2",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "1c2f4d0d5def84952f8d71579cdb36513e93a67657fd958901ef84966d011831"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 110.82,
+   "weight_kg": 4865.4,
+   "service_h": 41.41,
+   "fleet_rounds_by_volume": 1.76,
+   "service_h_per_vehicle": 8.28
+  }
+ },
+ "test_3073": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3073,
+  "sha256": {
+   "locations.csv": "3d7ed957ba891ebd331622006b1af9b04713d56d415a3d1e2a2e8a34ecc61ba7",
+   "orders.csv": "9154486b969b96195bf05074007e4445a56bd07da8485ba32f63ad3a5bf69d18",
+   "distances.csv": "2034c94315ff4f02c5dec178eae724d69d7637de14891439b2f78f6edb759328",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "6de9881cd91f0396669a41469a0bf1ab7949d3715c115c1088dc540e5559bd0a"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.76,
+   "weight_kg": 5098.1,
+   "service_h": 41.82,
+   "fleet_rounds_by_volume": 1.84,
+   "service_h_per_vehicle": 8.36
+  }
+ },
+ "test_3074": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3074,
+  "sha256": {
+   "locations.csv": "c5b2e3e2486a914d23772ca9dca0940ccd20a6833e4cc4cff9af6b89dc137b8d",
+   "orders.csv": "d54eebc99df1b29b9163c890d9da28f42d5b0a0777b20d90836c0d3bbc8e3c43",
+   "distances.csv": "7c4253dfaeb9a1bac4d624d956f0f6fdbf3b8158157fed4d070d14ad44187459",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e84138f762feb07d1cddbb72a9a761f904685ee5287c948b27c9c66d9697fd4b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.95,
+   "weight_kg": 5138.8,
+   "service_h": 41.88,
+   "fleet_rounds_by_volume": 1.83,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "test_3075": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3075,
+  "sha256": {
+   "locations.csv": "4a56065489796e9f2f66d87ff1aa4dbed47aff9b7b9548154f9f52197adbf87c",
+   "orders.csv": "ec5b20da0b98bf1922c18668b24d7369e163229dc089529c3948daee52f2766f",
+   "distances.csv": "efdb10e03f50cc35337f839e08044fdf148c6343f29cd79132539749844fba86",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "69a5bb3e647596b3284447c4ce2609ad61e269622c6af90e6db4e06b775d8d2f"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.61,
+   "weight_kg": 5274.6,
+   "service_h": 42.13,
+   "fleet_rounds_by_volume": 1.89,
+   "service_h_per_vehicle": 8.43
+  }
+ },
+ "test_3076": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3076,
+  "sha256": {
+   "locations.csv": "cb1593ef006c9b513e343691dfb185ce3a64c8dbd8dcdaeda354264c1dbd8c39",
+   "orders.csv": "9ed5d81891aa033ff5582e8be4a44675266afe42d6aca3c56483ff80fc14eec9",
+   "distances.csv": "0703a4cfb8e43217a0ce5eab0bcdc3f0516b2d7855ad9fedf022b31c7e6964ce",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "576f812231b2036753e2890219f99f14ce3a4bf1f46815f5953f8ef9a1030d1e"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 113.8,
+   "weight_kg": 5289.5,
+   "service_h": 42.16,
+   "fleet_rounds_by_volume": 1.81,
+   "service_h_per_vehicle": 8.43
+  }
+ },
+ "test_3077": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3077,
+  "sha256": {
+   "locations.csv": "2464bb88759b7783baaa3ca6a5faca001a97ec0ae21a776a24170e96f00425cb",
+   "orders.csv": "f061a7c52a89f7bced0e6ff487bade1384dc47a84ea4f068a817fa10ac8bb92e",
+   "distances.csv": "3853ed1c5712e676efcb2a25e35db4395f928d5d5178e83b6bb2ba604e418849",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "da5fa5d8e37f234f70809ac11bdca012a745379903b8020a5c3318aca8ac91dd"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 111.5,
+   "weight_kg": 5065.6,
+   "service_h": 41.77,
+   "fleet_rounds_by_volume": 1.77,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "test_3078": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3078,
+  "sha256": {
+   "locations.csv": "2262714e47390d3ffa14bab0e51dc038a5912991955128dad30e638436119ffa",
+   "orders.csv": "e9e1efea587974da8418e1b39bb95e441514e1fa242c0625a8579a383ddae4a7",
+   "distances.csv": "e53e73d7e1771ce3a4e7dde5ce3731305f174b4c1ae8b6289d1aafd69702a301",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fe23d4d87e27c5e46a00d6b4354821722240153b0e0dac15a8b6db1743520449"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 126.46,
+   "weight_kg": 5099.1,
+   "service_h": 41.83,
+   "fleet_rounds_by_volume": 2.01,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "test_3079": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3079,
+  "sha256": {
+   "locations.csv": "92751e1ec86f513f0ffea23013a7f97c27e47206a7b13551bf8dce27508499da",
+   "orders.csv": "ebd5d2ba61a17851d5f6db852f6c275350b354df68a6acb8ea42fbab68de1071",
+   "distances.csv": "a3acf927e2bec668c78417da717024ae164db18ef435d7e9b4a3bf763ef2c24e",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "38bb92b077111f0d86448ee5d76ded92c6572d8d8c1102d83b0ca780015f35d1"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.04,
+   "weight_kg": 4964.4,
+   "service_h": 41.61,
+   "fleet_rounds_by_volume": 1.81,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "test_3080": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3080,
+  "sha256": {
+   "locations.csv": "67ceb570bf06b3ba81894a2717bfeddf4b2c9bf368202b7ee726335bbd076b28",
+   "orders.csv": "729fb4402780ee521181d6bb40a8a22d0b6c0f9770f43ccab3ae1273a7700811",
+   "distances.csv": "334febea818e5f6ea7b0c694bb44ce2f352e97f9e3c16b1c42c6fa361bd31a18",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "6bc8d15d9c9e1cdeef7100eaa8bef22e9b4e840fc8194340db06c4cfb6eacdf8"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 109.04,
+   "weight_kg": 4839.1,
+   "service_h": 41.4,
+   "fleet_rounds_by_volume": 1.73,
+   "service_h_per_vehicle": 8.28
+  }
+ },
+ "test_3081": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3081,
+  "sha256": {
+   "locations.csv": "8136a13eda8d139d0844d7d556e79efba645d7332233551a5709a20cc1616f68",
+   "orders.csv": "31edeab62e28c6c7c240d503b8480a330e4c556594f62a827ca2eaa80c763094",
+   "distances.csv": "b39fb81974c522679a8f9b803e9689d64c390b0a0ec22da8396bdd3cd70fc2d4",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "b40189a7242d7105cc91a1b6b3ba8a5ab04829ac48c1d6b51286110f7f348282"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 124.2,
+   "weight_kg": 5585.0,
+   "service_h": 42.63,
+   "fleet_rounds_by_volume": 1.97,
+   "service_h_per_vehicle": 8.53
+  }
+ },
+ "test_3082": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3082,
+  "sha256": {
+   "locations.csv": "78f4937f3db75e985a8cff2aab7af477316aadbbfe5ad934d942e3c6736f525b",
+   "orders.csv": "c96aafd329180c8fa6bb729064774a2565b752353b7af6138dab7ca5d790f1eb",
+   "distances.csv": "5cfd192f3996b1fae614aa4d9b9767e6ea09834f8ed1613651a7edaa97a4397b",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "3c3ba8691062fac24ce6ec85c8021f1156fb1617de1b138542072b2cfcb41955"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.73,
+   "weight_kg": 5321.7,
+   "service_h": 42.18,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.44
+  }
+ },
+ "test_3083": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3083,
+  "sha256": {
+   "locations.csv": "07f587887cea042c2419f1dcd8e25b460ad73f6a05e031fb8be2003b64c54428",
+   "orders.csv": "59a708b185b270f4dab4b860c1cdccb4d5991340f57ca1a1515b1b02afaf4c32",
+   "distances.csv": "dc080ecc9f24e890568593e733f527c23895307074827361d1a24d3fab887924",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "ef6944bfee8e6c107a7b605286eeba383e45dcab6723216ca4d5fc64d340ceeb"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.68,
+   "weight_kg": 5079.2,
+   "service_h": 41.79,
+   "fleet_rounds_by_volume": 1.85,
+   "service_h_per_vehicle": 8.36
+  }
+ },
+ "test_3084": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3084,
+  "sha256": {
+   "locations.csv": "ae5378e54dcec75bab1f64c9da7bf5015c0e3f93dea98473df7ef8e956ed1a26",
+   "orders.csv": "b87d22864700eb3192e29a01851246a307f030e9fcd04ca0f8ebb170b02361f6",
+   "distances.csv": "9f40fd9cabc616975305774066c7aaf157db79b42b36667f51b5aea4193e2f9b",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "1b6989c36acea92ee4cab207f8b0cc9b762e476829bd5af8db194945ab668f3f"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 120.06,
+   "weight_kg": 5055.1,
+   "service_h": 41.75,
+   "fleet_rounds_by_volume": 1.91,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "test_3085": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3085,
+  "sha256": {
+   "locations.csv": "e93d6f8327b4a3d759f3337b29b14c8afc3976b3d911f32ac9d6a372aa2e9856",
+   "orders.csv": "f1aba097341cd5d683790435373292f20b7c23a8df6bf0da55eb7f9a77e87ec7",
+   "distances.csv": "2a535aea9e2b49b2a98c36516b8e3bd0dfb8725b98705aa4e918cab0bdaecb33",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "6636835bf44bd4b3f083d211c8b7dcca692bf42d12906609bb1c4c677608a289"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.3,
+   "weight_kg": 4995.7,
+   "service_h": 41.65,
+   "fleet_rounds_by_volume": 1.83,
+   "service_h_per_vehicle": 8.33
+  }
+ },
+ "test_3086": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3086,
+  "sha256": {
+   "locations.csv": "deb48ac72c3da2b748db4c56a8e1cd08bb32936c966173821475d442f0b9f5df",
+   "orders.csv": "397324abdfa8c214375f3bae0517e5bdd17bcaba2fa683537e25bf98dbb6c77c",
+   "distances.csv": "8780f03153fd2fcb22ee185a184bba3c140f9cd1aea12363157db40abc698f81",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "660236aec640cf56a0c009b669c44a171e97d9ae1190fafac5e5df42f00c22ce"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.37,
+   "weight_kg": 5166.5,
+   "service_h": 41.93,
+   "fleet_rounds_by_volume": 1.93,
+   "service_h_per_vehicle": 8.39
+  }
+ },
+ "test_3087": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3087,
+  "sha256": {
+   "locations.csv": "2641c9cf305581702972790a22a21074dbef750f9581c8b208254bac5b13db2f",
+   "orders.csv": "dabf05298022ff8af0e321267ef1db272264ee1fb23ab3d13b360f6bd28f46e7",
+   "distances.csv": "d763b16ad7fdbcbd1f52486ea770c9961e7a84972fed8cdec6c4ede91c7faacc",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f15d646c2f4b3d33070242e02f1d3d1c54978e9ff71a2dcd0ca99b269a17c635"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 125.22,
+   "weight_kg": 5565.7,
+   "service_h": 42.58,
+   "fleet_rounds_by_volume": 1.99,
+   "service_h_per_vehicle": 8.52
+  }
+ },
+ "test_3088": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3088,
+  "sha256": {
+   "locations.csv": "b146ae6b0e7a4024a6815ca5f91ad8bd32bbac53093da7d3a5e01c4c9a9425e7",
+   "orders.csv": "7a7b48070ab8a2edd21f2feeaffa3ef42fe8befa56c07193960f6e79ec137fac",
+   "distances.csv": "7f87f5655fdd5b30300fd33e0cf3899dd407018c45ae4d7aae80be9a44ab5364",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "1434f6bd2d31e13e3fb8419a56035976c51df1dbc1695154bb27069d300cfe19"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 117.63,
+   "weight_kg": 5152.8,
+   "service_h": 41.89,
+   "fleet_rounds_by_volume": 1.87,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "test_3089": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3089,
+  "sha256": {
+   "locations.csv": "ab340d10f520898436ad47a7fd0d0843a156b17cfff507be3216e0ace609446b",
+   "orders.csv": "544a588e32fba215c698e3d5255efff365778bd920fe2fc2f3b273413594e29a",
+   "distances.csv": "8aacad67cf47a793731cd8a407db5363c05d0643b5cf9d173a1c164539fae97c",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "8e77142e5be5fdc7d35207410bf5fc871ae7e0f5a51ebbe690983424b7116634"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 110.51,
+   "weight_kg": 5055.3,
+   "service_h": 41.76,
+   "fleet_rounds_by_volume": 1.76,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "test_3090": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3090,
+  "sha256": {
+   "locations.csv": "59840c0d328ab77c79aa6e607412ac1334875c6b35ea53fadbcab45f193d54b3",
+   "orders.csv": "1d2d53cbfc1efdb3e346853ca24fe178bfb804ed5aefa4933e2cb294fe1d5db5",
+   "distances.csv": "d1e947937b2ce63cf765115b2a7022f73d31e3a605cc57dd22805509b51f3d2e",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "816b2cea504be2fbeea889afbdf91fbac0612ebde2390cde4906b68e26c09821"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 125.84,
+   "weight_kg": 5610.3,
+   "service_h": 42.68,
+   "fleet_rounds_by_volume": 2.0,
+   "service_h_per_vehicle": 8.54
+  }
+ },
+ "test_3091": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3091,
+  "sha256": {
+   "locations.csv": "810a695faff1f1694650d2e8541d16275692b2d6fb8e388e943c3765e9f295fd",
+   "orders.csv": "dbc32a5b64ff88288adc2b32f0656b1df1216aa0b3666b3fd4507e31d6a1eb8f",
+   "distances.csv": "7c6f6b54d32523884deb561c742583402da42315d78b3956e9ecc586ff2ff360",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "c1ca6e9e9f06ff82ae218de2fae6be2d41c61bf3654cfb6868ff2b26ede7c523"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.5,
+   "weight_kg": 4958.7,
+   "service_h": 41.57,
+   "fleet_rounds_by_volume": 1.84,
+   "service_h_per_vehicle": 8.31
+  }
+ },
+ "test_3092": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3092,
+  "sha256": {
+   "locations.csv": "05bbe184f7708faea4d48d6f35110ab8e013e663b8b6b4a75c5aae73b22a18b8",
+   "orders.csv": "8f6e1ba57961987bdb207c6dbb664bd3c08c4e3a102f0867c914a85e4a0a0319",
+   "distances.csv": "3a727a35d75c9a5ab4f1eb85bc13ad523100a6454a362f88b10a1c0503cae41c",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "354c44f99633afb54699764ab7f571669ca0f13cbd696720da87636d79ade5c0"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.55,
+   "weight_kg": 5067.8,
+   "service_h": 41.78,
+   "fleet_rounds_by_volume": 1.82,
+   "service_h_per_vehicle": 8.36
+  }
+ },
+ "test_3093": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3093,
+  "sha256": {
+   "locations.csv": "da8f7c2f8cc3bb323d96c868dd8cf07d956aa79187457856750c42a9cddd0f0f",
+   "orders.csv": "599f602ead3355fe5b83b9b74eed627e29fcae8a669a4af141af5c37537747d2",
+   "distances.csv": "c136a5151439d837e2682c1c47c4feaecbc601b8dddf977cb76c89f559a875a4",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f665615651b8c4c544e7f3591b3746f1a8550fd97b6e99a90aabe3ab95be9005"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 108.53,
+   "weight_kg": 4779.3,
+   "service_h": 41.29,
+   "fleet_rounds_by_volume": 1.73,
+   "service_h_per_vehicle": 8.26
+  }
+ },
+ "test_3094": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3094,
+  "sha256": {
+   "locations.csv": "6b7ff617217bade4d29d92f53e22b7068dc17614a7dc25351d0e10df846fb872",
+   "orders.csv": "c7f61edd46a7906d78872dbaa480776407d3f5622db5ff5e52dde5e2df65b099",
+   "distances.csv": "d0b2d7db45486efaa01e80c682b0f1065477ccb6cd9a204064deb2c71aff699d",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d91fb10bd889b21c3a1cf21b5f779ee9e8bbee5c4c628884faf4a8053af45acd"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 126.84,
+   "weight_kg": 5510.2,
+   "service_h": 42.51,
+   "fleet_rounds_by_volume": 2.02,
+   "service_h_per_vehicle": 8.5
+  }
+ },
+ "test_3095": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3095,
+  "sha256": {
+   "locations.csv": "68b9d0ae46bebbb3e8c88a8f6eb2d8a6e5514b489dd13df6f3fb792d06ac50c3",
+   "orders.csv": "cf61d1c0af02801fb053427a00ec095d00d4ad7650f50f76296e61f0dde13dea",
+   "distances.csv": "43bc44a92a5135eb428118f385d0fb9012ba3245b1a5ddc3ed477c1b814711dc",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "1573265d9025d32f98c434a2e313a22a35c4cec822c300576e128c26bfc99170"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 115.83,
+   "weight_kg": 5193.1,
+   "service_h": 41.98,
+   "fleet_rounds_by_volume": 1.84,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "test_3096": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3096,
+  "sha256": {
+   "locations.csv": "8e2d9a3365d279075158569df2e4f11b77b0106a0054e113ad3d8683d3155841",
+   "orders.csv": "3ba7c1312ec856dd8311e4d18d5df2beda2637a35686a4ea896d74dec5f569c8",
+   "distances.csv": "73461b91b5d56df9d661dbe93e58203debe9784fa166b11b543a0738db4b6bf2",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "1768d25d2d463a379ceca52489ea99f7f4be829614b70b7886d7fd66c81dbb74"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 113.28,
+   "weight_kg": 4807.2,
+   "service_h": 41.34,
+   "fleet_rounds_by_volume": 1.8,
+   "service_h_per_vehicle": 8.27
+  }
+ },
+ "test_3097": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3097,
+  "sha256": {
+   "locations.csv": "77e83f17b447d1a93aee7d2e2b88971bd26e6ad4517d71ef882da3c3fbb1c738",
+   "orders.csv": "4f45e04c7659e5134f6aab579940414a2c16d295c67e9f94d8fca2d7ac87daed",
+   "distances.csv": "f27f33f08ac265da0f635810225b23aaac867db8bee10579507cd48d6f0d1cfe",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f4930d335ac1302278d3bfbb4761e2e4ac2ccc0679bcd3d94c9c41af18699510"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 109.07,
+   "weight_kg": 4944.1,
+   "service_h": 41.6,
+   "fleet_rounds_by_volume": 1.73,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "test_3098": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3098,
+  "sha256": {
+   "locations.csv": "97c2cdd20189b2f6efcd68f0ffd7dd9d902d37904a5a2534b5d8ccfbd2ea5415",
+   "orders.csv": "192130c0f84386e54f9b475eb1d9effd10ce57c98a468ecc67268f8d66971e1a",
+   "distances.csv": "95a21c9fe5f2448accc78758a04348a2d5ca8ac44689d6a2cae1b0f85dc94cd1",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "401a1dac492a989f97255b0a4d65b61f09002788c1b62d46975b957d4cdbfa3c"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 107.4,
+   "weight_kg": 4780.1,
+   "service_h": 41.29,
+   "fleet_rounds_by_volume": 1.71,
+   "service_h_per_vehicle": 8.26
+  }
+ },
+ "test_3099": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3099,
+  "sha256": {
+   "locations.csv": "ba8868fe5fd11d69336b2b36c635613c9ca64cbfa2c363425dd4a9ed299c8345",
+   "orders.csv": "a7d369ecc0a851f33bfd367fe200d0bf0854b033cf9946c86538dc0b90829299",
+   "distances.csv": "ed6df6fa2db1e1d90152d68d77e28f1f3d7acd6188ee584970ee778dbef14818",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "9636fb5d7d00b15abf4c4ca9a6eb7f706655ad227709958165e520046a63b3ed"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 108.68,
+   "weight_kg": 5020.3,
+   "service_h": 41.7,
+   "fleet_rounds_by_volume": 1.73,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "test_3100": {
+  "set": "test",
+  "customers": 250,
+  "seed": 3100,
+  "sha256": {
+   "locations.csv": "c5c7c020c2595c36bef7fc0c806d080edd08830cb38f07f9797ead48926e8098",
+   "orders.csv": "254f0882606addc78b28244542e094d493480abf525537671c389259d02730b8",
+   "distances.csv": "12a5ddaa24b0b1066811d145ad502075cb13ca74135099c486c59ad025645dcd",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "64cbcdf62ed736cd6338f8704a518e06d657e1e1c10362107dc8349c760516e6"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 117.24,
+   "weight_kg": 5029.6,
+   "service_h": 41.73,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "tune_1001": {
+  "set": "tuning",
+  "customers": 250,
+  "seed": 1001,
+  "sha256": {
+   "locations.csv": "62f8bf0002bc768ebec2e590d29a94b62aa25ed3668bb421aa2989c00c550e14",
+   "orders.csv": "b90fa8747f5763a6d70239a7ad3dc0cd44769a72cc5caae08a1c31ec2c254f6e",
+   "distances.csv": "1d924819cf16910aefe2ed5be9218ecaf046f898d8015b4c6fb8f7d2de5ee423",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d6099917db833a999b3682dd5a59289498126b33ce430eb520de65c3af4f5483"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.16,
+   "weight_kg": 5233.7,
+   "service_h": 42.02,
+   "fleet_rounds_by_volume": 1.88,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "tune_1002": {
+  "set": "tuning",
+  "customers": 250,
+  "seed": 1002,
+  "sha256": {
+   "locations.csv": "3df2d537bacc790827701a18988b660172275e313591561bd297f789450c402b",
+   "orders.csv": "78530c47bf9e9bc4a5c0b59f740663456f1d7b60b95a213f3a2961f722f641e0",
+   "distances.csv": "1d6d5d7c882400ddcec79784665d8523bbedab937a6ff9a15cf671a04478b663",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "098f453f07ff5959441e401f71f701cc475ad6b2c9693b9dc64f150b5c4d32ef"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.24,
+   "weight_kg": 5068.5,
+   "service_h": 41.76,
+   "fleet_rounds_by_volume": 1.82,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "tune_1003": {
+  "set": "tuning",
+  "customers": 250,
+  "seed": 1003,
+  "sha256": {
+   "locations.csv": "a0f1b2cab545b128119515e41f54666579744d4471e7982dd51d46936f771eaf",
+   "orders.csv": "2f0c3ab7cbdd26c2f61ccca464967a7d22148352a3facaf94afdcfef072afbb7",
+   "distances.csv": "dbcc31b3f668db5ccf3ea4b599d271bf2932d0d3baf0abdd4986d11e6026e75f",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "c93bf1d688298837505c7c3976d049b75896c4ef6e5d222d4207d4f7b4facc1b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 124.66,
+   "weight_kg": 5572.7,
+   "service_h": 42.62,
+   "fleet_rounds_by_volume": 1.98,
+   "service_h_per_vehicle": 8.52
+  }
+ },
+ "tune_1004": {
+  "set": "tuning",
+  "customers": 250,
+  "seed": 1004,
+  "sha256": {
+   "locations.csv": "5bc8662f8d26ea7afc0e637dc9ada7a8e6fc8ce1a4bda1acd162164bf96e99c3",
+   "orders.csv": "90d5ae6c3efd079dc6156e6c0da11ab4b052965cfff672cd5625c951ef02ce77",
+   "distances.csv": "f60e2574d4a44590bcb9f4869010790e9398e0003b03b2549c56095947b0407f",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "ace85ce61437c688d51ff17c1bf134d45d9cb6d1e2deff63db1f0c7b362ed4e6"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.33,
+   "weight_kg": 5169.8,
+   "service_h": 41.89,
+   "fleet_rounds_by_volume": 1.82,
+   "service_h_per_vehicle": 8.38
+  }
+ },
+ "val_2001": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2001,
+  "sha256": {
+   "locations.csv": "f74a878dee3acce077e335be927286050e49fa5ec897d7eabdd53e80c7a5327d",
+   "orders.csv": "ca99ea9b01bb393b5a1c64e9dcedccd5f9b690ebab4806d05d6adcfd8fc1affc",
+   "distances.csv": "9471ef8eb7112559ab198de71040e8e35dd5c7bad7710078f735708ac25ec015",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "6f3216f9eb7700f3b7a639b793b745692488435f2d57a8e6dd53c160df8e6f9b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.49,
+   "weight_kg": 5221.2,
+   "service_h": 42.02,
+   "fleet_rounds_by_volume": 1.85,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "val_2002": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2002,
+  "sha256": {
+   "locations.csv": "82fea8f240963359a3861606fc6a2a01bb45483774c45789bbe203ef9af76176",
+   "orders.csv": "afa92e233e32075950ed4e74d56f7d02a33dc3e150809fc9539de8ad0d7a4fa8",
+   "distances.csv": "e2cba55ad00c50537fecd255bcdc80dfc7048b035191afd045e8cc9c3a5258bb",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "e712eb079aaf31de8d57ae5218ab5347179a89e4099e783928604e26cdfec20b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.53,
+   "weight_kg": 5528.0,
+   "service_h": 42.53,
+   "fleet_rounds_by_volume": 1.93,
+   "service_h_per_vehicle": 8.51
+  }
+ },
+ "val_2003": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2003,
+  "sha256": {
+   "locations.csv": "845fa9d592aef5eea34a4646038f13f2e0bc50c9e127d0ade59a2c24d20f61ab",
+   "orders.csv": "eec3f05dbdbfe9b2089f38ceabebbe747e1c3565662f64b27a74b62af7f9977a",
+   "distances.csv": "c39f40b75be16b6607e2570335a8510c33dca556fa5f11bd7a5c91110e81de40",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "5b4dcbef6bfd3e7e109864b321a79a9ab5dc3263f22a9852a44bd53b472c28aa"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 110.94,
+   "weight_kg": 4987.7,
+   "service_h": 41.65,
+   "fleet_rounds_by_volume": 1.76,
+   "service_h_per_vehicle": 8.33
+  }
+ },
+ "val_2004": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2004,
+  "sha256": {
+   "locations.csv": "56741f758b4db952d8b9514ad1bfd163d0c3e5d1f99708e76d513a93a407e643",
+   "orders.csv": "39ca7f2b66a217938a6335bbe9cace9f72a6085eeb4f238056e2c05a583f3786",
+   "distances.csv": "38841bc1793eb8d3f63ab27e1f2ba808899b3f2bb5b9547593081c451c68771d",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "c12e41d7861d273ca24e981678a4528b17b837f0f0354d41677d75beaef21e0f"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 120.1,
+   "weight_kg": 5333.8,
+   "service_h": 42.21,
+   "fleet_rounds_by_volume": 1.91,
+   "service_h_per_vehicle": 8.44
+  }
+ },
+ "val_2005": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2005,
+  "sha256": {
+   "locations.csv": "840141195224972269d925f0e9460b2b2b1e3f6351b7420125aed380d3352bae",
+   "orders.csv": "7a3cb61228a8e30edfd36e1cdd0441f87f766dc77900953cc94b7319a864a6c9",
+   "distances.csv": "01769f0464f18607d969b746a5b599e5e26f0e2a5e10fae1d205bcbf5c355151",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "f0696c04fc63be195bedfdd3b522178c0f13b5beb290dc71e17b46c30a7a59e9"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.73,
+   "weight_kg": 5056.9,
+   "service_h": 41.77,
+   "fleet_rounds_by_volume": 1.82,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "val_2006": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2006,
+  "sha256": {
+   "locations.csv": "8d6c290b5b461931eac55798f46ba20a37309beaf79f9ff7080120a8563a2c94",
+   "orders.csv": "8eebb4ee0817d9d961e67467241df8c7e38de1bb1146781ce2583bfd8063506f",
+   "distances.csv": "824ddf434a6769c35d8e4b6f2c368c923b420d175c8ea43ac5133cbf8f9b9055",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "de6676589caca14a0f8a1485369e5b076317280c20caeed03c2fc918627dd3a3"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.19,
+   "weight_kg": 5100.8,
+   "service_h": 41.83,
+   "fleet_rounds_by_volume": 1.88,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "val_2007": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2007,
+  "sha256": {
+   "locations.csv": "47dc1963024279b871907bd7cfc32e232a3543316ab9307da4b223d266b4b16e",
+   "orders.csv": "824f23f645542611dcb6486621ef63fb5e651a6873f83196df8e1a0e9d1e8341",
+   "distances.csv": "8174f846d93f767df38ed03f0c22c23538ed4e32caaeb4233380e13fdceb0fbd",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "b190b63bfd0ea145ab76e837be50242a983c6b4b86400de1193fdcfbb721b75f"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 117.97,
+   "weight_kg": 5287.4,
+   "service_h": 42.13,
+   "fleet_rounds_by_volume": 1.88,
+   "service_h_per_vehicle": 8.43
+  }
+ },
+ "val_2008": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2008,
+  "sha256": {
+   "locations.csv": "58a13cc5dac9cc2fc2c4900e23202bc10162ce88b1e8a78f3fad9491cbc3c818",
+   "orders.csv": "a6a0ec95cadbea8156b021f654bdf7ea29b1419a4cc0f451b005b3eb86bd6966",
+   "distances.csv": "3da55f2d819495086a40c6e685b85c9e600aea9d945a3ad80f3d39674fcba5bb",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "ebb0a947643984ddbc609809924b5b1383aaec629e6ee4b99c424be08f277afe"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 120.35,
+   "weight_kg": 5193.5,
+   "service_h": 41.99,
+   "fleet_rounds_by_volume": 1.91,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "val_2009": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2009,
+  "sha256": {
+   "locations.csv": "0858b055df54626ae9fc23b508456e7ee84fa49204f10ba1a8416f3e32c698bd",
+   "orders.csv": "c15a559afadfed9a912daa1948c79664af9361be07087d07f41f16f44af8dcb6",
+   "distances.csv": "19e9c4f22ad1b57ee5b0810aedd94c9ea3c7b65cbce74e73136f51801b4d2184",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fd4fe130ee4b9f47a010938f2a90d75f5fd9979981f953fb2031e41d7257fecc"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 123.82,
+   "weight_kg": 5373.9,
+   "service_h": 42.27,
+   "fleet_rounds_by_volume": 1.97,
+   "service_h_per_vehicle": 8.45
+  }
+ },
+ "val_2010": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2010,
+  "sha256": {
+   "locations.csv": "3f5d351c45e540b3373c43ee6b156f7ec58e14129f5709e34c0d0aa4a987645a",
+   "orders.csv": "353040614f335c0bcdd299e6136be257444935f87d404de5fc69387f6f93ba67",
+   "distances.csv": "54a7e1f3e43d43bf3da7f4c33a548b48c2c9c001213d2312f172639dfa6b7bad",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "aa525f116602d8d12a7a042ac3878afbcb4028a19a3d009cb2b1bda2aa5dc696"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 118.68,
+   "weight_kg": 5196.1,
+   "service_h": 42.01,
+   "fleet_rounds_by_volume": 1.89,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "val_2011": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2011,
+  "sha256": {
+   "locations.csv": "dcbabc8250bdb29607acdcb8197ee1d8864c7eefb7817c4ecc00105a0ce69e2e",
+   "orders.csv": "6ea74ce898130fcc122a31ce42227e496d2265febbacc49f6aa51120942ec7c1",
+   "distances.csv": "31e3a091291d974e723dccb5c912fc37f4ccce255e0f912f4d7b65b026d98924",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "9669c79be5776eabe7ab4df1a845edb4179aded44392443708464130ec75fb8b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 122.07,
+   "weight_kg": 5093.1,
+   "service_h": 41.83,
+   "fleet_rounds_by_volume": 1.94,
+   "service_h_per_vehicle": 8.37
+  }
+ },
+ "val_2012": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2012,
+  "sha256": {
+   "locations.csv": "10289540f5031e38b9c1a48ecbcb31944b4a5d5db24faf2c2f390836321ecd71",
+   "orders.csv": "542565c633b4ee07876feb51c9a0c8a35e5e001b642838e080cb317a4ed3699d",
+   "distances.csv": "ab0cff6e8699f1f3c489c1230ab152a1c73b164565cbeeb84a52fb44fd636066",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "eaff06677738746fc101e55bffce125f0f464ab9a942b00cf05deea5d468ee52"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 122.87,
+   "weight_kg": 5534.8,
+   "service_h": 42.58,
+   "fleet_rounds_by_volume": 1.95,
+   "service_h_per_vehicle": 8.52
+  }
+ },
+ "val_2013": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2013,
+  "sha256": {
+   "locations.csv": "8487c61002673cc993ba4438b9649b3866922ed7a9922b7f2336260b5aa8809b",
+   "orders.csv": "8e43ebfc3163de52e7066411ca0c3eee0721de58cf5debd6113270fc059c8714",
+   "distances.csv": "70eb81c8eb1014cdbaca267642e2522a166726d8ef3bd7e506970b2ee7126972",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d5b283ce0b63e5fe9e9d248e5f93b41399ba375bf2e22cce8faf4cc774fee4da"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 123.18,
+   "weight_kg": 5284.2,
+   "service_h": 42.14,
+   "fleet_rounds_by_volume": 1.96,
+   "service_h_per_vehicle": 8.43
+  }
+ },
+ "val_2014": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2014,
+  "sha256": {
+   "locations.csv": "68aaac1582aec2ff48ddf0f6df51199af6bfaefa04fa58d7f58f6e56e2d1c1eb",
+   "orders.csv": "62ef6c1dcde94a277782811fd45da07ff986bbe98d662623520e061deee4772b",
+   "distances.csv": "b3cded7417a78e06601ac793270c8764609dfa6275694acf993f791286fdb517",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "0f3e05976c8f316a11a19e4f547e2dbb1a01221cbceb6bb355229ddc5a9a114b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 109.99,
+   "weight_kg": 5043.1,
+   "service_h": 41.72,
+   "fleet_rounds_by_volume": 1.75,
+   "service_h_per_vehicle": 8.34
+  }
+ },
+ "val_2015": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2015,
+  "sha256": {
+   "locations.csv": "71921d99b5b8464fad0a20a9f897b055fa53f8ffe4c38ea2e70c060493dda8f3",
+   "orders.csv": "11d2269abf8ddc17ffbc049246087eb8cd7ad7e61a40a992d8608eb7567617f4",
+   "distances.csv": "c8918ca6f21f21773120707e09bbe641000fa7886c06ef739f7ebab29bb531dc",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "69c933ba7af19ac8642fc9d81ff36a9d1c565d273b8141df950aa63327867c60"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 109.9,
+   "weight_kg": 5201.6,
+   "service_h": 42.0,
+   "fleet_rounds_by_volume": 1.75,
+   "service_h_per_vehicle": 8.4
+  }
+ },
+ "val_2016": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2016,
+  "sha256": {
+   "locations.csv": "c9e9dc7f1640ca2321474d24dba09759a8b705cc845a0fc56116546d4be2905c",
+   "orders.csv": "fa5043dc480d3c0cb845f17a5c2346f7fb43cb8031a81c090056de77a8dc6b38",
+   "distances.csv": "a9003b132a8f4b33f8aee4f3efc1d8ec97db9d3c9f5105737dbcbd13248a5ded",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "0417239951f95e4db209612a43d747b2b9975bc751fe45bdfaa238e52b83c745"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.54,
+   "weight_kg": 5297.1,
+   "service_h": 42.12,
+   "fleet_rounds_by_volume": 1.93,
+   "service_h_per_vehicle": 8.42
+  }
+ },
+ "val_2017": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2017,
+  "sha256": {
+   "locations.csv": "2cd48071d36f00109fdb53382e84db9547c610c13249f387efb0491da6ae2982",
+   "orders.csv": "e628040dc8e0e80ed40e44a16a56efdf56844abfea72c57b8e87b918a5ae69b7",
+   "distances.csv": "5a8c17b066c09aad638a3376bf37a38551d94d6554d8b6989a713b8df0c4a01f",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "7733529d34c65faaf5992e49c234b46aeaef2171255fce4dff84ae26beee4484"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 127.56,
+   "weight_kg": 5646.1,
+   "service_h": 42.75,
+   "fleet_rounds_by_volume": 2.03,
+   "service_h_per_vehicle": 8.55
+  }
+ },
+ "val_2018": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2018,
+  "sha256": {
+   "locations.csv": "b053d4ee50336b1f8df95d1fdb755ae2e485eb3fd86ebb1496af8fc8c57a0dd3",
+   "orders.csv": "92fcd1098b56486b733de183e1c64cc8fef9a8f2027a438269e50f2737d84681",
+   "distances.csv": "0501a8b711746878d3af6736eb4e0372c548ad0db1e18dbfc57ed367105217bc",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "8c1303a033ec9479e86a2c5a1fbb3bea825bae0513c3dc347f4282a083f58d0d"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 102.28,
+   "weight_kg": 4676.5,
+   "service_h": 41.12,
+   "fleet_rounds_by_volume": 1.63,
+   "service_h_per_vehicle": 8.22
+  }
+ },
+ "val_2019": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2019,
+  "sha256": {
+   "locations.csv": "cc0e4e13f62df26e20b2c76394f228e225f774377970c3740986cd886315e220",
+   "orders.csv": "c7d9265c3715ba66753f7796242beae2eefa09fc3f0a6b3a26cf34fc081e2f95",
+   "distances.csv": "b3dc9762440f743cd15fcf97c0650a1591cb0142a6ac1411c861eeae9278ebd1",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "fa33a0ed7b162fe9acf6da0b531b439660fb044589bba694f6cb4fe4a35703f7"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 112.66,
+   "weight_kg": 5057.7,
+   "service_h": 41.77,
+   "fleet_rounds_by_volume": 1.79,
+   "service_h_per_vehicle": 8.35
+  }
+ },
+ "val_2020": {
+  "set": "validation",
+  "customers": 250,
+  "seed": 2020,
+  "sha256": {
+   "locations.csv": "8dbcd32f94d2457ba8fb2c5e5772cb77fdfac7a004afa2fc227dca4637599bbf",
+   "orders.csv": "9f3640828740b89a2fa7f50c5eb35c16155c2b1f737a01b5a1d0ab0ddea59b4c",
+   "distances.csv": "2cd4a4cefb30364ca8043b764fb57114212f95acd60953df2892e15e0d716c09",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "ea2bea469c9441ea1a01043715fcd455f1a76a570fa354c0c34f072108c66b56"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 116.82,
+   "weight_kg": 5047.4,
+   "service_h": 41.76,
+   "fleet_rounds_by_volume": 1.86,
+   "service_h_per_vehicle": 8.35
+  }
+ }
+}

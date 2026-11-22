@@ -189,6 +189,32 @@ delivery and finish time, and overtime against the unavoidable minimum
 
 ---
 
+## Benchmark instances
+
+`python -m experiments.make_instances` builds the 100 test instances
+(250 customers each) into `instances/test/`; `--set all` also builds the
+tuning (4), validation (20) and scaling (4 each at 50, 100, 250, 500 and
+1,000 customers) sets. Each instance is a complete dataset folder that the
+solver reads like `dataset/` (`python main.py --dataset instances/test/test_3001`).
+
+* Same rules as `dataset/generators/`; only the seed changes. Seed 42 with 250
+  customers reproduces `dataset/` byte for byte (`tests/test_instances.py`).
+* Disjoint seeds per set: tuning 1001-1004, validation 2001-2020,
+  test 3001-3100, scaling 4001-4004 (seed 42 is never used).
+* Scaling instances repeat the 5-vehicle fleet once per 250 customers.
+* The folders (about 90 MB) are not committed. `instances/manifest.json`
+  records the SHA-256 of every file;
+  `python -m experiments.make_instances --set all --check` verifies a rebuild.
+
+| Test set (100 instances) | Mean | Min | Max |
+|---|---:|---:|---:|
+| Furniture volume (m3) | 116.1 | 104.2 | 128.3 |
+| Furniture weight (kg) | 5,128 | 4,706 | 5,610 |
+| Loading + unloading time (h) | 41.9 | 41.2 | 42.7 |
+| Fleet rounds needed by volume | 1.85 | 1.66 | 2.04 |
+
+---
+
 ## Convergence fixes
 
 Diagnosis (default instance, daily window): in V0 the best plan came from the

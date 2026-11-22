@@ -1,0 +1,31 @@
+﻿section,key,value
+Solution,True cost,"1,263.42 EUR"
+Solution,Penalty,0.00 EUR
+Solution,Objective,"1,263.42 EUR"
+Solution,Feasible,yes
+Solution,Trips,16
+Solution,Distance,810.1 km
+Solution,Working time,59.14 h
+Solution,Overtime,19.24 h
+Solution,Vehicle-day overtime cost,261.61 EUR
+Solution,Total weight,"5,283.2 kg"
+Solution,Total volume,122.70 m3
+Solution,Method,trip-2opt
+Daily window,Rule,"start 08:00, overtime 2x after 8 h, last delivery by 22:00, back by 23:00"
+Daily window,Longest vehicle-day,14.31 h
+Daily window,Unavoidable overtime,19.14 h
+Daily window,Avoidable overtime,0.10 h
+Daily window,Vehicle 1,"08:00-15:54, last delivery 15:39"
+Daily window,Vehicle 2,"08:00-18:20, last delivery 18:02"
+Daily window,Vehicle 3,"08:00-21:59, last delivery 21:40"
+Daily window,Vehicle 4,"08:00-22:18, last delivery 21:51"
+Daily window,Vehicle 5,"08:00-20:37, last delivery 20:14"
+Search,Runtime,995.5 s
+Search,Decoder evaluations,"14,544"
+Search,Best feasible cost,"1,263.42 EUR"
+Search,Final check_solution,no errors
+Config,Swarm size,40
+Config,Iterations,300
+Config,Seed,42
+Config,Local search,"every 5 iterations, budget 40"
+Config,Final local search budget,120

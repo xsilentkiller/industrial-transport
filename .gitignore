@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+# Benchmark instances are rebuilt from their seeds (python -m experiments.make_instances);
+# only the manifest with their checksums is committed.
+instances/*
+!instances/manifest.json
