@@ -1,28 +1,28 @@
 ﻿section,key,value
-Solution,True cost,"1,211.59 EUR"
+Solution,True cost,"1,192.72 EUR"
 Solution,Penalty,0.00 EUR
-Solution,Objective,"1,211.59 EUR"
+Solution,Objective,"1,192.72 EUR"
 Solution,Feasible,yes
 Solution,Trips,15
-Solution,Distance,774.6 km
-Solution,Working time,58.31 h
-Solution,Overtime,18.31 h
-Solution,Vehicle-day overtime cost,241.06 EUR
+Solution,Distance,752.5 km
+Solution,Working time,57.84 h
+Solution,Overtime,17.84 h
+Solution,Vehicle-day overtime cost,234.82 EUR
 Solution,Total weight,"5,265.2 kg"
 Solution,Total volume,123.98 m3
 Solution,Method,trip-2opt
 Daily window,Rule,"start 08:00, overtime 2x after 8 h, last delivery by 22:00, back by 23:00"
-Daily window,Longest vehicle-day,14.39 h
-Daily window,Unavoidable overtime,18.31 h
+Daily window,Longest vehicle-day,14.07 h
+Daily window,Unavoidable overtime,17.84 h
 Daily window,Avoidable overtime,0.00 h
-Daily window,Vehicle 1,"08:00-16:49, last delivery 16:34"
-Daily window,Vehicle 2,"08:00-18:51, last delivery 18:34"
-Daily window,Vehicle 3,"08:00-22:02, last delivery 21:43"
-Daily window,Vehicle 4,"08:00-22:24, last delivery 21:59"
-Daily window,Vehicle 5,"08:00-18:13, last delivery 17:51"
-Search,Runtime,320.3 s
-Search,Decoder evaluations,"4,714"
-Search,Best feasible cost,"1,211.59 EUR"
+Daily window,Vehicle 1,"08:00-19:14, last delivery 18:57"
+Daily window,Vehicle 2,"08:00-16:23, last delivery 16:06"
+Daily window,Vehicle 3,"08:00-22:04, last delivery 21:40"
+Daily window,Vehicle 4,"08:00-22:00, last delivery 21:41"
+Daily window,Vehicle 5,"08:00-18:10, last delivery 17:47"
+Search,Runtime,285.4 s
+Search,Decoder evaluations,"4,728"
+Search,Best feasible cost,"1,192.72 EUR"
 Search,Final check_solution,no errors
 Config,Swarm size,30
 Config,Iterations,120

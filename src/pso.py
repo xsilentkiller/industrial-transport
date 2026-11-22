@@ -48,6 +48,24 @@ class PSOConfig:
     reinit_interval: int = 30
     reinit_fraction: float = 0.10
 
+    # Convergence fixes (see experiments/diagnose_convergence.py).
+    # 1) Score every candidate like the incumbent: 2-opt inside its trips
+    #    before comparing.  Without it, polished incumbents are compared
+    #    against unpolished candidates and nothing is ever accepted.
+    polish_candidates: bool = True
+    # Write the polished order back into the particle (Lamarckian learning).
+    # Off: slower and no better (seeds 1-3: 1,197.34 vs 1,195.45 EUR).
+    lamarckian: bool = False
+    # 2) Start (and restart) particles near good tours instead of uniform
+    #    random keys: random tours are 0 % feasible under the daily window.
+    seeded_init: bool = True
+    seed_noise: tuple[float, float] = (0.01, 0.10)
+    # 3) Restart the worst particles when the swarm has collapsed onto the
+    #    global best (mean rank distance below this; 0 = off).  Off: with
+    #    seeded starts it triggered once in 3 runs and changed nothing.
+    diversity_threshold: float = 0.0
+    diversity_restart_fraction: float = 0.3
+
     max_seconds: float = 0.0
     verbose: bool = True
     log_interval: int = 10
@@ -183,6 +201,31 @@ def volume_aware_nearest_neighbor_tour(
     return low_order + high_order
 
 
+def two_opt_order(order: list[int], D: np.ndarray) -> list[int]:
+    """First-improvement 2-opt on one trip (depot -> order -> depot).
+
+    Each move reverses order[i..j] (at least three customers) and is priced by
+    the change of its two end edges only, O(1) per move, instead of
+    recomputing the whole trip.  Same scan order and acceptance rule as the
+    original implementation, so it returns the same trip.
+    """
+    order = list(order)
+    n = len(order)
+    improved = True
+    while improved:
+        improved = False
+        for i in range(n - 1):
+            for j in range(i + 2, n):
+                prev = order[i - 1] if i > 0 else 0
+                nxt = order[j + 1] if j + 1 < n else 0
+                a, b = order[i], order[j]
+                delta = D[prev, b] + D[a, nxt] - D[prev, a] - D[b, nxt]
+                if delta < -1e-9:
+                    order[i : j + 1] = order[i : j + 1][::-1]
+                    improved = True
+    return order
+
+
 def improve_solution_trips(
     data: ProblemData,
     sol: Solution,
@@ -196,27 +239,14 @@ def improve_solution_trips(
     the assignment can move the improved trips between vehicles.
     """
     best = sol
+    D = data.distance
     for _ in range(max(1, passes)):
         segments = []
         for trip in best.trips:
             order = list(trip.customers)
-            if len(order) < 3:
-                segments.append(segment_stats(data, order))
-                continue
-            current = segment_stats(data, order)
-            improved = True
-            while improved:
-                improved = False
-                n = len(order)
-                for i in range(n - 1):
-                    for j in range(i + 2, n):
-                        candidate = order[:i] + list(reversed(order[i : j + 1])) + order[j + 1 :]
-                        cand_stats = segment_stats(data, candidate)
-                        if cand_stats.distance_km < current.distance_km - 1e-9:
-                            order = candidate
-                            current = cand_stats
-                            improved = True
-            segments.append(current)
+            if len(order) >= 3:
+                order = two_opt_order(order, D)
+            segments.append(segment_stats(data, order))
         new = assign_trips(data, segments, config, method="trip-2opt")
         if new.objective < best.objective - 1e-9:
             best = new
@@ -264,6 +294,7 @@ class MemeticPSO:
         self.best_feasible_solution: Solution | None = None
         self.best_feasible_score = np.inf
         self.seed_solution: Solution | None = None
+        self.restarts = 0
 
         self.particles: list[_Particle] = []
         self._start = 0.0
@@ -275,7 +306,21 @@ class MemeticPSO:
     def _evaluate_tour(self, tour: list[int]) -> tuple[float, Solution]:
         sol = decode_tour(self.data, tour, self.fast_decoder)
         self.evaluations += 1
+        if self.config.polish_candidates:
+            polished = improve_solution_trips(
+                self.data, sol, self.fast_decoder, passes=1
+            )
+            if polished.objective < sol.objective - 1e-9:
+                sol = polished
         return sol.objective, sol
+
+    def _evaluate_position(self, pos: np.ndarray) -> tuple[float, Solution, np.ndarray]:
+        """Decode a particle; with Lamarckian learning, return the keys of the
+        polished tour so the particle keeps what the polish found."""
+        score, sol = self._evaluate_tour(keys_to_tour(pos))
+        if self.config.polish_candidates and self.config.lamarckian and sol.trips:
+            pos = tour_to_keys(self._solution_tour(sol))
+        return score, sol, pos
 
     def _update_feasible(self, sol: Solution) -> None:
         if sol.feasible and sol.true_cost_eur < self.best_feasible_score - 1e-9:
@@ -338,11 +383,13 @@ class MemeticPSO:
                 # noise to the randomised/extra seeds.
                 if i >= 4:
                     pos = np.clip(pos + self.rng.normal(0.0, 0.02, n), 0.0, 1.0)
+            elif self.config.seeded_init:
+                pos = self._perturbed(tour_to_keys(tours[i % len(tours)]))
             else:
                 pos = self.rng.random(n)
 
             vel = self.rng.uniform(-0.05, 0.05, n)
-            score, sol = self._evaluate_tour(keys_to_tour(pos))
+            score, sol, pos = self._evaluate_position(pos)
             self.particles.append(
                 _Particle(
                     position=pos,
@@ -383,6 +430,43 @@ class MemeticPSO:
         # contains at least one feasible member.
         worst = int(np.argmax([p.pbest_score for p in self.particles]))
         self._inject(worst, seed_tour, seed_sol)
+
+    def _perturbed(self, keys: np.ndarray) -> np.ndarray:
+        """Keys near a good tour: Gaussian noise of a random strength."""
+        lo, hi = self.config.seed_noise
+        sigma = float(self.rng.uniform(lo, hi))
+        return np.clip(keys + self.rng.normal(0.0, sigma, len(keys)), 0.0, 1.0)
+
+    def _diversity(self) -> float:
+        """Mean rank distance of the particles to the global best (0..~0.33)."""
+        g = np.argsort(np.argsort(self.gbest_position))
+        return float(np.mean([
+            np.abs(np.argsort(np.argsort(p.position)) - g).mean() / self.n
+            for p in self.particles
+        ]))
+
+    def _restart_particles(self, indices) -> None:
+        """Replace particles: near an elite tour when seeded, else random."""
+        elite = sorted(self.particles, key=lambda p: p.pbest_score)[:5]
+        for idx in indices:
+            if self.config.seeded_init:
+                base = elite[int(self.rng.integers(0, len(elite)))].pbest_position
+                if self.rng.random() < 0.5:
+                    base = self.gbest_position
+                pos = self._perturbed(base)
+            else:
+                pos = self.rng.random(self.n)
+            score, sol, pos = self._evaluate_position(pos)
+            self.particles[int(idx)] = _Particle(
+                position=pos,
+                velocity=self.rng.uniform(-0.05, 0.05, self.n),
+                pbest_position=pos.copy(),
+                pbest_score=score,
+                pbest_solution=sol,
+                current_solution=sol,
+                current_score=score,
+            )
+            self._update_global(score, sol, pos)
 
     def _inject(self, idx: int, tour: list[int], sol: Solution) -> None:
         pos = tour_to_keys(tour)
@@ -531,7 +615,7 @@ class MemeticPSO:
                 np.clip(p.velocity, -cfg.v_max, cfg.v_max, out=p.velocity)
                 p.position = np.clip(p.position + p.velocity, 0.0, 1.0)
 
-                score, sol = self._evaluate_tour(keys_to_tour(p.position))
+                score, sol, p.position = self._evaluate_position(p.position)
                 p.current_score = score
                 p.current_solution = sol
                 if score < p.pbest_score - 1e-9:
@@ -563,27 +647,23 @@ class MemeticPSO:
                         worst = int(np.argmax([p.pbest_score for p in self.particles]))
                         self._inject(worst, new_tour, new_sol)
 
-            # Diversity restart.
-            if (
+            # Diversity restart: on a fixed schedule when the search stalls,
+            # and (fix 3) whenever the swarm has collapsed onto the best.
+            stalled = (
                 cfg.reinit_interval > 0
                 and iteration % cfg.reinit_interval == 0
                 and iteration - self._last_improvement >= cfg.reinit_interval
-            ):
-                k = max(1, int(round(cfg.swarm_size * cfg.reinit_fraction)))
+            )
+            collapsed = (
+                cfg.diversity_threshold > 0
+                and self._diversity() < cfg.diversity_threshold
+            )
+            if stalled or collapsed:
+                frac = cfg.diversity_restart_fraction if collapsed else cfg.reinit_fraction
+                k = max(1, int(round(cfg.swarm_size * frac)))
                 worst_indices = np.argsort([p.pbest_score for p in self.particles])[-k:]
-                for idx in worst_indices:
-                    pos = self.rng.random(n)
-                    score, sol = self._evaluate_tour(keys_to_tour(pos))
-                    self.particles[int(idx)] = _Particle(
-                        position=pos,
-                        velocity=self.rng.uniform(-0.05, 0.05, n),
-                        pbest_position=pos.copy(),
-                        pbest_score=score,
-                        pbest_solution=sol,
-                        current_solution=sol,
-                        current_score=score,
-                    )
-                    self._update_global(score, sol, pos)
+                self._restart_particles(worst_indices)
+                self.restarts += 1
 
             self._record(iteration)
             if cfg.verbose and (iteration % cfg.log_interval == 0 or iteration == 1):

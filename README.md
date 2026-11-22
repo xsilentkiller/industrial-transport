@@ -189,6 +189,37 @@ delivery and finish time, and overtime against the unavoidable minimum
 
 ---
 
+## Convergence fixes
+
+Diagnosis (default instance, daily window): in V0 the best plan came from the
+start heuristics and the swarm never improved it. Two causes were found and
+fixed; each fix is a setting in `PSOConfig`, measured with
+`python -m experiments.convergence_ablation` (seeds 1-3) and plotted with
+`experiments/plot_convergence.py`.
+
+| Variant | Mean final cost | Swarm improvements | Runtime | Kept |
+|---|---:|---:|---:|---|
+| V0 | 1,207.40 EUR | 1.7 | 180 s | |
+| Fix 1: polish every candidate (`polish_candidates`) | 1,195.45 EUR | 9.7 | 223 s | yes |
+| + Lamarckian write-back (`lamarckian`) | 1,197.34 EUR | 6.7 | 250 s | no |
+| Fix 2: start near good tours (`seeded_init`) | 1,191.94 EUR | 18.7 | 227 s | yes |
+| Fix 3: diversity restart (`diversity_threshold=0.02`) | 1,191.94 EUR | 18.7 | 226 s | no, never needed |
+| Fix 4: `v_max=0.10` | 1,191.15 EUR | 18.7 | 229 s | no, within noise |
+
+* **Fix 1.** The incumbent was polished (2-opt inside each trip) but every
+  candidate was scored without the polish, about 10 % worse for the same
+  tour, so the memetic step could never accept a move. Candidates are now
+  scored the same way. The trip 2-opt was rewritten with O(1) move deltas
+  (same results, about 6x faster) to make this affordable.
+* **Fix 2.** Under the daily window random tours are 0 % feasible; the swarm
+  spent its iterations escaping penalties. Particles now start (and restart)
+  as perturbed copies of good tours.
+
+Three seeds on one instance show the direction, not significance; the
+validation on 20 instances is part of phase 2.
+
+---
+
 ## Solution format
 
 `Solution.trips` is the required list of trips. Each `TripPlan` contains:
