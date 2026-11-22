@@ -248,8 +248,8 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Report directory (default: <output-dir>/report or <input>/report)",
     )
-    parser.add_argument("--swarm", type=int, default=20)
-    parser.add_argument("--iterations", type=int, default=200)
+    parser.add_argument("--swarm", type=int, default=40)
+    parser.add_argument("--iterations", type=int, default=300)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--ls-interval", type=int, default=5)
     parser.add_argument("--ls-budget", type=int, default=40)
