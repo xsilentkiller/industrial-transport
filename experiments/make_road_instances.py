@@ -123,11 +123,15 @@ def build_instance(name: str, n: int, seed: int, dest: Path) -> dict[str, str]:
 
 
 def main() -> None:
+    global ROAD
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--set", default="road_test", choices=[*SETS, "all"])
     ap.add_argument("--out", type=Path, default=OUT)
     ap.add_argument("--check", action="store_true")
+    ap.add_argument("--road-dir", type=Path, default=ROAD,
+                    help="road dataset to slice (default dataset_road; e.g. dataset_osm)")
     a = ap.parse_args()
+    ROAD = a.road_dir
 
     names = list(SETS) if a.set == "all" else [a.set]
     manifest_path = a.out / "road_manifest.json"

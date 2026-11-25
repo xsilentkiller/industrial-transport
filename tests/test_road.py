@@ -187,3 +187,49 @@ class TestRoadInstances(unittest.TestCase):
         np.testing.assert_allclose(inst.duration, full.duration[np.ix_(idx, idx)])
         np.testing.assert_array_equal(inst.lat, full.lat[idx])
         self.assertEqual(meta["osm_node_ids"], [full_meta["osm_node_ids"][i] for i in src])
+
+
+class TestRoadPool(unittest.TestCase):
+    """Own pipeline: snap the pool to the drivable core and route every pair."""
+
+    def test_pool_matrix_and_filter(self) -> None:
+        import tempfile
+
+        from experiments.build_road_pool import build_pool, drivable_core
+        from src.road_geometry import graph_from_osm, paths_from
+
+        # 3 x 3 grid (middle row one-way east) + a separate 2-node road island.
+        nodes = [{"type": "node", "id": 10 * r + c, "lon": 19.0 + 0.0015 * c, "lat": 47.5 + 0.001 * r}
+                 for r in range(3) for c in range(3)]
+        nodes += [{"type": "node", "id": 900, "lon": 19.0300, "lat": 47.5},
+                  {"type": "node", "id": 901, "lon": 19.0310, "lat": 47.5}]
+        ways = []
+        for r in range(3):
+            tags = {"highway": "residential", **({"oneway": "yes"} if r == 1 else {})}
+            ways.append({"type": "way", "id": 100 + r, "nodes": [10 * r, 10 * r + 1, 10 * r + 2], "tags": tags})
+        for c in range(3):
+            ways.append({"type": "way", "id": 200 + c, "nodes": [c, 10 + c, 20 + c],
+                         "tags": {"highway": "residential"}})
+        ways.append({"type": "way", "id": 300, "nodes": [900, 901], "tags": {"highway": "residential"}})
+        osm = {"elements": nodes + ways}
+        coord = {e["id"]: [e["lon"], e["lat"]] for e in nodes}
+
+        # depot at node 0, customers at nodes 12 and 10, one on the island.
+        points = [coord[0], coord[12], coord[10], [19.0305, 47.5]]
+        _, graph = graph_from_osm(osm)
+        self.assertNotIn(900, drivable_core(graph, 0))
+        with tempfile.TemporaryDirectory() as tmp:
+            res = build_pool(osm, points, Path(tmp), workers=1, max_snap_m=150)
+
+        self.assertEqual(list(res["vertex"][:3]), [0, 12, 10])
+        self.assertTrue(np.isfinite(res["km"]).all())
+        for i, a in enumerate([0, 12, 10]):
+            found = paths_from(graph, a, {0, 12, 10})
+            for j, b in enumerate([0, 12, 10]):
+                self.assertAlmostEqual(res["km"][i, j], found[b][1] / 1000)
+                self.assertAlmostEqual(res["min"][i, j], found[b][2] / 60)
+        # middle row is one-way east: 10 -> 12 is 2 blocks, 12 -> 10 must detour
+        self.assertGreater(res["min"][1, 2], res["min"][2, 1] * 1.5)
+        # The island point snaps to the core, but ~2 km away -> not usable.
+        self.assertEqual(list(res["usable"]), [True, True, True, False])
+        self.assertIn("snapped", res["reasons"][3])

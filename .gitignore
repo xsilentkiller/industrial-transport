@@ -5,3 +5,5 @@ __pycache__/
 instances/*
 !instances/manifest.json
 !instances/road_manifest.json
+# OSM extract and routed address pool (rebuilt by experiments/build_road_pool.py)
+cache/
