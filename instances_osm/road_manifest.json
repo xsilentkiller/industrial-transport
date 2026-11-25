@@ -1,0 +1,98 @@
+{
+ "road_tune_7001": {
+  "set": "road_tuning",
+  "customers": 250,
+  "seed": 7001,
+  "road_source_sha256": "f54306fe36ce5f23b5888bb6715230cb4234391dfe7639bc12419f545da95623",
+  "sha256": {
+   "locations.csv": "1e190e35ac9bef07b06860dba11e429b4c2e3c9a6a9460405b8e14fa378fc0db",
+   "orders.csv": "bf4dbd1226d1f0edcac89d40be9e463e37d1840737ff37529bedc2ed263c7d45",
+   "road_distance_km.csv": "6d35e5b9ec2226d5eb68a21420465405351c95a4468de6132a8f73c8d0b191f5",
+   "road_duration_min.csv": "b54e6b7c835ae58a93843fbd3d97e5d004f9e7a4cf9edb4c9026523c1b4df705",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "8a1998a1b63c1969777aa2d98c0f99948b791e82685df9e0032544c50ae67755",
+   "road_meta.json": "6aa14aa5065db1af3cdc7fe41e1f3dc4c4c26d4ef648feb4fda190b1c59433f1"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 114.87,
+   "weight_kg": 4972.0,
+   "service_h": 41.62,
+   "fleet_rounds_by_volume": 1.83,
+   "service_h_per_vehicle": 8.32
+  }
+ },
+ "road_tune_7002": {
+  "set": "road_tuning",
+  "customers": 250,
+  "seed": 7002,
+  "road_source_sha256": "f54306fe36ce5f23b5888bb6715230cb4234391dfe7639bc12419f545da95623",
+  "sha256": {
+   "locations.csv": "c54120e41a5048b2c96e6667afa88839b985ebcbdf1c54f3232ce820483b6895",
+   "orders.csv": "d93f3c3089bbe1ebd3828812e5ef2ca39fa6320cb02426a720edf42e77f8714b",
+   "road_distance_km.csv": "a6a30d91812ac429cd1e579cc1c9cbc1bd2c0e3c0b232438432fe616e827a4c9",
+   "road_duration_min.csv": "b4884450defa753f6aeb0d25c6880880b5db10664aedf88bf9fa46ae7f34ae2b",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "934760bd8ea10fea648e11a8e850a33be614023553399ce969a383e37dcb9659",
+   "road_meta.json": "f34981f2b3416db758cbac90401c9409d4ef406ab8124d62c49cdfac1415369b"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 120.37,
+   "weight_kg": 5332.7,
+   "service_h": 42.21,
+   "fleet_rounds_by_volume": 1.91,
+   "service_h_per_vehicle": 8.44
+  }
+ },
+ "road_tune_7003": {
+  "set": "road_tuning",
+  "customers": 250,
+  "seed": 7003,
+  "road_source_sha256": "f54306fe36ce5f23b5888bb6715230cb4234391dfe7639bc12419f545da95623",
+  "sha256": {
+   "locations.csv": "caf03300618d1e6b258ef652c77b70a47be43cd93effbbc70679628c6bb1b18f",
+   "orders.csv": "7f80fe1a8f548aaecf5fe7fcc55d50b8837b57a0614f0233ee7b622a8105926b",
+   "road_distance_km.csv": "6250e87190703037ebfb92033d8d8ac3c0172279ec04f55dbd4b2be93b2fbd5d",
+   "road_duration_min.csv": "f7292073ee82eb7d5e3d06c7bebc1a8793fb889def312221e3c0219e26d6f44d",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "d3f1f4ac1948a430a653981bf70542a112d85d333c229bb3510a08647263393b",
+   "road_meta.json": "313a8b1f3f27f3965f85667815dd23d50181c640e1cdb4facaf29e1cca460af0"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 121.86,
+   "weight_kg": 5273.1,
+   "service_h": 42.12,
+   "fleet_rounds_by_volume": 1.94,
+   "service_h_per_vehicle": 8.42
+  }
+ },
+ "road_tune_7004": {
+  "set": "road_tuning",
+  "customers": 250,
+  "seed": 7004,
+  "road_source_sha256": "f54306fe36ce5f23b5888bb6715230cb4234391dfe7639bc12419f545da95623",
+  "sha256": {
+   "locations.csv": "162c256bdc87f5e2b29a945a033a4b1057fba60c5c8e7de8cf01c07cfbd03a60",
+   "orders.csv": "384569db535dc84e1d6791c31316469c8840c70b526e934730623b8c02206690",
+   "road_distance_km.csv": "12b7b10108b504f98fbbb6a2b3577a0430e52b48f9e687c0b68f724a9a02715f",
+   "road_duration_min.csv": "650a8bdb6cb1c9bc35e3845a84ab6a03595e92abec25b9d857eb68982f0f6a53",
+   "vehicles.csv": "ff30115497b9c1f9f92eb3455295163abc535a201c4285f047805e3e68aace55",
+   "params.json": "880242d7683a90e93cabc7498aa194761f7bd4f7d448caed387f469c54430d66",
+   "road_meta.json": "504b774e20b95a26774e13a60c0d9dce6e3d7b9d0c0e2edcdbcfc31c377eb3aa"
+  },
+  "stats": {
+   "customers": 250,
+   "vehicles": 5,
+   "volume_m3": 128.07,
+   "weight_kg": 5399.5,
+   "service_h": 42.32,
+   "fleet_rounds_by_volume": 2.04,
+   "service_h_per_vehicle": 8.46
+  }
+ }
+}
