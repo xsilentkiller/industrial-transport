@@ -1,10 +1,18 @@
 # Furniture Delivery Optimiser
 
 A Python implementation of a **Split-based memetic random-key particle swarm
-optimisation (PSO)** for the 250-customer furniture delivery benchmark in
-`data/base/`.
+optimisation (PSO)** for a 250-customer furniture delivery problem in Budapest.
 
-The solver reads the six dataset files once, decodes random-key vectors into
+The same 250 customers and orders exist in three versions under `data/`, which
+differ only in how distance and travel time are measured:
+
+| Folder | Distances | Role |
+|---|---|---|
+| `data/osm/` | **our own real-road matrices** built from OpenStreetMap | **default** for `main.py` |
+| `data/road_ga/` | the GA team's real-road matrices | shared reference with the GA team |
+| `data/base/` | straight line × 1.3 | original model + source data (address pool, furniture, generators) |
+
+The solver reads the dataset files once, decodes random-key vectors into
 vehicle routes through a Split dynamic program, assigns trips to the mixed
 fleet, and improves solutions with memetic local search. Infeasible candidates
 are never repaired: their true EUR cost and a proportional penalty are stored
@@ -14,50 +22,54 @@ separately.
 
 ## Quick start
 
-Requirements: Python 3.10+, NumPy, and Matplotlib.
+Requirements: Python 3.10+, NumPy, and Matplotlib (`osmium` only to rebuild
+the OSM road data, see below).
+
+`main.py` is the single entry point:
 
 ```powershell
-# Full run on data/osm (our own OSM road data, the default):
-# decoder checks + PSO + street geometry + visual report -> output/
-python main.py --mode all
-# the straight-line dataset or the GA road matrices instead
-python main.py --dataset data/base
-python main.py --dataset data/road_ga
+# Full run on data/osm (the default): decoder checks + PSO + street geometry + report
+python main.py
+# another dataset
+python main.py --dataset data/base        # straight-line
+python main.py --dataset data/road_ga     # GA team's road matrices
+python main.py --dataset instances_osm/road_tuning/road_tune_7001
 
-# Decoder checks only (first 20 customers, full 250, timing)
-python main.py --mode decoder
-
-# PSO only (also writes the report)
-python main.py --mode pso
-
-# Rebuild the visual report from an existing solution
-python main.py --mode report
+python main.py --mode decoder     # decoder checks only (first 20, full 250, timing)
+python main.py --mode pso         # PSO + street geometry + report
+python main.py --mode report      # rebuild the report from output/best_solution.json
+python main.py --mode road-data   # rebuild data/osm from OpenStreetMap (see below)
 
 # All tests at once, with a per-file summary (what each file checks, which data)
-python run_tests.py          # add -v to list every test
-# or
-python main.py --mode tests
+python run_tests.py               # add -v to list every test
+python main.py --mode tests       # the same
 ```
 
-Useful PSO options:
+Useful options:
 
 ```powershell
 python main.py --mode pso --swarm 30 --iterations 120 --seed 42
 python main.py --mode pso --time-limit 60
-python main.py --mode pso --output-dir output
-
-# Report options
-python main.py --mode report --input output/best_solution.json
-python main.py --mode report --report-dir output/report
+python main.py --mode pso --no-geometry           # map with straight lines (no OSM extract needed)
+python main.py --mode report --input output/best_solution.json --report-dir somewhere/report
 ```
 
-The best solution is written to `output/best_solution.json`, including the
-trip list, per-trip metrics, fleet totals, PSO configuration, runtime, and
-search history.
+**`output/` always holds the latest run only** (any dataset; the next run
+replaces it; `--output-dir` picks another folder):
 
-The visual report is written to `output/report/report.html` (or the directory
-given by `--report-dir`). It is a single self-contained HTML file with
-embedded charts. Standalone PNG charts and CSV tables are written next to it.
+```text
+output/
+  best_solution.json     the plan; its "dataset" field says which dataset it was
+  route_geometry.json    road datasets only: street geometry of the routes
+  report/                report.html, route_map.html, PNG charts, CSV tables
+```
+
+`best_solution.json` holds the trip list, per-trip metrics, fleet totals, PSO
+configuration, runtime, and search history. `report/report.html` is a single
+self-contained HTML file with embedded charts. On a road dataset `main.py`
+also computes `route_geometry.json` when `cache/budapest_osm.json` exists, so
+the map follows the streets. To keep a result, copy `output/` or run with
+`--output-dir` elsewhere.
 
 ---
 
@@ -75,60 +87,63 @@ rest at 2x): on roads, 250 customers do not fit the 08:00-23:00 window with
 this fleet. All other rules are unchanged.
 
 ```powershell
-# re-import (only needed if the GA team publishes a new road file)
-python -m experiments.import_road --source ..\transport-algorithms\data\shared_pso_250_road.json
-
-# solve on roads
-python main.py --mode pso --dataset data/road_ga
+# solve on the GA matrices (routes drawn along streets if cache/budapest_osm.json exists)
+python main.py --dataset data/road_ga
 
 # road benchmark instances (250 customers, orders vary by seed)
-python -m experiments.make_road_instances --set all     # 100 test instances, all 250 customers
-python -m experiments.make_road_instances --set all --check
+python -m experiments.make_road_instances --set all            # from data/road_ga
+python -m experiments.make_road_instances --set all --check    # verify against the manifest
 
-# draw the routes along the streets (needs the OSM extract once)
-python -m experiments.road_geometry --solution output/best_solution.json --osm cache/budapest_osm.json --download
-python main.py --mode report --dataset data/road_ga
+# re-import (only if the GA team publishes a new road file; the old one is gone)
+python -m experiments.import_road --source ..\transport-algorithms\data\shared_pso_250_road.json
 ```
 
 Our evaluator reproduces the GA validator's cost of the shared reference plan
-exactly (1,472.0597 EUR, `tests/test_road.py`). The report writes
-`route_map.html`, an interactive street map; with `route_geometry.json` the
-lines follow the roads and every leg is checked against the cost matrix.
+exactly (1,472.0597 EUR, `tests/test_road.py`).
 
-### Own road data from OSM (download once, route the pool once)
+### Own road data from OSM (`data/osm/`, the default)
 
-Instead of the GA team's file, the road matrices can be built here for all
-1500 addresses of `data/base/places_pool.csv`; any dataset is then a slice of
-that pool (no re-routing). Same OSM query, road classes, speeds and Dijkstra
-as the GA team. Everything heavy is cached in `cache/` (not committed).
+`data/osm/` is built here, without the GA team's file: the road network is
+taken from OpenStreetMap, **all 1500 addresses** of
+`data/base/places_pool.csv` are routed once (a "pool"), and a dataset is a
+slice of that pool (no re-routing). Same road classes, speeds, one-way rules
+and time-shortest Dijkstra as the GA team. Everything heavy is cached in
+`cache/` (not committed).
 
 ```powershell
-# 1a. once: the OSM road extract -> cache/budapest_osm.json, either from Geofabrik (reliable) ...
+# once: the Geofabrik Hungary map file (316 MB) and pyosmium
 pip install osmium
 curl.exe -L -o cache\geofabrik\hungary-latest.osm.pbf https://download.geofabrik.de/europe/hungary-latest.osm.pbf
-python -m experiments.osm_from_geofabrik
-#     ... or from Overpass in 4x4 resumable tiles: add --download to step 1b
-# 1b. once: route depot + pool on it (resumable, ~2 min on 7 workers)
-python -m experiments.build_road_pool
-# 2. a road dataset: same customers/orders as data/base/ ...
-python -m experiments.make_osm_dataset --out data/osm
-#    ... or other customers from the usable pool
-python -m experiments.make_osm_dataset --out data/osm_s9 --customers 250 --seed 9
-# 3. use it like data/road_ga
-python main.py --mode pso --dataset data/osm --output-dir output_osm
+
+# OSM extract -> routed pool (~3 min on 7 workers) -> data/osm/ ; cached steps are skipped
+python main.py --mode road-data                    # --rebuild-pool to route again
+```
+
+The same steps one by one (more options):
+
+```powershell
+python -m experiments.osm_from_geofabrik           # map file -> cache/budapest_osm.json (~20 s)
+python -m experiments.build_road_pool [--download] # route the pool; --download = Overpass tiles instead
+python -m experiments.make_osm_dataset --out data/osm                       # same customers/orders as data/base
+python -m experiments.make_osm_dataset --out data/osm_s9 --customers 250 --seed 9   # other customers
 python -m experiments.make_road_instances --road-dir data/osm --set road_tuning --out instances_osm
 ```
 
-Check against the GA data (Geofabrik extract of 25 Nov 2026): all 251
-locations snap to the same OSM vertex; 97.7 % of the km and 99.1 % of the
-minutes agree within 0.1 % (mean difference 0.01 %), the rest are OSM edits
-since the GA snapshot. A PSO solution on `data/osm` draws 269/269 legs
-exactly on the cost matrix.
+Checks (Geofabrik extract of 25 Nov 2026, all in `tests/test_road.py::TestOsmData`):
+
+* all 251 locations snap to the same OSM road vertex as the GA data;
+* 97.7 % of the km and 99.1 % of the minutes agree with the GA matrices within
+  0.1 % (mean difference 0.01 %); the rest are OSM edits since the GA snapshot;
+* every customer fits the largest vehicle and can be served alone in the day;
+* a PSO solution draws 269/269 legs exactly on the cost matrix.
 
 Pool places that snap more than 150 m from a road or have a depot round trip
-over 180 min are excluded (`cache/road_pool/pool_meta.json` lists them).
+over 180 min are excluded (3 of 1500; listed in `cache/road_pool/pool_meta.json`).
 `make_osm_dataset` refuses to finish (no `params.json`) unless every order fits
 the largest vehicle and every customer can be served alone inside the day.
+
+`cache/budapest_osm.json` (42 MB) is the exact map snapshot all `data/osm`
+numbers come from; it is not in git, so keep a copy of it.
 
 ---
 
@@ -144,12 +159,15 @@ following files once and returns plain NumPy arrays and small dataclasses via
 | `vehicles.csv` | capacity, speed, fuel use, wage, maintenance |
 | `locations.csv` | depot and customer coordinates |
 | `orders.csv` | weight, volume, loading and unloading time per customer |
-| `distances.csv` | 251 × 251 symmetric distance matrix in km |
+| `distances.csv` | straight-line datasets: 251 × 251 symmetric distance matrix in km |
+| `road_distance_km.csv`, `road_duration_min.csv` | road datasets (`"distance_source": "road"`): directed 251 × 251 km and minutes |
+| `road_meta.json` | road datasets: OSM vertex of every location (for the street map), source, checks |
 | `furniture_clean.csv` | item table used to validate each order's weight and volume |
 
 Index `0` is the depot; customers are `1..250`, matching `location_id` in the
-dataset. `load_problem()` validates the matrix shape/symmetry, the location
-numbering, and every order against the furniture table before returning.
+dataset. `load_problem()` validates the matrix shape (symmetry for straight-line,
+finite and non-negative for road), the location numbering, and every order
+against the furniture table before returning.
 
 ---
 
@@ -181,10 +199,13 @@ For an ordered customer sequence `c1..ck`:
 
 ```text
 distance = d(0,c1) + d(c1,c2) + ... + d(ck,0)
-driving  = distance / avg_speed * 60
+driving  = distance / avg_speed * 60          (straight-line datasets)
+driving  = t(0,c1) + ... + t(ck,0)            (road datasets: road minutes, same for every vehicle)
 service  = sum(loading_i) + sum(unloading_i)
 total    = driving + service
 ```
+
+On road data `d` and `t` are directed (one-way streets), so the order of a trip matters.
 
 ### Trip cost
 
@@ -192,7 +213,8 @@ total    = driving + service
 fuel         = distance * fuel_l_per_km * fuel_price_per_l
 maintenance  = distance * maintenance_per_1000km / 1000
 wage_base    = total / 60 * wage_per_h
-base_cost    = fuel + maintenance + wage_base
+overflow_fee = max(0, min(volume, cap) - 0.9 * cap) * 100 EUR/m3   (using the 10 % reserve)
+base_cost    = fuel + maintenance + wage_base + overflow_fee
 
 vehicle OT   = max(0, vehicle_day_total - 480 min)
 OT premium   = vehicle_OT / 60 * wage_per_h * (overtime_multiplier - 1)
@@ -211,13 +233,16 @@ evaluator always aggregates overtime correctly over the vehicle-day.
 | Constraint | Handling | Penalty |
 |---|---|---:|
 | Weight over vehicle capacity | soft, proportional | 1,000 EUR per kg over |
-| Volume beyond usable (90%) volume | soft, proportional | 10,000 EUR per m³ over |
+| Volume 90-100 % of the cargo space (the 10 % reserve) | **allowed, paid** as `overflow_fee` (100 EUR/m³, `volume_overflow_eur_per_m3`) | 0 EUR penalty (it is a real cost) |
+| Volume over 100 % of the cargo space | physically impossible, infeasible | 10,000 EUR per m³ over |
 | Fewer than 10 customers | soft, proportional | 2,000 EUR per missing customer |
 | More than 50 customers | hard in the decoder, also penalised | 1,000,000 EUR per extra customer |
 | Shift overrun | allowed, paid as overtime | 0 EUR penalty |
+| Last delivery late / back after the day end | planning penalty (see Daily working window) | 1,000 EUR per minute |
 
-A trip is feasible only when all capacity, free-volume, minimum-count, and
-maximum-count checks pass. The **minimum of 10 customers is deliberately
+A trip is feasible only when the weight, raw-volume (100 %), minimum-count and
+maximum-count checks pass. The overflow fee is part of the true cost, so the
+report's "Penalty" stays 0 when trips use the reserve. The **minimum of 10 customers is deliberately
 soft**: a short trip is allowed but pays 2,000 EUR per missing customer. When
 the soft partition is penalised, the decoder also tries a hard-minimum
 partition as a safety net and keeps whichever has the lower objective.
@@ -257,6 +282,12 @@ vehicle-day, the trip with the longest return leg runs last, so the last
 delivery is as early as possible. The trip-to-vehicle assignment prices every
 move with these rules.
 
+**Road datasets** (`data/osm`, `data/road_ga`) use the shared 16-hour workday
+agreed with the GA team instead: start 08:00, back at the depot by **24:00**,
+no separate last-delivery time (first 8 h at the normal wage, the rest at 2x).
+On real roads the 250 customers do not fit the 08:00-23:00 window with this
+fleet.
+
 Each run also reports the longest vehicle-day, each vehicle's start, last
 delivery and finish time, and overtime against the unavoidable minimum
 (total work minus 8 h per vehicle). Remove the window keys (`last_delivery_by`, `hard_day_end`) from
@@ -280,6 +311,15 @@ solver reads like `data/base/` (`python main.py --dataset instances/test/test_30
 * The folders (about 90 MB) are not committed. `instances/manifest.json`
   records the SHA-256 of every file;
   `python -m experiments.make_instances --set all --check` verifies a rebuild.
+  (The straight-line manifest predates the last `data/base/params.json`
+  change; rebuild it with `python -m experiments.make_instances --set all`.)
+
+Road instances work the same way: `python -m experiments.make_road_instances`
+builds `road_test` (100), `road_validation` (20) and `road_tuning` (4) from
+`data/road_ga` (manifest `instances/road_manifest.json`); all 250 customers,
+only the orders change with the seed. `instances_osm/road_tuning/` holds the 4
+tuning instances built from **our** `data/osm` (committed in full, ready to run:
+`python main.py --dataset instances_osm/road_tuning/road_tune_7001`).
 
 | Test set (100 instances) | Mean | Min | Max |
 |---|---:|---:|---:|
@@ -383,21 +423,39 @@ certified global optimum.
 ## Project layout
 
 ```text
-main.py                 CLI: decoder checks, PSO, report, road-data, tests
-src/data_loader.py      the only CSV reader; returns ProblemData
-src/cost.py             trip metrics, cost formulas, penalties, overtime
-src/decoder.py          random keys, greedy cut, Split DP, assignment, checks
-src/pso.py              PSO, construction heuristics, local search, polish
-src/report.py           HTML/PNG/CSV visual report generator
-tests/test_cost.py      hand-checked cost, overtime, free-volume tests
-tests/test_decoder.py   first-20, full-250, Split/coverage/timing tests
-tests/test_report.py    report files, tables, and chart smoke test
-data/base/              straight-line instance + source data (places pool, furniture, generators)
-data/road_ga/           same instance on the GA team's road matrices (shared reference)
-data/osm/               same instance on our own OSM road matrices (main.py default)
-experiments/            instance generators and road pipeline
-cache/                  OSM extract and routed pool (local, not committed)
-output/                 latest run: best_solution.json, route_geometry.json, report/
+main.py                          CLI: decoder checks, PSO, report, road-data, tests
+run_tests.py                     runs every test once, prints a per-file summary
+
+src/data_loader.py               the only CSV reader; returns ProblemData
+src/cost.py                      trip metrics, cost formulas, overflow fee, penalties, overtime
+src/decoder.py                   random keys, greedy cut, Split DP, assignment, checks
+src/pso.py                       PSO, construction heuristics, local search, polish
+src/report.py                    HTML/PNG/CSV report, street/satellite route map
+src/road_geometry.py             OSM road graph and Dijkstra (shared by pool and map)
+
+experiments/osm_from_geofabrik.py   Geofabrik map file -> cache/budapest_osm.json
+experiments/build_road_pool.py      route depot + 1500 pool addresses -> cache/road_pool/
+experiments/make_osm_dataset.py     slice the pool -> data/osm/ (feasibility gate)
+experiments/road_geometry.py        street geometry of a solution (route_geometry.json)
+experiments/import_road.py          one-time import of the GA road file -> data/road_ga/
+experiments/make_instances.py       straight-line benchmark instances -> instances/
+experiments/make_road_instances.py  road benchmark instances -> instances/, instances_osm/
+
+tests/test_cost.py               hand-checked cost, overtime, overflow fee
+tests/test_day_window.py         working day, 2x overtime, day-end rules
+tests/test_decoder.py            first-20, full-250, Split/coverage/timing
+tests/test_convergence.py        PSO fixes (fast 2-opt, scoring, seeding)
+tests/test_report.py             report files, tables, charts
+tests/test_instances.py          straight-line instance generator
+tests/test_road.py               road mode, GA cross-check, OSM data, OSM pipeline
+
+data/base/                       straight-line instance + source data (places pool, furniture, generators)
+data/road_ga/                    same instance on the GA team's road matrices (shared reference)
+data/osm/                        same instance on our own OSM road matrices (main.py default)
+instances/                       benchmark manifests (instance folders rebuilt from seeds)
+instances_osm/                   4 road instances on data/osm
+cache/                           OSM map file, extract and routed pool (local, not committed)
+output/                          latest run: best_solution.json, route_geometry.json, report/
 ```
 
 ---
@@ -414,28 +472,34 @@ Hand-checked cases include:
   120 EUR total on a 10 EUR/h vehicle.
 - **Vehicle-day aggregation:** two 5-hour trips produce 2 hours of overtime
   once for the day, not per trip.
-- **Free-volume violation:** ten 0.30 m³ orders fit the Caddy's raw 3.10 m³
-  but exceed the usable 2.79 m³; the 0.21 m³ excess is penalised while true
-  cost remains separately available.
+- **Volume reserve:** a trip in the 90-100 % volume band pays the overflow fee
+  (100 EUR/m³) and stays feasible; below 90 % there is no fee; above 100 % it
+  is infeasible. The Split DP prices the fee exactly like the cost function.
 - **Report generator:** produces the HTML report, five PNG charts, and four
   CSV tables (summary, vehicles, trips, history) from a saved solution.
+- **Road data:** the GA validator's cost is reproduced exactly; our `data/osm`
+  matches the GA matrices, every customer is feasible, instances are exact
+  slices (`TestOsmData`); the OSM pipeline is tested on a tiny synthetic map.
 
-Decoder checks:
+`python main.py --mode decoder` (on `data/osm`):
 
 - First 20 customers: 2 trips of 10 customers, every customer exactly once,
   all capacity and count checks pass, penalty 0.
-- Full 250 customers: 14 trips, every customer exactly once, no trip over 50,
-  all capacity checks pass, penalty 0.
-- Full 250-customer decoder timing: **mean ≈ 24–25 ms** per decode on the
-  development machine.
+- Full 250 customers decoded from a plain nearest-neighbour tour: every
+  customer exactly once, no trip over 50. This raw tour is **not** feasible
+  (some trips over 100 % volume, one vehicle back after 24:00); that is
+  expected: the check shows what the decoder does with a naive tour, and the
+  PSO turns it into a feasible plan.
+- Decoder timing: about 65 ms per full 250-customer decode on the development
+  machine (road data; straight-line data is faster).
 
 ---
 
 ## Visual report
 
 `python main.py --mode report` builds `output/report/report.html` from an
-existing `output/best_solution.json`. The same report is generated
-automatically after `--mode pso` and `--mode all`.
+existing `output/best_solution.json` (use the same `--dataset` as the run).
+The same report is generated automatically after `--mode pso` and `--mode all`.
 
 The HTML file is self-contained (charts are embedded), so it can be opened
 directly in a browser without a web server. It includes:
@@ -445,10 +509,11 @@ directly in a browser without a web server. It includes:
 | Summary cards | true cost, penalty, trips, distance, working time, overtime, runtime, evaluations |
 | `convergence.png` | PSO loss/convergence curve, penalty, and cumulative decoder calls |
 | `vehicle_timeline.png` | vehicle-day Gantt chart with the 8-hour shift and overtime region |
-| `cost_breakdown.png` | fuel, maintenance, wages, and overtime premium per vehicle, plus total cost composition |
+| `cost_breakdown.png` | fuel, maintenance, wages, volume overflow fee and overtime premium per vehicle (bar totals = vehicle cost), plus total cost composition with EUR legend |
 | `trip_capacity.png` | weight/usable-volume utilisation and customers per trip |
-| `route_map.png` | depot-to-customer routes on the Budapest map and trip distance vs cost |
-| Tables | summary, per-vehicle aggregates, and per-trip details |
+| `route_map.png` | routes on the Budapest map (along the streets on road data) and trip distance vs cost |
+| `route_map.html` | interactive map: street map, satellite, or satellite + labels (Esri tiles, needs internet); one layer per vehicle, popups per trip and stop |
+| Tables | summary, per-vehicle aggregates, and per-trip details (incl. overflow fee per trip) |
 | CSV files | `summary.csv`, `vehicles.csv`, `trips.csv`, `history.csv` for Excel/Python analysis |
 
 The final polished cost is marked separately on the convergence chart because
@@ -461,56 +526,55 @@ the trip-level polish runs after the last PSO iteration.
 Dataset: 250 customers, 5 vehicles, total demand **5,265.18 kg / 123.98 m³**,
 total loading + unloading service time **2,525.6 min (42.1 h)**.
 
-Default configuration: swarm 30, 120 iterations, inertia 0.72, `c1 = c2 =
-1.49`, `v_max = 0.25`, local search every 5 iterations with budget 40, final
-local-search budget 120, seed 42.
+Default configuration (`python main.py`): swarm 20, 60 iterations, inertia
+0.72, `c1 = c2 = 1.49`, `v_max = 0.25`, local search every 5 iterations with
+budget 40, final local-search budget 120, seed 42; `polish_candidates` and
+`seeded_init` on.
 
-| Stage | True EUR cost | Trips | Feasible |
-|---|---:|---:|---|
-| Deterministic chunk-10 seed | 1,666.51 | 25 | yes |
-| Nearest-neighbour decoder | 1,344.89 | 14 | yes |
-| Polished volume-aware seed | 1,183.33 | 15 | yes |
-| **Final memetic PSO** | **1,177.30** | **15** | **yes** |
-
-Final solution details:
+Result on **`data/osm`** (our OSM road data, the default; the run in `output/`):
 
 | Metric | Value |
 |---|---:|
-| True cost | **1,177.30 EUR** |
-| Penalty | 0.00 EUR |
-| Trips | 15 |
-| Distance | 762.1 km |
-| Working time | 57.92 h |
-| Overtime | 18.05 h |
-| Vehicle-day overtime cost | 231.43 EUR |
-| Runtime | 128.3 s (≈2 min) |
-| Decoder evaluations | 4,708 |
+| True cost | **1,734.94 EUR** |
+| Penalty | 0.00 EUR (feasible, `check_solution`: no errors) |
+| Trips | 19 (10-18 customers each) |
+| Distance | 1,058.4 km |
+| Working time | 74.15 h |
+| Overtime | 34.15 h, all unavoidable (avoidable 0.00 h) |
+| Vehicle-day overtime cost | 452.42 EUR |
+| Volume overflow fee | 1.65 EUR (2 trips use the 10 % reserve) |
+| Runtime | about 150 s, 1,836 decoder evaluations |
 
-Per-vehicle result:
+| Vehicle | Type | Trips | Day | Overtime | Cost |
+|---|---|---:|---|---:|---:|
+| 1 | Caddy | 3 | 08:00-20:23 | 4.38 h | 234.50 EUR |
+| 2 | Caddy | 4 | 08:00-23:27 | 7.45 h | 312.63 EUR |
+| 3 | Sprinter | 4 | 08:00-23:36 | 7.60 h | 361.91 EUR |
+| 4 | Sprinter | 4 | 08:00-23:56 | 7.94 h | 366.70 EUR |
+| 5 | MAN TGL | 4 | 08:00-22:47 | 6.78 h | 459.20 EUR |
 
-| Vehicle | Type | Trips | Day time | Overtime | Cost |
-|---|---|---:|---:|---:|---:|
-| 1 | Caddy | 2 | 8.79 h | 0.79 h | 135.98 EUR |
-| 2 | Caddy | 3 | 10.41 h | 2.41 h | 179.57 EUR |
-| 3 | Sprinter | 4 | 14.56 h | 6.56 h | 340.96 EUR |
-| 4 | Sprinter | 5 | 16.29 h | 8.29 h | 368.12 EUR |
-| 5 | MAN TGL | 1 | 7.88 h | 0.00 h | 152.67 EUR |
+Every vehicle is back before 24:00. The street map draws all 269 legs exactly
+on the cost matrix.
 
-The saved solution was independently rebuilt from `output/best_solution.json`:
-`check_solution` reports no errors, all 250 customers appear exactly once, and
-the recomputed true cost matches 1,177.30 EUR.
+Same configuration on **`data/base`** (straight line × 1.3, 08:00-23:00 day):
+**1,212.78 EUR**, 15 trips, 764.6 km, 18.14 h overtime (all unavoidable),
+feasible. Real roads cost about 43 % more: they are longer and slower, so
+there is more driving and more overtime.
 
 ---
 
 ## Notes and limitations
 
-- The instance uses straight-line distances × 1.3 (`distances.csv`), not live
-  road routing.
+- Road data (`data/osm`, `data/road_ga`) uses static road-class speeds capped
+  by OSM `maxspeed`; no live traffic, turn restrictions or truck-specific
+  limits. `data/base` uses straight-line distances × 1.3.
+- `data/osm` depends on one OSM snapshot (`cache/budapest_osm.json`, not in
+  git); a newer download can change a few routes slightly.
 - Packing mode is 1 (keep 10% free volume); three-dimensional box placement
   (packing mode 2) is not modelled.
 - The fleet is fixed and every vehicle may perform multiple depot-return
   trips.
 - The minimum-customer rule is soft by design; the reported benchmark solution
-  happens to have 10–36 customers on every trip.
+  has 10–18 customers on every trip.
 - Results are deterministic for a fixed seed on the same NumPy/BLAS setup, but
   small platform-dependent floating-point differences can change tie-breaks.
