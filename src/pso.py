@@ -48,7 +48,8 @@ class PSOConfig:
     reinit_interval: int = 30
     reinit_fraction: float = 0.10
 
-    # Convergence fixes (see experiments/diagnose_convergence.py).
+    # Convergence fixes (measured in the README section "Convergence fixes";
+    # tested in tests/test_convergence.py).
     # 1) Score every candidate like the incumbent: 2-opt inside its trips
     #    before comparing.  Without it, polished incumbents are compared
     #    against unpolished candidates and nothing is ever accepted.

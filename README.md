@@ -294,9 +294,9 @@ solver reads like `data/base/` (`python main.py --dataset instances/test/test_30
 
 Diagnosis (default instance, daily window): in V0 the best plan came from the
 start heuristics and the swarm never improved it. Two causes were found and
-fixed; each fix is a setting in `PSOConfig`, measured with
-`python -m experiments.convergence_ablation` (seeds 1-3) and plotted with
-`experiments/plot_convergence.py`.
+fixed; each fix is a setting in `PSOConfig` (`src/pso.py`), measured once
+over seeds 1-3 and tested in `tests/test_convergence.py`. (The one-off study
+scripts and their raw results were removed; they are in the git history.)
 
 | Variant | Mean final cost | Swarm improvements | Runtime | Kept |
 |---|---:|---:|---:|---|
@@ -395,10 +395,9 @@ tests/test_report.py    report files, tables, and chart smoke test
 data/base/              straight-line instance + source data (places pool, furniture, generators)
 data/road_ga/           same instance on the GA team's road matrices (shared reference)
 data/osm/               same instance on our own OSM road matrices (main.py default)
-experiments/            instance generators, road pipeline, convergence study
+experiments/            instance generators and road pipeline
 cache/                  OSM extract and routed pool (local, not committed)
 output/                 latest run: best_solution.json, route_geometry.json, report/
-results/                convergence study results and curves
 ```
 
 ---
