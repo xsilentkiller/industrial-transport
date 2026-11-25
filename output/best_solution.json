@@ -1,52 +1,52 @@
 {
   "dataset": "dataset",
   "config": {
-    "swarm_size": 40,
-    "iterations": 300,
+    "swarm_size": 20,
+    "iterations": 60,
     "seed": 42,
     "local_search_interval": 5,
     "local_search_budget": 40,
     "final_local_search_budget": 120
   },
-  "runtime_sec": 3896.9582594000094,
-  "evaluations": 14551,
-  "best_feasible_cost": 1184.163718,
+  "runtime_sec": 242.57304029999068,
+  "evaluations": 1841,
+  "best_feasible_cost": 1212.7838365333334,
   "check_errors": [],
   "best_solution": {
-    "method": "trip-2opt",
-    "true_cost_eur": 1184.163718,
+    "method": "split-soft",
+    "true_cost_eur": 1212.7838365333334,
     "penalty": 0.0,
-    "objective": 1184.163718,
+    "objective": 1212.7838365333334,
     "feasible": true,
     "n_trips": 15,
-    "total_distance_km": 740.915,
-    "total_time_min": 3456.6164999999996,
-    "total_weight_kg": 5265.178,
-    "total_volume_m3": 123.9785,
-    "day_overtime_cost": 231.55954999999997,
-    "shift_over_min": 1056.6164999999999,
+    "total_distance_km": 764.5889999999997,
+    "total_time_min": 3488.182,
+    "total_weight_kg": 5265.178000000001,
+    "total_volume_m3": 123.97850000000001,
+    "day_overtime_cost": 241.71881666666673,
+    "shift_over_min": 1088.1820000000002,
     "vehicle_total_min": [
-      671.4588,
-      484.3452,
-      865.51875,
-      837.5062499999999,
-      597.7875
+      650.3924000000003,
+      529.8496,
+      851.0600000000002,
+      784.5449999999998,
+      672.335
     ],
     "vehicle_overtime_min": [
-      191.4588,
-      4.345199999999977,
-      385.51874999999995,
-      357.5062499999999,
-      117.78750000000002
+      170.3924000000003,
+      49.84960000000001,
+      371.0600000000002,
+      304.54499999999985,
+      192.33500000000004
     ],
     "vehicle_overtime_cost": [
-      38.291760000000004,
-      0.8690399999999955,
-      83.5290625,
-      77.45968749999999,
-      31.410000000000007
+      34.07848000000006,
+      9.969920000000002,
+      80.39633333333337,
+      65.98474999999996,
+      51.28933333333334
     ],
-    "longest_day_min": 865.51875,
+    "longest_day_min": 851.0600000000002,
     "vehicle_night_min": [
       0.0,
       0.0,
@@ -55,11 +55,11 @@
       0.0
     ],
     "vehicle_last_delivery_min": [
-      654.24,
-      467.48999999999995,
-      830.11875,
-      816.6687499999999,
-      576.3855
+      633.5036000000003,
+      514.6456000000001,
+      826.7137500000001,
+      763.1862499999999,
+      649.6385
     ],
     "vehicle_day_penalty": [
       0.0,
@@ -73,11 +73,223 @@
         "vehicle_index": 0,
         "vehicle_id": 1,
         "customers": [
+          209,
+          96,
+          4,
+          182,
+          188,
+          79,
+          103,
+          83,
+          176,
+          135,
+          233,
+          60,
+          53,
+          225,
+          76,
+          136,
+          239
+        ],
+        "count": 17,
+        "distance_km": 39.059,
+        "driving_min": 46.8708,
+        "loading_min": 60.4,
+        "unloading_min": 94.39999999999999,
+        "time_min": 201.67079999999999,
+        "weight_kg": 190.054,
+        "volume_m3": 2.4221,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 3.3434504,
+        "maintenance_cost": 3.12472,
+        "wage_base_cost": 40.33416,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 46.802330399999995,
+        "cost_eur": 46.802330399999995,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 0,
+        "vehicle_id": 1,
+        "customers": [
+          61,
+          145,
+          55,
+          63,
+          249,
+          62,
+          167,
+          40,
+          98,
+          10,
+          224,
+          12,
+          247,
+          20,
+          191,
+          161,
+          69
+        ],
+        "count": 17,
+        "distance_km": 64.26,
+        "driving_min": 77.11200000000001,
+        "loading_min": 60.30000000000007,
+        "unloading_min": 94.30000000000007,
+        "time_min": 231.71200000000016,
+        "weight_kg": 184.67200000000014,
+        "volume_m3": 2.642899999999999,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 5.500656,
+        "maintenance_cost": 5.1408000000000005,
+        "wage_base_cost": 46.34240000000003,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 56.98385600000003,
+        "cost_eur": 56.98385600000003,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 0,
+        "vehicle_id": 1,
+        "customers": [
+          16,
+          97,
+          6,
+          234,
+          146,
+          164,
+          241,
+          101,
+          31,
+          124,
+          195,
+          37,
+          156,
+          242,
+          89,
+          67,
+          175
+        ],
+        "count": 17,
+        "distance_km": 51.008,
+        "driving_min": 61.209599999999995,
+        "loading_min": 60.900000000000034,
+        "unloading_min": 94.90000000000009,
+        "time_min": 217.00960000000012,
+        "weight_kg": 197.918,
+        "volume_m3": 2.7308000000000003,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 4.366284800000001,
+        "maintenance_cost": 4.080640000000001,
+        "wage_base_cost": 43.401920000000025,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 51.84884480000002,
+        "cost_eur": 51.84884480000002,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 1,
+        "vehicle_id": 2,
+        "customers": [
+          118,
+          28,
+          95,
+          217,
+          245,
+          183,
+          49,
+          48,
+          51,
+          246,
+          71,
+          125,
+          108,
+          123,
+          32,
+          194,
+          127,
+          92,
+          66,
+          56,
+          163,
+          111,
+          169,
+          204
+        ],
+        "count": 24,
+        "distance_km": 63.955000000000034,
+        "driving_min": 76.74600000000004,
+        "loading_min": 81.19999999999996,
+        "unloading_min": 129.2000000000001,
+        "time_min": 287.1460000000001,
+        "weight_kg": 186.28700000000003,
+        "volume_m3": 2.5848000000000004,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 5.474548000000003,
+        "maintenance_cost": 5.116400000000002,
+        "wage_base_cost": 57.42920000000002,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 68.02014800000003,
+        "cost_eur": 68.02014800000003,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 1,
+        "vehicle_id": 2,
+        "customers": [
           75,
           238,
           227,
           121,
           210,
+          144,
           77,
           2,
           186,
@@ -89,238 +301,27 @@
           39,
           200,
           168,
-          110,
-          61
+          110
         ],
         "count": 18,
-        "distance_km": 63.344,
-        "driving_min": 76.0128,
-        "loading_min": 64.5,
-        "unloading_min": 100.49999999999999,
-        "time_min": 241.01279999999997,
-        "weight_kg": 215.329,
-        "volume_m3": 2.7111000000000005,
+        "distance_km": 65.25299999999999,
+        "driving_min": 78.30359999999997,
+        "loading_min": 64.19999999999999,
+        "unloading_min": 100.19999999999997,
+        "time_min": 242.70359999999994,
+        "weight_kg": 210.78899999999996,
+        "volume_m3": 2.7232999999999996,
         "raw_volume_over_m3": 0.0,
         "free_volume_over_m3": 0.0,
         "overflow_m3": 0.0,
         "overflow_cost": 0.0,
-        "fuel_cost": 5.422246400000001,
-        "maintenance_cost": 5.06752,
-        "wage_base_cost": 48.20255999999999,
+        "fuel_cost": 5.585656799999999,
+        "maintenance_cost": 5.220239999999999,
+        "wage_base_cost": 48.54071999999998,
         "overtime_min": 0.0,
         "overtime_cost": 0.0,
-        "base_cost_eur": 58.69232639999999,
-        "cost_eur": 58.69232639999999,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 0,
-        "vehicle_id": 1,
-        "customers": [
-          209,
-          96,
-          116,
-          79,
-          188,
-          182,
-          76,
-          60,
-          103,
-          83,
-          119,
-          135,
-          233,
-          53,
-          225,
-          136,
-          239
-        ],
-        "count": 17,
-        "distance_km": 38.239999999999995,
-        "driving_min": 45.888,
-        "loading_min": 60.900000000000006,
-        "unloading_min": 94.89999999999999,
-        "time_min": 201.688,
-        "weight_kg": 202.754,
-        "volume_m3": 2.751,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 3.273344,
-        "maintenance_cost": 3.0591999999999997,
-        "wage_base_cost": 40.337599999999995,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 46.67014399999999,
-        "cost_eur": 46.67014399999999,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 0,
-        "vehicle_id": 1,
-        "customers": [
-          69,
-          161,
-          12,
-          247,
-          191,
-          20,
-          146,
-          40,
-          98,
-          167,
-          62,
-          249,
-          10,
-          224,
-          63,
-          22,
-          174
-        ],
-        "count": 17,
-        "distance_km": 62.465,
-        "driving_min": 74.958,
-        "loading_min": 59.89999999999999,
-        "unloading_min": 93.9,
-        "time_min": 228.758,
-        "weight_kg": 178.37099999999998,
-        "volume_m3": 2.7662,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 5.347004000000001,
-        "maintenance_cost": 4.9972,
-        "wage_base_cost": 45.751599999999996,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 56.095804,
-        "cost_eur": 56.095804,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 1,
-        "vehicle_id": 2,
-        "customers": [
-          204,
-          169,
-          111,
-          163,
-          56,
-          66,
-          127,
-          194,
-          123,
-          32,
-          108,
-          125,
-          246,
-          202,
-          51,
-          48,
-          49,
-          183,
-          245,
-          95,
-          217,
-          28,
-          118
-        ],
-        "count": 23,
-        "distance_km": 62.384,
-        "driving_min": 74.8608,
-        "loading_min": 78.3,
-        "unloading_min": 124.3,
-        "time_min": 277.4608,
-        "weight_kg": 188.04699999999997,
-        "volume_m3": 2.6894,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 5.3400704,
-        "maintenance_cost": 4.9907200000000005,
-        "wage_base_cost": 55.49216,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 65.8229504,
-        "cost_eur": 65.8229504,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 1,
-        "vehicle_id": 2,
-        "customers": [
-          175,
-          67,
-          89,
-          242,
-          156,
-          92,
-          195,
-          37,
-          124,
-          31,
-          101,
-          241,
-          164,
-          234,
-          6,
-          97,
-          16
-        ],
-        "count": 17,
-        "distance_km": 42.737,
-        "driving_min": 51.284400000000005,
-        "loading_min": 60.800000000000004,
-        "unloading_min": 94.79999999999998,
-        "time_min": 206.8844,
-        "weight_kg": 194.87,
-        "volume_m3": 2.7173,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 3.6582872,
-        "maintenance_cost": 3.41896,
-        "wage_base_cost": 41.37688,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 48.4541272,
-        "cost_eur": 48.4541272,
+        "base_cost_eur": 59.34661679999998,
+        "cost_eur": 59.34661679999998,
         "penalty": 0.0,
         "feasible": true,
         "violations": {
@@ -335,42 +336,233 @@
         "vehicle_index": 2,
         "vehicle_id": 3,
         "customers": [
-          145,
-          54,
-          140,
-          34,
-          55,
-          115,
-          35,
-          126,
-          198,
-          147,
+          237,
+          27,
+          178,
+          248,
+          170,
+          47,
+          222,
+          50,
+          203,
+          57,
+          190,
+          26
+        ],
+        "count": 12,
+        "distance_km": 31.37599999999997,
+        "driving_min": 39.21999999999996,
+        "loading_min": 51.90000000000009,
+        "unloading_min": 75.90000000000009,
+        "time_min": 167.02000000000015,
+        "weight_kg": 316.02700000000016,
+        "volume_m3": 6.636699999999998,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 4.543244799999996,
+        "maintenance_cost": 3.7651199999999965,
+        "wage_base_cost": 36.1876666666667,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 44.49603146666669,
+        "cost_eur": 44.49603146666669,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 2,
+        "vehicle_id": 3,
+        "customers": [
+          29,
+          46,
+          38,
+          128,
+          150,
+          85,
+          131,
+          44,
+          81,
+          184,
+          229,
+          18
+        ],
+        "count": 12,
+        "distance_km": 81.72400000000002,
+        "driving_min": 102.15500000000003,
+        "loading_min": 50.599999999999966,
+        "unloading_min": 74.60000000000002,
+        "time_min": 227.35500000000002,
+        "weight_kg": 295.2800000000002,
+        "volume_m3": 9.437300000000004,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 11.833635200000003,
+        "maintenance_cost": 9.806880000000003,
+        "wage_base_cost": 49.260250000000006,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 70.90076520000001,
+        "cost_eur": 70.90076520000001,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 2,
+        "vehicle_id": 3,
+        "customers": [
+          8,
+          137,
+          181,
+          15,
+          112,
+          185,
+          211,
+          21,
+          84,
+          24,
+          177,
+          130,
+          143,
+          9,
+          205
+        ],
+        "count": 15,
+        "distance_km": 68.12800000000009,
+        "driving_min": 85.16000000000011,
+        "loading_min": 63.49999999999994,
+        "unloading_min": 93.50000000000011,
+        "time_min": 242.16000000000017,
+        "weight_kg": 370.33600000000024,
+        "volume_m3": 8.73210000000001,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 9.864934400000013,
+        "maintenance_cost": 8.17536000000001,
+        "wage_base_cost": 52.46800000000004,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 70.50829440000007,
+        "cost_eur": 70.50829440000007,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 2,
+        "vehicle_id": 3,
+        "customers": [
+          230,
+          243,
+          134,
+          72,
+          132,
+          219,
+          213,
+          133,
+          173,
+          155,
+          240,
+          58,
+          91,
+          33,
+          160
+        ],
+        "count": 15,
+        "distance_km": 48.41999999999999,
+        "driving_min": 60.52499999999999,
+        "loading_min": 61.99999999999994,
+        "unloading_min": 91.99999999999989,
+        "time_min": 214.5249999999998,
+        "weight_kg": 340.1089999999999,
+        "volume_m3": 9.333800000000004,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 7.0112159999999975,
+        "maintenance_cost": 5.810399999999999,
+        "wage_base_cost": 46.48041666666662,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 59.30203266666662,
+        "cost_eur": 59.30203266666662,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 3,
+        "vehicle_id": 4,
+        "customers": [
+          172,
+          152,
           215,
-          105,
+          147,
+          198,
           129,
           52,
           90,
-          172
+          126,
+          35,
+          115,
+          174,
+          22,
+          34,
+          54,
+          140,
+          180
         ],
-        "count": 16,
-        "distance_km": 45.748999999999995,
-        "driving_min": 57.186249999999994,
-        "loading_min": 69.9,
-        "unloading_min": 101.9,
-        "time_min": 228.98625,
-        "weight_kg": 437.80899999999997,
-        "volume_m3": 9.202000000000002,
+        "count": 17,
+        "distance_km": 46.767999999999915,
+        "driving_min": 58.459999999999894,
+        "loading_min": 72.5,
+        "unloading_min": 106.5,
+        "time_min": 237.4599999999999,
+        "weight_kg": 430.40599999999995,
+        "volume_m3": 9.25419999999999,
         "raw_volume_over_m3": 0.0,
         "free_volume_over_m3": 0.0,
         "overflow_m3": 0.0,
         "overflow_cost": 0.0,
-        "fuel_cost": 6.624455199999999,
-        "maintenance_cost": 5.489879999999999,
-        "wage_base_cost": 49.613687500000005,
+        "fuel_cost": 6.772006399999988,
+        "maintenance_cost": 5.61215999999999,
+        "wage_base_cost": 51.449666666666644,
         "overtime_min": 0.0,
         "overtime_cost": 0.0,
-        "base_cost_eur": 61.728022700000004,
-        "cost_eur": 61.728022700000004,
+        "base_cost_eur": 63.83383306666662,
+        "cost_eur": 63.83383306666662,
         "penalty": 0.0,
         "feasible": true,
         "violations": {
@@ -382,44 +574,88 @@
         }
       },
       {
-        "vehicle_index": 2,
-        "vehicle_id": 3,
+        "vehicle_index": 3,
+        "vehicle_id": 4,
         "customers": [
-          160,
-          33,
-          91,
-          58,
-          240,
-          155,
-          173,
-          133,
-          213,
-          219,
-          132,
-          72,
-          134,
-          243,
-          230
+          65,
+          214,
+          153,
+          23,
+          221,
+          120,
+          104,
+          106,
+          226,
+          116
+        ],
+        "count": 10,
+        "distance_km": 15.687999999999906,
+        "driving_min": 19.609999999999882,
+        "loading_min": 42.799999999999955,
+        "unloading_min": 62.799999999999955,
+        "time_min": 125.2099999999998,
+        "weight_kg": 258.73099999999977,
+        "volume_m3": 8.316699999999997,
+        "raw_volume_over_m3": 0.0,
+        "free_volume_over_m3": 0.0,
+        "overflow_m3": 0.0,
+        "overflow_cost": 0.0,
+        "fuel_cost": 2.2716223999999867,
+        "maintenance_cost": 1.882559999999989,
+        "wage_base_cost": 27.128833333333287,
+        "overtime_min": 0.0,
+        "overtime_cost": 0.0,
+        "base_cost_eur": 31.28301573333326,
+        "cost_eur": 31.28301573333326,
+        "penalty": 0.0,
+        "feasible": true,
+        "violations": {
+          "weight_over_kg": 0.0,
+          "raw_volume_over_m3": 0.0,
+          "free_volume_over_m3": 0.0,
+          "customers_under_min": 0.0,
+          "customers_over_max": 0.0
+        }
+      },
+      {
+        "vehicle_index": 3,
+        "vehicle_id": 4,
+        "customers": [
+          148,
+          109,
+          30,
+          149,
+          201,
+          78,
+          151,
+          102,
+          207,
+          166,
+          122,
+          171,
+          17,
+          231,
+          107
         ],
         "count": 15,
-        "distance_km": 48.42,
-        "driving_min": 60.525000000000006,
-        "loading_min": 61.99999999999999,
-        "unloading_min": 92.0,
-        "time_min": 214.525,
-        "weight_kg": 340.10900000000004,
-        "volume_m3": 9.3338,
+        "distance_km": 52.41799999999993,
+        "driving_min": 65.52249999999991,
+        "loading_min": 68.20000000000005,
+        "unloading_min": 98.19999999999993,
+        "time_min": 231.9224999999999,
+        "weight_kg": 464.04299999999967,
+        "volume_m3": 9.351099999999988,
         "raw_volume_over_m3": 0.0,
         "free_volume_over_m3": 0.0,
         "overflow_m3": 0.0,
         "overflow_cost": 0.0,
-        "fuel_cost": 7.011216000000001,
-        "maintenance_cost": 5.8104000000000005,
-        "wage_base_cost": 46.48041666666667,
+        "fuel_cost": 7.59012639999999,
+        "maintenance_cost": 6.290159999999991,
+        "wage_base_cost": 50.24987499999998,
         "overtime_min": 0.0,
         "overtime_cost": 0.0,
-        "base_cost_eur": 59.302032666666676,
-        "cost_eur": 59.302032666666676,
+        "base_cost_eur": 64.13016139999996,
+        "cost_eur": 64.13016139999996,
         "penalty": 0.0,
         "feasible": true,
         "violations": {
@@ -431,10 +667,11 @@
         }
       },
       {
-        "vehicle_index": 2,
-        "vehicle_id": 3,
+        "vehicle_index": 3,
+        "vehicle_id": 4,
         "customers": [
-          19,
+          187,
+          193,
           59,
           86,
           189,
@@ -443,270 +680,28 @@
           220,
           1,
           232,
-          71,
-          235,
-          193,
-          187
-        ],
-        "count": 13,
-        "distance_km": 52.783,
-        "driving_min": 65.97875,
-        "loading_min": 53.3,
-        "unloading_min": 79.30000000000001,
-        "time_min": 198.57875,
-        "weight_kg": 284.543,
-        "volume_m3": 8.869399999999999,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 7.6429784000000005,
-        "maintenance_cost": 6.33396,
-        "wage_base_cost": 43.025395833333334,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 57.002334233333336,
-        "cost_eur": 57.002334233333336,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 2,
-        "vehicle_id": 3,
-        "customers": [
-          229,
-          18,
-          184,
-          81,
-          44,
-          85,
-          150,
-          128,
-          131,
-          38,
-          46,
-          29
+          202,
+          235
         ],
         "count": 12,
-        "distance_km": 78.583,
-        "driving_min": 98.22874999999999,
-        "loading_min": 50.6,
-        "unloading_min": 74.60000000000001,
-        "time_min": 223.42874999999998,
-        "weight_kg": 295.28,
-        "volume_m3": 9.4373,
+        "distance_km": 52.44199999999998,
+        "driving_min": 65.55249999999998,
+        "loading_min": 50.200000000000045,
+        "unloading_min": 74.20000000000027,
+        "time_min": 189.9525000000003,
+        "weight_kg": 281.22199999999975,
+        "volume_m3": 8.769500000000008,
         "raw_volume_over_m3": 0.0,
         "free_volume_over_m3": 0.0,
         "overflow_m3": 0.0,
         "overflow_cost": 0.0,
-        "fuel_cost": 11.3788184,
-        "maintenance_cost": 9.42996,
-        "wage_base_cost": 48.4095625,
+        "fuel_cost": 7.593601599999997,
+        "maintenance_cost": 6.293039999999997,
+        "wage_base_cost": 41.15637500000007,
         "overtime_min": 0.0,
         "overtime_cost": 0.0,
-        "base_cost_eur": 69.2183409,
-        "cost_eur": 69.2183409,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 3,
-        "vehicle_id": 4,
-        "customers": [
-          107,
-          151,
-          148,
-          109,
-          30,
-          149,
-          201,
-          78,
-          180,
-          102,
-          166,
-          122,
-          171,
-          17,
-          231
-        ],
-        "count": 15,
-        "distance_km": 49.942,
-        "driving_min": 62.427499999999995,
-        "loading_min": 67.89999999999999,
-        "unloading_min": 97.89999999999999,
-        "time_min": 228.22749999999996,
-        "weight_kg": 458.735,
-        "volume_m3": 9.3929,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 7.231601600000001,
-        "maintenance_cost": 5.99304,
-        "wage_base_cost": 49.44929166666666,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 62.673933266666666,
-        "cost_eur": 62.673933266666666,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 3,
-        "vehicle_id": 4,
-        "customers": [
-          106,
-          226,
-          120,
-          104,
-          221,
-          4,
-          23,
-          153,
-          214,
-          65
-        ],
-        "count": 10,
-        "distance_km": 15.364,
-        "driving_min": 19.205,
-        "loading_min": 42.49999999999999,
-        "unloading_min": 62.5,
-        "time_min": 124.20499999999998,
-        "weight_kg": 251.01999999999998,
-        "volume_m3": 8.1144,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 2.2247072,
-        "maintenance_cost": 1.84368,
-        "wage_base_cost": 26.911083333333334,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 30.979470533333334,
-        "cost_eur": 30.979470533333334,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 3,
-        "vehicle_id": 4,
-        "customers": [
-          73,
-          157,
-          117,
-          45,
-          100,
-          208,
-          41,
-          196,
-          82,
-          158,
-          13,
-          64,
-          93,
-          42,
-          70,
-          139
-        ],
-        "count": 16,
-        "distance_km": 39.087,
-        "driving_min": 48.85875000000001,
-        "loading_min": 71.4,
-        "unloading_min": 103.4,
-        "time_min": 223.65875000000003,
-        "weight_kg": 466.121,
-        "volume_m3": 9.2996,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 5.659797600000001,
-        "maintenance_cost": 4.690440000000001,
-        "wage_base_cost": 48.45939583333334,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 58.80963343333334,
-        "cost_eur": 58.80963343333334,
-        "penalty": 0.0,
-        "feasible": true,
-        "violations": {
-          "weight_over_kg": 0.0,
-          "raw_volume_over_m3": 0.0,
-          "free_volume_over_m3": 0.0,
-          "customers_under_min": 0.0,
-          "customers_over_max": 0.0
-        }
-      },
-      {
-        "vehicle_index": 3,
-        "vehicle_id": 4,
-        "customers": [
-          177,
-          24,
-          84,
-          21,
-          130,
-          143,
-          9,
-          205,
-          207,
-          211,
-          185,
-          112,
-          15,
-          181,
-          137,
-          144,
-          8
-        ],
-        "count": 17,
-        "distance_km": 68.49199999999999,
-        "driving_min": 85.61499999999998,
-        "loading_min": 70.9,
-        "unloading_min": 104.9,
-        "time_min": 261.41499999999996,
-        "weight_kg": 398.868,
-        "volume_m3": 9.144499999999999,
-        "raw_volume_over_m3": 0.0,
-        "free_volume_over_m3": 0.0,
-        "overflow_m3": 0.0,
-        "overflow_cost": 0.0,
-        "fuel_cost": 9.9176416,
-        "maintenance_cost": 8.21904,
-        "wage_base_cost": 56.63991666666666,
-        "overtime_min": 0.0,
-        "overtime_cost": 0.0,
-        "base_cost_eur": 74.77659826666665,
-        "cost_eur": 74.77659826666665,
+        "base_cost_eur": 55.04301660000006,
+        "cost_eur": 55.04301660000006,
         "penalty": 0.0,
         "feasible": true,
         "violations": {
@@ -721,38 +716,42 @@
         "vehicle_index": 4,
         "vehicle_id": 5,
         "customers": [
-          190,
-          203,
-          57,
-          222,
-          47,
-          178,
-          27,
-          237,
-          248,
-          170,
-          50,
-          26
+          139,
+          70,
+          42,
+          93,
+          64,
+          13,
+          158,
+          82,
+          41,
+          196,
+          208,
+          100,
+          45,
+          117,
+          73,
+          157
         ],
-        "count": 12,
-        "distance_km": 29.717999999999996,
-        "driving_min": 44.57699999999999,
-        "loading_min": 51.9,
-        "unloading_min": 75.89999999999999,
-        "time_min": 172.37699999999998,
-        "weight_kg": 316.027,
-        "volume_m3": 6.6367,
+        "count": 16,
+        "distance_km": 39.349999999999994,
+        "driving_min": 59.02499999999999,
+        "loading_min": 71.40000000000009,
+        "unloading_min": 103.40000000000032,
+        "time_min": 233.8250000000004,
+        "weight_kg": 466.121000000001,
+        "volume_m3": 9.299600000000012,
         "raw_volume_over_m3": 0.0,
         "free_volume_over_m3": 0.0,
         "overflow_m3": 0.0,
         "overflow_cost": 0.0,
-        "fuel_cost": 9.985247999999999,
-        "maintenance_cost": 7.429499999999999,
-        "wage_base_cost": 45.9672,
+        "fuel_cost": 13.221599999999999,
+        "maintenance_cost": 9.837499999999999,
+        "wage_base_cost": 62.35333333333344,
         "overtime_min": 0.0,
         "overtime_cost": 0.0,
-        "base_cost_eur": 63.381947999999994,
-        "cost_eur": 63.381947999999994,
+        "base_cost_eur": 85.41243333333344,
+        "cost_eur": 85.41243333333344,
         "penalty": 0.0,
         "feasible": true,
         "violations": {
@@ -772,53 +771,54 @@
           228,
           94,
           88,
-          99,
           11,
+          99,
           141,
           138,
-          154,
           159,
+          154,
           162,
           179,
-          176,
+          119,
           216,
           244,
           25,
           114,
+          19,
           199,
           250,
           7,
           36,
           74,
           192,
-          218,
           142,
+          218,
           43,
           113,
           14,
-          197,
+          105,
           3,
-          152
+          197
         ],
-        "count": 32,
-        "distance_km": 43.607,
-        "driving_min": 65.4105,
-        "loading_min": 148.0,
-        "unloading_min": 212.0,
-        "time_min": 425.4105,
-        "weight_kg": 1037.295,
-        "volume_m3": 30.9129,
+        "count": 33,
+        "distance_km": 44.73999999999994,
+        "driving_min": 67.10999999999991,
+        "loading_min": 152.69999999999993,
+        "unloading_min": 218.69999999999982,
+        "time_min": 438.50999999999965,
+        "weight_kg": 1073.183,
+        "volume_m3": 31.7436,
         "raw_volume_over_m3": 0.0,
         "free_volume_over_m3": 0.0,
         "overflow_m3": 0.0,
         "overflow_cost": 0.0,
-        "fuel_cost": 14.651952000000001,
-        "maintenance_cost": 10.90175,
-        "wage_base_cost": 113.4428,
+        "fuel_cost": 15.03263999999998,
+        "maintenance_cost": 11.184999999999985,
+        "wage_base_cost": 116.93599999999991,
         "overtime_min": 0.0,
         "overtime_cost": 0.0,
-        "base_cost_eur": 138.99650200000002,
-        "cost_eur": 138.99650200000002,
+        "base_cost_eur": 143.15363999999988,
+        "cost_eur": 143.15363999999988,
         "penalty": 0.0,
         "feasible": true,
         "violations": {
@@ -842,28 +842,28 @@
       "vehicle_id": 1,
       "model": "VW Caddy Cargo SWB",
       "trips": 3,
-      "work_h": 11.19098,
+      "work_h": 10.839873333333339,
       "start": "08:00",
-      "last_delivery": "18:54",
-      "finish": "19:11",
-      "overtime_h": 3.19098,
+      "last_delivery": "18:34",
+      "finish": "18:50",
+      "overtime_h": 2.839873333333338,
       "night_h": 0.0,
-      "premium_eur": 38.291760000000004,
+      "premium_eur": 34.07848000000006,
       "window_penalty": 0.0,
       "trip_times": [
         {
           "start": "08:00",
-          "end": "12:01",
-          "customers": 18
-        },
-        {
-          "start": "12:01",
-          "end": "15:23",
+          "end": "11:22",
           "customers": 17
         },
         {
-          "start": "15:23",
-          "end": "19:11",
+          "start": "11:22",
+          "end": "15:13",
+          "customers": 17
+        },
+        {
+          "start": "15:13",
+          "end": "18:50",
           "customers": 17
         }
       ]
@@ -872,24 +872,24 @@
       "vehicle_id": 2,
       "model": "VW Caddy Cargo SWB",
       "trips": 2,
-      "work_h": 8.07242,
+      "work_h": 8.830826666666667,
       "start": "08:00",
-      "last_delivery": "15:47",
-      "finish": "16:04",
-      "overtime_h": 0.07241999999999962,
+      "last_delivery": "16:35",
+      "finish": "16:50",
+      "overtime_h": 0.8308266666666668,
       "night_h": 0.0,
-      "premium_eur": 0.8690399999999955,
+      "premium_eur": 9.969920000000002,
       "window_penalty": 0.0,
       "trip_times": [
         {
           "start": "08:00",
-          "end": "12:37",
-          "customers": 23
+          "end": "12:47",
+          "customers": 24
         },
         {
-          "start": "12:37",
-          "end": "16:04",
-          "customers": 17
+          "start": "12:47",
+          "end": "16:50",
+          "customers": 18
         }
       ]
     },
@@ -897,34 +897,34 @@
       "vehicle_id": 3,
       "model": "Mercedes Sprinter 315 CDI L2H2",
       "trips": 4,
-      "work_h": 14.425312499999999,
+      "work_h": 14.184333333333337,
       "start": "08:00",
-      "last_delivery": "21:50",
-      "finish": "22:26",
-      "overtime_h": 6.4253124999999995,
+      "last_delivery": "21:47",
+      "finish": "22:11",
+      "overtime_h": 6.184333333333337,
       "night_h": 0.0,
-      "premium_eur": 83.5290625,
+      "premium_eur": 80.39633333333337,
       "window_penalty": 0.0,
       "trip_times": [
         {
           "start": "08:00",
-          "end": "11:49",
-          "customers": 16
+          "end": "10:47",
+          "customers": 12
         },
         {
-          "start": "11:49",
-          "end": "15:24",
+          "start": "10:47",
+          "end": "14:34",
+          "customers": 12
+        },
+        {
+          "start": "14:34",
+          "end": "18:37",
           "customers": 15
         },
         {
-          "start": "15:24",
-          "end": "18:42",
-          "customers": 13
-        },
-        {
-          "start": "18:42",
-          "end": "22:26",
-          "customers": 12
+          "start": "18:37",
+          "end": "22:11",
+          "customers": 15
         }
       ]
     },
@@ -932,34 +932,34 @@
       "vehicle_id": 4,
       "model": "Mercedes Sprinter 315 CDI L2H2",
       "trips": 4,
-      "work_h": 13.958437499999999,
+      "work_h": 13.075749999999998,
       "start": "08:00",
-      "last_delivery": "21:37",
-      "finish": "21:58",
-      "overtime_h": 5.958437499999999,
+      "last_delivery": "20:43",
+      "finish": "21:05",
+      "overtime_h": 5.0757499999999975,
       "night_h": 0.0,
-      "premium_eur": 77.45968749999999,
+      "premium_eur": 65.98474999999996,
       "window_penalty": 0.0,
       "trip_times": [
         {
           "start": "08:00",
-          "end": "11:48",
-          "customers": 15
+          "end": "11:57",
+          "customers": 17
         },
         {
-          "start": "11:48",
-          "end": "13:52",
+          "start": "11:57",
+          "end": "14:03",
           "customers": 10
         },
         {
-          "start": "13:52",
-          "end": "17:36",
-          "customers": 16
+          "start": "14:03",
+          "end": "17:55",
+          "customers": 15
         },
         {
-          "start": "17:36",
-          "end": "21:58",
-          "customers": 17
+          "start": "17:55",
+          "end": "21:05",
+          "customers": 12
         }
       ]
     },
@@ -967,35 +967,35 @@
       "vehicle_id": 5,
       "model": "MAN TGL 12.190 box",
       "trips": 2,
-      "work_h": 9.963125,
+      "work_h": 11.205583333333333,
       "start": "08:00",
-      "last_delivery": "17:36",
-      "finish": "17:58",
-      "overtime_h": 1.9631250000000005,
+      "last_delivery": "18:50",
+      "finish": "19:12",
+      "overtime_h": 3.205583333333334,
       "night_h": 0.0,
-      "premium_eur": 31.410000000000007,
+      "premium_eur": 51.28933333333334,
       "window_penalty": 0.0,
       "trip_times": [
         {
           "start": "08:00",
-          "end": "10:52",
-          "customers": 12
+          "end": "11:54",
+          "customers": 16
         },
         {
-          "start": "10:52",
-          "end": "17:58",
-          "customers": 32
+          "start": "11:54",
+          "end": "19:12",
+          "customers": 33
         }
       ]
     }
   ],
   "overtime_summary": {
-    "total_work_h": 57.610274999999994,
-    "overtime_h": 17.610274999999998,
-    "unavoidable_overtime_h": 17.610274999999994,
-    "avoidable_overtime_h": 3.789561257387201e-15,
+    "total_work_h": 58.13636666666667,
+    "overtime_h": 18.13636666666667,
+    "unavoidable_overtime_h": 18.13636666666667,
+    "avoidable_overtime_h": 0.0,
     "night_h": 0.0,
-    "longest_day_h": 14.425312499999999
+    "longest_day_h": 14.184333333333337
   },
   "history": [
     {
@@ -1004,7 +1004,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 85
+      "evaluations": 45
     },
     {
       "iteration": 2,
@@ -1012,7 +1012,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 125
+      "evaluations": 65
     },
     {
       "iteration": 3,
@@ -1020,7 +1020,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 165
+      "evaluations": 85
     },
     {
       "iteration": 4,
@@ -1028,7 +1028,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 205
+      "evaluations": 105
     },
     {
       "iteration": 5,
@@ -1036,7 +1036,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 282
+      "evaluations": 164
     },
     {
       "iteration": 6,
@@ -1044,7 +1044,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 322
+      "evaluations": 184
     },
     {
       "iteration": 7,
@@ -1052,7 +1052,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 362
+      "evaluations": 204
     },
     {
       "iteration": 8,
@@ -1060,7 +1060,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 402
+      "evaluations": 224
     },
     {
       "iteration": 9,
@@ -1068,7 +1068,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 442
+      "evaluations": 244
     },
     {
       "iteration": 10,
@@ -1076,7 +1076,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 521
+      "evaluations": 304
     },
     {
       "iteration": 11,
@@ -1084,7 +1084,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 561
+      "evaluations": 324
     },
     {
       "iteration": 12,
@@ -1092,7 +1092,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 601
+      "evaluations": 344
     },
     {
       "iteration": 13,
@@ -1100,7 +1100,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 641
+      "evaluations": 364
     },
     {
       "iteration": 14,
@@ -1108,7 +1108,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 681
+      "evaluations": 384
     },
     {
       "iteration": 15,
@@ -1116,7 +1116,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 759
+      "evaluations": 443
     },
     {
       "iteration": 16,
@@ -1124,7 +1124,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 799
+      "evaluations": 463
     },
     {
       "iteration": 17,
@@ -1132,7 +1132,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 839
+      "evaluations": 483
     },
     {
       "iteration": 18,
@@ -1140,7 +1140,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 879
+      "evaluations": 503
     },
     {
       "iteration": 19,
@@ -1148,7 +1148,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 919
+      "evaluations": 523
     },
     {
       "iteration": 20,
@@ -1156,7 +1156,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 999
+      "evaluations": 583
     },
     {
       "iteration": 21,
@@ -1164,7 +1164,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1039
+      "evaluations": 603
     },
     {
       "iteration": 22,
@@ -1172,7 +1172,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1079
+      "evaluations": 623
     },
     {
       "iteration": 23,
@@ -1180,7 +1180,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1119
+      "evaluations": 643
     },
     {
       "iteration": 24,
@@ -1188,7 +1188,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1159
+      "evaluations": 663
     },
     {
       "iteration": 25,
@@ -1196,7 +1196,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1239
+      "evaluations": 723
     },
     {
       "iteration": 26,
@@ -1204,7 +1204,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1279
+      "evaluations": 743
     },
     {
       "iteration": 27,
@@ -1212,7 +1212,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1319
+      "evaluations": 763
     },
     {
       "iteration": 28,
@@ -1220,7 +1220,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1359
+      "evaluations": 783
     },
     {
       "iteration": 29,
@@ -1228,7 +1228,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1399
+      "evaluations": 803
     },
     {
       "iteration": 30,
@@ -1236,7 +1236,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1483
+      "evaluations": 864
     },
     {
       "iteration": 31,
@@ -1244,7 +1244,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1523
+      "evaluations": 884
     },
     {
       "iteration": 32,
@@ -1252,7 +1252,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1563
+      "evaluations": 904
     },
     {
       "iteration": 33,
@@ -1260,7 +1260,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1603
+      "evaluations": 924
     },
     {
       "iteration": 34,
@@ -1268,7 +1268,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1643
+      "evaluations": 944
     },
     {
       "iteration": 35,
@@ -1276,7 +1276,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1721
+      "evaluations": 1002
     },
     {
       "iteration": 36,
@@ -1284,7 +1284,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1761
+      "evaluations": 1022
     },
     {
       "iteration": 37,
@@ -1292,7 +1292,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1801
+      "evaluations": 1042
     },
     {
       "iteration": 38,
@@ -1300,7 +1300,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1841
+      "evaluations": 1062
     },
     {
       "iteration": 39,
@@ -1308,7 +1308,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1881
+      "evaluations": 1082
     },
     {
       "iteration": 40,
@@ -1316,7 +1316,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 1960
+      "evaluations": 1141
     },
     {
       "iteration": 41,
@@ -1324,7 +1324,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2000
+      "evaluations": 1161
     },
     {
       "iteration": 42,
@@ -1332,7 +1332,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2040
+      "evaluations": 1181
     },
     {
       "iteration": 43,
@@ -1340,7 +1340,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2080
+      "evaluations": 1201
     },
     {
       "iteration": 44,
@@ -1348,7 +1348,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2120
+      "evaluations": 1221
     },
     {
       "iteration": 45,
@@ -1356,7 +1356,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2200
+      "evaluations": 1280
     },
     {
       "iteration": 46,
@@ -1364,7 +1364,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2240
+      "evaluations": 1300
     },
     {
       "iteration": 47,
@@ -1372,7 +1372,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2280
+      "evaluations": 1320
     },
     {
       "iteration": 48,
@@ -1380,7 +1380,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2320
+      "evaluations": 1340
     },
     {
       "iteration": 49,
@@ -1388,7 +1388,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2360
+      "evaluations": 1360
     },
     {
       "iteration": 50,
@@ -1396,7 +1396,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2438
+      "evaluations": 1420
     },
     {
       "iteration": 51,
@@ -1404,7 +1404,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2478
+      "evaluations": 1440
     },
     {
       "iteration": 52,
@@ -1412,7 +1412,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2518
+      "evaluations": 1460
     },
     {
       "iteration": 53,
@@ -1420,7 +1420,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2558
+      "evaluations": 1480
     },
     {
       "iteration": 54,
@@ -1428,7 +1428,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2598
+      "evaluations": 1500
     },
     {
       "iteration": 55,
@@ -1436,7 +1436,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2678
+      "evaluations": 1560
     },
     {
       "iteration": 56,
@@ -1444,7 +1444,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2718
+      "evaluations": 1580
     },
     {
       "iteration": 57,
@@ -1452,7 +1452,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2758
+      "evaluations": 1600
     },
     {
       "iteration": 58,
@@ -1460,7 +1460,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2798
+      "evaluations": 1620
     },
     {
       "iteration": 59,
@@ -1468,7 +1468,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2838
+      "evaluations": 1640
     },
     {
       "iteration": 60,
@@ -1476,1927 +1476,7 @@
       "best_true_cost": 1215.0789909333332,
       "best_penalty": 0.0,
       "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2921
-    },
-    {
-      "iteration": 61,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 2961
-    },
-    {
-      "iteration": 62,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3001
-    },
-    {
-      "iteration": 63,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3041
-    },
-    {
-      "iteration": 64,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3081
-    },
-    {
-      "iteration": 65,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3159
-    },
-    {
-      "iteration": 66,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3199
-    },
-    {
-      "iteration": 67,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3239
-    },
-    {
-      "iteration": 68,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3279
-    },
-    {
-      "iteration": 69,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3319
-    },
-    {
-      "iteration": 70,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3398
-    },
-    {
-      "iteration": 71,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3438
-    },
-    {
-      "iteration": 72,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3478
-    },
-    {
-      "iteration": 73,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3518
-    },
-    {
-      "iteration": 74,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3558
-    },
-    {
-      "iteration": 75,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3637
-    },
-    {
-      "iteration": 76,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3677
-    },
-    {
-      "iteration": 77,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3717
-    },
-    {
-      "iteration": 78,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3757
-    },
-    {
-      "iteration": 79,
-      "best_score": 1215.0789909333332,
-      "best_true_cost": 1215.0789909333332,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1215.0789909333332,
-      "evaluations": 3797
-    },
-    {
-      "iteration": 80,
-      "best_score": 1207.2422096666664,
-      "best_true_cost": 1207.2422096666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1207.2422096666664,
-      "evaluations": 3876
-    },
-    {
-      "iteration": 81,
-      "best_score": 1207.2422096666664,
-      "best_true_cost": 1207.2422096666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1207.2422096666664,
-      "evaluations": 3916
-    },
-    {
-      "iteration": 82,
-      "best_score": 1207.2422096666664,
-      "best_true_cost": 1207.2422096666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1207.2422096666664,
-      "evaluations": 3956
-    },
-    {
-      "iteration": 83,
-      "best_score": 1207.2422096666664,
-      "best_true_cost": 1207.2422096666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1207.2422096666664,
-      "evaluations": 3996
-    },
-    {
-      "iteration": 84,
-      "best_score": 1207.2422096666664,
-      "best_true_cost": 1207.2422096666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1207.2422096666664,
-      "evaluations": 4036
-    },
-    {
-      "iteration": 85,
-      "best_score": 1202.2044592666666,
-      "best_true_cost": 1202.2044592666666,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1202.2044592666666,
-      "evaluations": 4115
-    },
-    {
-      "iteration": 86,
-      "best_score": 1202.2044592666666,
-      "best_true_cost": 1202.2044592666666,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1202.2044592666666,
-      "evaluations": 4155
-    },
-    {
-      "iteration": 87,
-      "best_score": 1202.2044592666666,
-      "best_true_cost": 1202.2044592666666,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1202.2044592666666,
-      "evaluations": 4195
-    },
-    {
-      "iteration": 88,
-      "best_score": 1202.2044592666666,
-      "best_true_cost": 1202.2044592666666,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1202.2044592666666,
-      "evaluations": 4235
-    },
-    {
-      "iteration": 89,
-      "best_score": 1202.2044592666666,
-      "best_true_cost": 1202.2044592666666,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1202.2044592666666,
-      "evaluations": 4275
-    },
-    {
-      "iteration": 90,
-      "best_score": 1199.5404515333335,
-      "best_true_cost": 1199.5404515333335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1199.5404515333335,
-      "evaluations": 4355
-    },
-    {
-      "iteration": 91,
-      "best_score": 1199.5404515333335,
-      "best_true_cost": 1199.5404515333335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1199.5404515333335,
-      "evaluations": 4395
-    },
-    {
-      "iteration": 92,
-      "best_score": 1199.5404515333335,
-      "best_true_cost": 1199.5404515333335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1199.5404515333335,
-      "evaluations": 4435
-    },
-    {
-      "iteration": 93,
-      "best_score": 1199.5404515333335,
-      "best_true_cost": 1199.5404515333335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1199.5404515333335,
-      "evaluations": 4475
-    },
-    {
-      "iteration": 94,
-      "best_score": 1199.5404515333335,
-      "best_true_cost": 1199.5404515333335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1199.5404515333335,
-      "evaluations": 4515
-    },
-    {
-      "iteration": 95,
-      "best_score": 1197.951335,
-      "best_true_cost": 1197.951335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.951335,
-      "evaluations": 4593
-    },
-    {
-      "iteration": 96,
-      "best_score": 1197.951335,
-      "best_true_cost": 1197.951335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.951335,
-      "evaluations": 4633
-    },
-    {
-      "iteration": 97,
-      "best_score": 1197.951335,
-      "best_true_cost": 1197.951335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.951335,
-      "evaluations": 4673
-    },
-    {
-      "iteration": 98,
-      "best_score": 1197.951335,
-      "best_true_cost": 1197.951335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.951335,
-      "evaluations": 4713
-    },
-    {
-      "iteration": 99,
-      "best_score": 1197.951335,
-      "best_true_cost": 1197.951335,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.951335,
-      "evaluations": 4753
-    },
-    {
-      "iteration": 100,
-      "best_score": 1197.588203,
-      "best_true_cost": 1197.588203,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.588203,
-      "evaluations": 4830
-    },
-    {
-      "iteration": 101,
-      "best_score": 1197.588203,
-      "best_true_cost": 1197.588203,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.588203,
-      "evaluations": 4870
-    },
-    {
-      "iteration": 102,
-      "best_score": 1197.588203,
-      "best_true_cost": 1197.588203,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.588203,
-      "evaluations": 4910
-    },
-    {
-      "iteration": 103,
-      "best_score": 1197.588203,
-      "best_true_cost": 1197.588203,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.588203,
-      "evaluations": 4950
-    },
-    {
-      "iteration": 104,
-      "best_score": 1197.588203,
-      "best_true_cost": 1197.588203,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.588203,
-      "evaluations": 4990
-    },
-    {
-      "iteration": 105,
-      "best_score": 1197.528605,
-      "best_true_cost": 1197.528605,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.528605,
-      "evaluations": 5069
-    },
-    {
-      "iteration": 106,
-      "best_score": 1197.528605,
-      "best_true_cost": 1197.528605,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.528605,
-      "evaluations": 5109
-    },
-    {
-      "iteration": 107,
-      "best_score": 1197.528605,
-      "best_true_cost": 1197.528605,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.528605,
-      "evaluations": 5149
-    },
-    {
-      "iteration": 108,
-      "best_score": 1197.528605,
-      "best_true_cost": 1197.528605,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.528605,
-      "evaluations": 5189
-    },
-    {
-      "iteration": 109,
-      "best_score": 1197.528605,
-      "best_true_cost": 1197.528605,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1197.528605,
-      "evaluations": 5229
-    },
-    {
-      "iteration": 110,
-      "best_score": 1196.5479385999997,
-      "best_true_cost": 1196.5479385999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.5479385999997,
-      "evaluations": 5309
-    },
-    {
-      "iteration": 111,
-      "best_score": 1196.5479385999997,
-      "best_true_cost": 1196.5479385999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.5479385999997,
-      "evaluations": 5349
-    },
-    {
-      "iteration": 112,
-      "best_score": 1196.5479385999997,
-      "best_true_cost": 1196.5479385999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.5479385999997,
-      "evaluations": 5389
-    },
-    {
-      "iteration": 113,
-      "best_score": 1196.5479385999997,
-      "best_true_cost": 1196.5479385999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.5479385999997,
-      "evaluations": 5429
-    },
-    {
-      "iteration": 114,
-      "best_score": 1196.5479385999997,
-      "best_true_cost": 1196.5479385999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.5479385999997,
-      "evaluations": 5469
-    },
-    {
-      "iteration": 115,
-      "best_score": 1196.3275645999997,
-      "best_true_cost": 1196.3275645999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.3275645999997,
-      "evaluations": 5549
-    },
-    {
-      "iteration": 116,
-      "best_score": 1196.3275645999997,
-      "best_true_cost": 1196.3275645999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.3275645999997,
-      "evaluations": 5589
-    },
-    {
-      "iteration": 117,
-      "best_score": 1196.3275645999997,
-      "best_true_cost": 1196.3275645999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.3275645999997,
-      "evaluations": 5629
-    },
-    {
-      "iteration": 118,
-      "best_score": 1196.3275645999997,
-      "best_true_cost": 1196.3275645999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.3275645999997,
-      "evaluations": 5669
-    },
-    {
-      "iteration": 119,
-      "best_score": 1196.3275645999997,
-      "best_true_cost": 1196.3275645999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.3275645999997,
-      "evaluations": 5709
-    },
-    {
-      "iteration": 120,
-      "best_score": 1196.0358152666665,
-      "best_true_cost": 1196.0358152666665,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.0358152666665,
-      "evaluations": 5789
-    },
-    {
-      "iteration": 121,
-      "best_score": 1196.0358152666665,
-      "best_true_cost": 1196.0358152666665,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1196.0358152666665,
-      "evaluations": 5829
-    },
-    {
-      "iteration": 122,
-      "best_score": 1195.9866207999999,
-      "best_true_cost": 1195.9866207999999,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.9866207999999,
-      "evaluations": 5869
-    },
-    {
-      "iteration": 123,
-      "best_score": 1195.9866207999999,
-      "best_true_cost": 1195.9866207999999,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.9866207999999,
-      "evaluations": 5909
-    },
-    {
-      "iteration": 124,
-      "best_score": 1195.9503298,
-      "best_true_cost": 1195.9503298,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.9503298,
-      "evaluations": 5949
-    },
-    {
-      "iteration": 125,
-      "best_score": 1195.9503298,
-      "best_true_cost": 1195.9503298,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.9503298,
-      "evaluations": 6027
-    },
-    {
-      "iteration": 126,
-      "best_score": 1195.9503298,
-      "best_true_cost": 1195.9503298,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.9503298,
-      "evaluations": 6067
-    },
-    {
-      "iteration": 127,
-      "best_score": 1195.9503298,
-      "best_true_cost": 1195.9503298,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.9503298,
-      "evaluations": 6107
-    },
-    {
-      "iteration": 128,
-      "best_score": 1195.9503298,
-      "best_true_cost": 1195.9503298,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.9503298,
-      "evaluations": 6147
-    },
-    {
-      "iteration": 129,
-      "best_score": 1195.9503298,
-      "best_true_cost": 1195.9503298,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.9503298,
-      "evaluations": 6187
-    },
-    {
-      "iteration": 130,
-      "best_score": 1195.6214754666662,
-      "best_true_cost": 1195.6214754666662,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.6214754666662,
-      "evaluations": 6266
-    },
-    {
-      "iteration": 131,
-      "best_score": 1195.6214754666662,
-      "best_true_cost": 1195.6214754666662,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.6214754666662,
-      "evaluations": 6306
-    },
-    {
-      "iteration": 132,
-      "best_score": 1195.6214754666662,
-      "best_true_cost": 1195.6214754666662,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.6214754666662,
-      "evaluations": 6346
-    },
-    {
-      "iteration": 133,
-      "best_score": 1195.6214754666662,
-      "best_true_cost": 1195.6214754666662,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.6214754666662,
-      "evaluations": 6386
-    },
-    {
-      "iteration": 134,
-      "best_score": 1195.6214754666662,
-      "best_true_cost": 1195.6214754666662,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1195.6214754666662,
-      "evaluations": 6426
-    },
-    {
-      "iteration": 135,
-      "best_score": 1194.1985598666665,
-      "best_true_cost": 1194.1985598666665,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1985598666665,
-      "evaluations": 6503
-    },
-    {
-      "iteration": 136,
-      "best_score": 1194.1985598666665,
-      "best_true_cost": 1194.1985598666665,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1985598666665,
-      "evaluations": 6543
-    },
-    {
-      "iteration": 137,
-      "best_score": 1194.1985598666665,
-      "best_true_cost": 1194.1985598666665,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1985598666665,
-      "evaluations": 6583
-    },
-    {
-      "iteration": 138,
-      "best_score": 1194.1985598666665,
-      "best_true_cost": 1194.1985598666665,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1985598666665,
-      "evaluations": 6623
-    },
-    {
-      "iteration": 139,
-      "best_score": 1194.1985598666665,
-      "best_true_cost": 1194.1985598666665,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1985598666665,
-      "evaluations": 6663
-    },
-    {
-      "iteration": 140,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 6741
-    },
-    {
-      "iteration": 141,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 6781
-    },
-    {
-      "iteration": 142,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 6821
-    },
-    {
-      "iteration": 143,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 6861
-    },
-    {
-      "iteration": 144,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 6901
-    },
-    {
-      "iteration": 145,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 6980
-    },
-    {
-      "iteration": 146,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 7020
-    },
-    {
-      "iteration": 147,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 7060
-    },
-    {
-      "iteration": 148,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 7100
-    },
-    {
-      "iteration": 149,
-      "best_score": 1194.1824198666664,
-      "best_true_cost": 1194.1824198666664,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1824198666664,
-      "evaluations": 7140
-    },
-    {
-      "iteration": 150,
-      "best_score": 1194.1114771999999,
-      "best_true_cost": 1194.1114771999999,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1114771999999,
-      "evaluations": 7220
-    },
-    {
-      "iteration": 151,
-      "best_score": 1194.1114771999999,
-      "best_true_cost": 1194.1114771999999,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1114771999999,
-      "evaluations": 7260
-    },
-    {
-      "iteration": 152,
-      "best_score": 1194.1114771999999,
-      "best_true_cost": 1194.1114771999999,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1114771999999,
-      "evaluations": 7300
-    },
-    {
-      "iteration": 153,
-      "best_score": 1194.1114771999999,
-      "best_true_cost": 1194.1114771999999,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1114771999999,
-      "evaluations": 7340
-    },
-    {
-      "iteration": 154,
-      "best_score": 1194.1114771999999,
-      "best_true_cost": 1194.1114771999999,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1194.1114771999999,
-      "evaluations": 7380
-    },
-    {
-      "iteration": 155,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7460
-    },
-    {
-      "iteration": 156,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7500
-    },
-    {
-      "iteration": 157,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7540
-    },
-    {
-      "iteration": 158,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7580
-    },
-    {
-      "iteration": 159,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7620
-    },
-    {
-      "iteration": 160,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7700
-    },
-    {
-      "iteration": 161,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7740
-    },
-    {
-      "iteration": 162,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7780
-    },
-    {
-      "iteration": 163,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7820
-    },
-    {
-      "iteration": 164,
-      "best_score": 1193.9308286666667,
-      "best_true_cost": 1193.9308286666667,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.9308286666667,
-      "evaluations": 7860
-    },
-    {
-      "iteration": 165,
-      "best_score": 1193.479198733333,
-      "best_true_cost": 1193.479198733333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.479198733333,
-      "evaluations": 7939
-    },
-    {
-      "iteration": 166,
-      "best_score": 1193.479198733333,
-      "best_true_cost": 1193.479198733333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.479198733333,
-      "evaluations": 7979
-    },
-    {
-      "iteration": 167,
-      "best_score": 1193.479198733333,
-      "best_true_cost": 1193.479198733333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.479198733333,
-      "evaluations": 8019
-    },
-    {
-      "iteration": 168,
-      "best_score": 1193.479198733333,
-      "best_true_cost": 1193.479198733333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.479198733333,
-      "evaluations": 8059
-    },
-    {
-      "iteration": 169,
-      "best_score": 1193.479198733333,
-      "best_true_cost": 1193.479198733333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.479198733333,
-      "evaluations": 8099
-    },
-    {
-      "iteration": 170,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8179
-    },
-    {
-      "iteration": 171,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8219
-    },
-    {
-      "iteration": 172,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8259
-    },
-    {
-      "iteration": 173,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8299
-    },
-    {
-      "iteration": 174,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8339
-    },
-    {
-      "iteration": 175,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8418
-    },
-    {
-      "iteration": 176,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8458
-    },
-    {
-      "iteration": 177,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8498
-    },
-    {
-      "iteration": 178,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8538
-    },
-    {
-      "iteration": 179,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8578
-    },
-    {
-      "iteration": 180,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8657
-    },
-    {
-      "iteration": 181,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8697
-    },
-    {
-      "iteration": 182,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8737
-    },
-    {
-      "iteration": 183,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8777
-    },
-    {
-      "iteration": 184,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8817
-    },
-    {
-      "iteration": 185,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8896
-    },
-    {
-      "iteration": 186,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8936
-    },
-    {
-      "iteration": 187,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 8976
-    },
-    {
-      "iteration": 188,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9016
-    },
-    {
-      "iteration": 189,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9056
-    },
-    {
-      "iteration": 190,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9135
-    },
-    {
-      "iteration": 191,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9175
-    },
-    {
-      "iteration": 192,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9215
-    },
-    {
-      "iteration": 193,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9255
-    },
-    {
-      "iteration": 194,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9295
-    },
-    {
-      "iteration": 195,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9372
-    },
-    {
-      "iteration": 196,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9412
-    },
-    {
-      "iteration": 197,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9452
-    },
-    {
-      "iteration": 198,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9492
-    },
-    {
-      "iteration": 199,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9532
-    },
-    {
-      "iteration": 200,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9611
-    },
-    {
-      "iteration": 201,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9651
-    },
-    {
-      "iteration": 202,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9691
-    },
-    {
-      "iteration": 203,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9731
-    },
-    {
-      "iteration": 204,
-      "best_score": 1193.3700923333327,
-      "best_true_cost": 1193.3700923333327,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.3700923333327,
-      "evaluations": 9771
-    },
-    {
-      "iteration": 205,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 9849
-    },
-    {
-      "iteration": 206,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 9889
-    },
-    {
-      "iteration": 207,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 9929
-    },
-    {
-      "iteration": 208,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 9969
-    },
-    {
-      "iteration": 209,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10009
-    },
-    {
-      "iteration": 210,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10089
-    },
-    {
-      "iteration": 211,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10129
-    },
-    {
-      "iteration": 212,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10169
-    },
-    {
-      "iteration": 213,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10209
-    },
-    {
-      "iteration": 214,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10249
-    },
-    {
-      "iteration": 215,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10329
-    },
-    {
-      "iteration": 216,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10369
-    },
-    {
-      "iteration": 217,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10409
-    },
-    {
-      "iteration": 218,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10449
-    },
-    {
-      "iteration": 219,
-      "best_score": 1193.2225089333328,
-      "best_true_cost": 1193.2225089333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.2225089333328,
-      "evaluations": 10489
-    },
-    {
-      "iteration": 220,
-      "best_score": 1193.1809289333328,
-      "best_true_cost": 1193.1809289333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1809289333328,
-      "evaluations": 10568
-    },
-    {
-      "iteration": 221,
-      "best_score": 1193.1809289333328,
-      "best_true_cost": 1193.1809289333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1809289333328,
-      "evaluations": 10608
-    },
-    {
-      "iteration": 222,
-      "best_score": 1193.1809289333328,
-      "best_true_cost": 1193.1809289333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1809289333328,
-      "evaluations": 10648
-    },
-    {
-      "iteration": 223,
-      "best_score": 1193.1809289333328,
-      "best_true_cost": 1193.1809289333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1809289333328,
-      "evaluations": 10688
-    },
-    {
-      "iteration": 224,
-      "best_score": 1193.1809289333328,
-      "best_true_cost": 1193.1809289333328,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1809289333328,
-      "evaluations": 10728
-    },
-    {
-      "iteration": 225,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 10807
-    },
-    {
-      "iteration": 226,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 10847
-    },
-    {
-      "iteration": 227,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 10887
-    },
-    {
-      "iteration": 228,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 10927
-    },
-    {
-      "iteration": 229,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 10967
-    },
-    {
-      "iteration": 230,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 11046
-    },
-    {
-      "iteration": 231,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 11086
-    },
-    {
-      "iteration": 232,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 11126
-    },
-    {
-      "iteration": 233,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 11166
-    },
-    {
-      "iteration": 234,
-      "best_score": 1193.1656829333333,
-      "best_true_cost": 1193.1656829333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1193.1656829333333,
-      "evaluations": 11206
-    },
-    {
-      "iteration": 235,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11285
-    },
-    {
-      "iteration": 236,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11325
-    },
-    {
-      "iteration": 237,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11365
-    },
-    {
-      "iteration": 238,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11405
-    },
-    {
-      "iteration": 239,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11445
-    },
-    {
-      "iteration": 240,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11524
-    },
-    {
-      "iteration": 241,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11564
-    },
-    {
-      "iteration": 242,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11604
-    },
-    {
-      "iteration": 243,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11644
-    },
-    {
-      "iteration": 244,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11684
-    },
-    {
-      "iteration": 245,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11763
-    },
-    {
-      "iteration": 246,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11803
-    },
-    {
-      "iteration": 247,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11843
-    },
-    {
-      "iteration": 248,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11883
-    },
-    {
-      "iteration": 249,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 11923
-    },
-    {
-      "iteration": 250,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 12003
-    },
-    {
-      "iteration": 251,
-      "best_score": 1185.354466,
-      "best_true_cost": 1185.354466,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1185.354466,
-      "evaluations": 12043
-    },
-    {
-      "iteration": 252,
-      "best_score": 1184.7630964,
-      "best_true_cost": 1184.7630964,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.7630964,
-      "evaluations": 12083
-    },
-    {
-      "iteration": 253,
-      "best_score": 1184.7630964,
-      "best_true_cost": 1184.7630964,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.7630964,
-      "evaluations": 12123
-    },
-    {
-      "iteration": 254,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12163
-    },
-    {
-      "iteration": 255,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12242
-    },
-    {
-      "iteration": 256,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12282
-    },
-    {
-      "iteration": 257,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12322
-    },
-    {
-      "iteration": 258,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12362
-    },
-    {
-      "iteration": 259,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12402
-    },
-    {
-      "iteration": 260,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12480
-    },
-    {
-      "iteration": 261,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12520
-    },
-    {
-      "iteration": 262,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12560
-    },
-    {
-      "iteration": 263,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12600
-    },
-    {
-      "iteration": 264,
-      "best_score": 1184.505502,
-      "best_true_cost": 1184.505502,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.505502,
-      "evaluations": 12640
-    },
-    {
-      "iteration": 265,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 12719
-    },
-    {
-      "iteration": 266,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 12759
-    },
-    {
-      "iteration": 267,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 12799
-    },
-    {
-      "iteration": 268,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 12839
-    },
-    {
-      "iteration": 269,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 12879
-    },
-    {
-      "iteration": 270,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 12959
-    },
-    {
-      "iteration": 271,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 12999
-    },
-    {
-      "iteration": 272,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13039
-    },
-    {
-      "iteration": 273,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13079
-    },
-    {
-      "iteration": 274,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13119
-    },
-    {
-      "iteration": 275,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13198
-    },
-    {
-      "iteration": 276,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13238
-    },
-    {
-      "iteration": 277,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13278
-    },
-    {
-      "iteration": 278,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13318
-    },
-    {
-      "iteration": 279,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13358
-    },
-    {
-      "iteration": 280,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13437
-    },
-    {
-      "iteration": 281,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13477
-    },
-    {
-      "iteration": 282,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13517
-    },
-    {
-      "iteration": 283,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13557
-    },
-    {
-      "iteration": 284,
-      "best_score": 1184.3971635999997,
-      "best_true_cost": 1184.3971635999997,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.3971635999997,
-      "evaluations": 13597
-    },
-    {
-      "iteration": 285,
-      "best_score": 1184.367324333333,
-      "best_true_cost": 1184.367324333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.367324333333,
-      "evaluations": 13676
-    },
-    {
-      "iteration": 286,
-      "best_score": 1184.367324333333,
-      "best_true_cost": 1184.367324333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.367324333333,
-      "evaluations": 13716
-    },
-    {
-      "iteration": 287,
-      "best_score": 1184.367324333333,
-      "best_true_cost": 1184.367324333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.367324333333,
-      "evaluations": 13756
-    },
-    {
-      "iteration": 288,
-      "best_score": 1184.367324333333,
-      "best_true_cost": 1184.367324333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.367324333333,
-      "evaluations": 13796
-    },
-    {
-      "iteration": 289,
-      "best_score": 1184.367324333333,
-      "best_true_cost": 1184.367324333333,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.367324333333,
-      "evaluations": 13836
-    },
-    {
-      "iteration": 290,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 13914
-    },
-    {
-      "iteration": 291,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 13954
-    },
-    {
-      "iteration": 292,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 13994
-    },
-    {
-      "iteration": 293,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 14034
-    },
-    {
-      "iteration": 294,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 14074
-    },
-    {
-      "iteration": 295,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 14153
-    },
-    {
-      "iteration": 296,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 14193
-    },
-    {
-      "iteration": 297,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 14233
-    },
-    {
-      "iteration": 298,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 14273
-    },
-    {
-      "iteration": 299,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 14313
-    },
-    {
-      "iteration": 300,
-      "best_score": 1184.163718,
-      "best_true_cost": 1184.163718,
-      "best_penalty": 0.0,
-      "best_feasible_cost": 1184.163718,
-      "evaluations": 14393
+      "evaluations": 1702
     }
   ]
 }
