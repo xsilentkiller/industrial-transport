@@ -1,4 +1,4 @@
-"""Road mode: GA team's OSM road matrices (dataset_road/)."""
+"""Road mode: GA team's OSM road matrices (data/road_ga/)."""
 
 from __future__ import annotations
 
@@ -39,8 +39,8 @@ def naive_directed_two_opt(order, D):
 class TestRoadData(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.road = load_problem(ROOT / "dataset_road")
-        cls.euclid = load_problem(ROOT / "dataset")
+        cls.road = load_problem(ROOT / "data" / "road_ga")
+        cls.euclid = load_problem(ROOT / "data" / "base")
 
     def test_loaded_as_road(self) -> None:
         self.assertTrue(self.road.road_mode)
@@ -91,7 +91,7 @@ class TestCrossCheckWithGA(unittest.TestCase):
     """Our evaluator must give the GA validator's cost for the same road plan."""
 
     def test_reference_plan_cost(self) -> None:
-        data = load_problem(ROOT / "dataset_road")
+        data = load_problem(ROOT / "data" / "road_ga")
         ref = json.loads((HERE / "data" / "ga_road_reference.json").read_text())
         base = 0.0
         day: dict[int, float] = {}
@@ -171,8 +171,8 @@ class TestRoadInstances(unittest.TestCase):
         import csv
         import tempfile
         from experiments.make_road_instances import build_instance
-        full = load_problem(ROOT / "dataset_road")
-        full_meta = json.loads((ROOT / "dataset_road" / "road_meta.json").read_text())
+        full = load_problem(ROOT / "data" / "road_ga")
+        full_meta = json.loads((ROOT / "data" / "road_ga" / "road_meta.json").read_text())
         with tempfile.TemporaryDirectory() as tmp:
             dest = Path(tmp) / "x"
             build_instance("x", 50, 5001, dest)

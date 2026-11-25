@@ -7,11 +7,11 @@ dataset; best_solution.json records which dataset it was):
     route_geometry.json    street geometry (road datasets, needs cache/budapest_osm.json)
     report/                report.html, route_map.html (street / satellite), charts, CSVs
 
-    python main.py                                   # decoder checks + PSO + street geometry + report on dataset_osm/
-    python main.py --mode pso                        # PSO + street geometry + report (dataset_osm)
+    python main.py                                   # decoder checks + PSO + street geometry + report on data/osm/
+    python main.py --mode pso                        # PSO + street geometry + report (data/osm)
     python main.py --mode report
-    python main.py --dataset dataset                 # the straight-line dataset instead
-    python main.py --mode road-data                  # OSM extract -> routed pool -> dataset_osm/
+    python main.py --dataset data/base                 # the straight-line dataset instead
+    python main.py --mode road-data                  # OSM extract -> routed pool -> data/osm/
     python main.py --mode tests
 """
 
@@ -317,8 +317,8 @@ def main(argv: list[str] | None = None) -> int:
         choices=["all", "decoder", "pso", "report", "road-data", "tests"],
         default="all",
     )
-    parser.add_argument("--dataset", default="dataset_osm",
-                        help="dataset folder (default dataset_osm: own OSM road data; "
+    parser.add_argument("--dataset", default="data/osm",
+                        help="dataset folder (default data/osm: own OSM road data; "
                              "road-data: the folder to create)")
     parser.add_argument("--output-dir", default="output",
                         help="result folder; holds the latest run and is overwritten by the next")

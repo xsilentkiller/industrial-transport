@@ -4,7 +4,7 @@
     python -m experiments.osm_from_geofabrik
     python -m experiments.build_road_pool          # finds cache/budapest_osm.json, no download
 
-Reproduces the GA team's Overpass query (dataset_road/road_meta.json):
+Reproduces the GA team's Overpass query (data/road_ga/road_meta.json):
 
     way[highway][highway!~"^(footway|path|cycleway|steps|pedestrian|construction|
         proposed|track|bridleway)$"](47.36,18.91,47.64,19.26); (._;>;); out body;
@@ -30,7 +30,7 @@ import osmium
 ROOT = Path(__file__).resolve().parents[1]
 PBF = ROOT / "cache" / "geofabrik" / "hungary-latest.osm.pbf"
 OUT = ROOT / "cache" / "budapest_osm.json"
-GA_META = ROOT / "dataset_road" / "road_meta.json"
+GA_META = ROOT / "data" / "road_ga" / "road_meta.json"
 
 
 def query_rules(query: str) -> tuple[set[str], list[float]]:

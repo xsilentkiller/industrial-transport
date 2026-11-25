@@ -24,7 +24,7 @@ from src.pso import nearest_neighbor_tour
 class TestDecoder(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.data = load_problem("dataset")
+        cls.data = load_problem("data/base")
 
     def assert_permutation(self, customers: list[int], n: int) -> None:
         self.assertEqual(len(customers), n)

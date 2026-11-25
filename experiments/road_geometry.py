@@ -6,13 +6,13 @@
 Needs the OpenStreetMap highway extract of Budapest (about 100 MB JSON).
 Best: the frozen file the GA team built the matrices from
 (transport-algorithms ``cache/budapest_city_osm.json``, sha256 in
-dataset_road/road_meta.json) -- then every leg matches the cost matrix
+data/road_ga/road_meta.json) -- then every leg matches the cost matrix
 exactly.  ``--download`` fetches a fresh copy once from Overpass with the
 same query; OSM edits since then can make a few legs differ, and those are
 reported (they never change the cost, which always uses the matrices).
 
 Writes route_geometry.json next to the solution; ``python main.py --mode
-report --dataset dataset_road`` then picks it up.
+report --dataset data/road_ga`` then picks it up.
 """
 
 from __future__ import annotations
@@ -76,7 +76,7 @@ def save_geometry(geo: dict, out: Path) -> None:
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--solution", type=Path, default=Path("output/best_solution.json"))
-    ap.add_argument("--dataset", type=Path, default=Path("dataset_osm"))
+    ap.add_argument("--dataset", type=Path, default=Path("data/osm"))
     ap.add_argument("--osm", type=Path, default=Path("cache/budapest_osm.json"))
     ap.add_argument("--download", action="store_true",
                     help="fetch the OSM extract once if --osm does not exist")

@@ -14,12 +14,12 @@ from src.report import generate_report
 class TestReport(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.data = load_problem("dataset")
+        cls.data = load_problem("data/base")
         cfg = DecoderConfig(enforce_min_customers=True, use_greedy_baseline=False)
         sol = decode_tour(cls.data, list(range(1, 21)), cfg)
         cost = sol.true_cost_eur
         cls.payload = {
-            "dataset": "dataset",
+            "dataset": "data/base",
             "config": {
                 "swarm_size": 1,
                 "iterations": 2,

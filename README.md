@@ -2,7 +2,7 @@
 
 A Python implementation of a **Split-based memetic random-key particle swarm
 optimisation (PSO)** for the 250-customer furniture delivery benchmark in
-`dataset/`.
+`data/base/`.
 
 The solver reads the six dataset files once, decodes random-key vectors into
 vehicle routes through a Split dynamic program, assigns trips to the mixed
@@ -17,12 +17,12 @@ separately.
 Requirements: Python 3.10+, NumPy, and Matplotlib.
 
 ```powershell
-# Full run on dataset_osm (our own OSM road data, the default):
+# Full run on data/osm (our own OSM road data, the default):
 # decoder checks + PSO + street geometry + visual report -> output/
 python main.py --mode all
 # the straight-line dataset or the GA road matrices instead
-python main.py --dataset dataset
-python main.py --dataset dataset_road
+python main.py --dataset data/base
+python main.py --dataset data/road_ga
 
 # Decoder checks only (first 20 customers, full 250, timing)
 python main.py --mode decoder
@@ -63,7 +63,7 @@ embedded charts. Standalone PNG charts and CSV tables are written next to it.
 
 ## Real road network (with the GA team)
 
-`dataset_road/` is the same 250-customer dataset on **real Budapest roads**:
+`data/road_ga/` is the same 250-customer dataset on **real Budapest roads**:
 directed road distances and driving times taken from the GA team's
 OpenStreetMap graph (`data/shared_pso_250_road.json` in
 huyuxuan028/transport-algorithms, sha256 `6d794dff…`). In road mode a leg's
@@ -79,7 +79,7 @@ this fleet. All other rules are unchanged.
 python -m experiments.import_road --source ..\transport-algorithms\data\shared_pso_250_road.json
 
 # solve on roads
-python main.py --mode pso --dataset dataset_road
+python main.py --mode pso --dataset data/road_ga
 
 # road benchmark instances (250 customers, orders vary by seed)
 python -m experiments.make_road_instances --set all     # 100 test instances, all 250 customers
@@ -87,7 +87,7 @@ python -m experiments.make_road_instances --set all --check
 
 # draw the routes along the streets (needs the OSM extract once)
 python -m experiments.road_geometry --solution output/best_solution.json --osm cache/budapest_osm.json --download
-python main.py --mode report --dataset dataset_road
+python main.py --mode report --dataset data/road_ga
 ```
 
 Our evaluator reproduces the GA validator's cost of the shared reference plan
@@ -98,7 +98,7 @@ lines follow the roads and every leg is checked against the cost matrix.
 ### Own road data from OSM (download once, route the pool once)
 
 Instead of the GA team's file, the road matrices can be built here for all
-1500 addresses of `dataset/places_pool.csv`; any dataset is then a slice of
+1500 addresses of `data/base/places_pool.csv`; any dataset is then a slice of
 that pool (no re-routing). Same OSM query, road classes, speeds and Dijkstra
 as the GA team. Everything heavy is cached in `cache/` (not committed).
 
@@ -110,19 +110,19 @@ python -m experiments.osm_from_geofabrik
 #     ... or from Overpass in 4x4 resumable tiles: add --download to step 1b
 # 1b. once: route depot + pool on it (resumable, ~2 min on 7 workers)
 python -m experiments.build_road_pool
-# 2. a road dataset: same customers/orders as dataset/ ...
-python -m experiments.make_osm_dataset --out dataset_osm
+# 2. a road dataset: same customers/orders as data/base/ ...
+python -m experiments.make_osm_dataset --out data/osm
 #    ... or other customers from the usable pool
-python -m experiments.make_osm_dataset --out dataset_osm_s9 --customers 250 --seed 9
-# 3. use it like dataset_road
-python main.py --mode pso --dataset dataset_osm --output-dir output_osm
-python -m experiments.make_road_instances --road-dir dataset_osm --set road_tuning --out instances_osm
+python -m experiments.make_osm_dataset --out data/osm_s9 --customers 250 --seed 9
+# 3. use it like data/road_ga
+python main.py --mode pso --dataset data/osm --output-dir output_osm
+python -m experiments.make_road_instances --road-dir data/osm --set road_tuning --out instances_osm
 ```
 
 Check against the GA data (Geofabrik extract of 25 Nov 2026): all 251
 locations snap to the same OSM vertex; 97.7 % of the km and 99.1 % of the
 minutes agree within 0.1 % (mean difference 0.01 %), the rest are OSM edits
-since the GA snapshot. A PSO solution on `dataset_osm` draws 269/269 legs
+since the GA snapshot. A PSO solution on `data/osm` draws 269/269 legs
 exactly on the cost matrix.
 
 Pool places that snap more than 150 m from a road or have a depot round trip
@@ -240,7 +240,7 @@ feasible  = (penalty <= 1e-7)
 ## Daily working window
 
 Every vehicle starts at 08:00 and drives its trips back to back. The rules are
-set in `dataset/params.json` and enforced in `src/cost.py` (`day_metrics`):
+set in `data/base/params.json` and enforced in `src/cost.py` (`day_metrics`):
 
 | Time | Rule | Wage |
 |---|---|---|
@@ -270,10 +270,10 @@ delivery and finish time, and overtime against the unavoidable minimum
 (250 customers each) into `instances/test/`; `--set all` also builds the
 tuning (4), validation (20) and scaling (4 each at 50, 100, 250, 500 and
 1,000 customers) sets. Each instance is a complete dataset folder that the
-solver reads like `dataset/` (`python main.py --dataset instances/test/test_3001`).
+solver reads like `data/base/` (`python main.py --dataset instances/test/test_3001`).
 
-* Same rules as `dataset/generators/`; only the seed changes. Seed 42 with 250
-  customers reproduces `dataset/` byte for byte (`tests/test_instances.py`).
+* Same rules as `data/base/generators/`; only the seed changes. Seed 42 with 250
+  customers reproduces `data/base/` byte for byte (`tests/test_instances.py`).
 * Disjoint seeds per set: tuning 1001-1004, validation 2001-2020,
   test 3001-3100, scaling 4001-4004 (seed 42 is never used).
 * Scaling instances repeat the 5-vehicle fleet once per 250 customers.
@@ -383,7 +383,7 @@ certified global optimum.
 ## Project layout
 
 ```text
-main.py                 CLI: decoder checks, PSO, report, tests
+main.py                 CLI: decoder checks, PSO, report, road-data, tests
 src/data_loader.py      the only CSV reader; returns ProblemData
 src/cost.py             trip metrics, cost formulas, penalties, overtime
 src/decoder.py          random keys, greedy cut, Split DP, assignment, checks
@@ -392,9 +392,13 @@ src/report.py           HTML/PNG/CSV visual report generator
 tests/test_cost.py      hand-checked cost, overtime, free-volume tests
 tests/test_decoder.py   first-20, full-250, Split/coverage/timing tests
 tests/test_report.py    report files, tables, and chart smoke test
-dataset/                benchmark instance (read-only)
-output/                 best_solution.json
-output/report/          report.html, PNG charts, CSV tables
+data/base/              straight-line instance + source data (places pool, furniture, generators)
+data/road_ga/           same instance on the GA team's road matrices (shared reference)
+data/osm/               same instance on our own OSM road matrices (main.py default)
+experiments/            instance generators, road pipeline, convergence study
+cache/                  OSM extract and routed pool (local, not committed)
+output/                 latest run: best_solution.json, route_geometry.json, report/
+results/                convergence study results and curves
 ```
 
 ---

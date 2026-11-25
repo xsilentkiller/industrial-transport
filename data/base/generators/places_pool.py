@@ -3,7 +3,7 @@ import csv, json, os, random, time, requests
 random.seed(42)
 N_POOL = 1500
 PER_DISTRICT = 100          # max addresses fetched per district
-os.makedirs("dataset/cache", exist_ok=True)
+os.makedirs("data/base/cache", exist_ok=True)
 
 MIRRORS = [
     "https://overpass-api.de/api/interpreter",
@@ -16,7 +16,7 @@ HEADERS = {
 }
 
 def fetch_district(d):
-    cache = f"dataset/cache/district_{d:02d}.json"
+    cache = f"data/base/cache/district_{d:02d}.json"
     if os.path.exists(cache):                       # reuse earlier result
         with open(cache, encoding="utf-8") as f:
             return json.load(f)
@@ -74,7 +74,7 @@ for i, p in enumerate(pool, start=1):
 
 fields = ["place_id", "lat", "lon", "street", "housenumber", "postcode",
           "district", "suburb", "city", "country", "full_address"]
-with open("dataset/places_pool.csv", "w", newline="", encoding="utf-8") as f:
+with open("data/base/places_pool.csv", "w", newline="", encoding="utf-8") as f:
     w = csv.DictWriter(f, fieldnames=fields)
     w.writeheader(); w.writerows(pool)
 print("wrote", len(pool), "places")

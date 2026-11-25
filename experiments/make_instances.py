@@ -2,16 +2,16 @@
 
 Every instance is a complete dataset folder (params.json, vehicles.csv,
 furniture_clean.csv, locations.csv, orders.csv, distances.csv) that
-``load_problem`` reads exactly like ``dataset/``.  Only the random seed
-changes; the rules are those of ``dataset/generators/``:
+``load_problem`` reads exactly like ``data/base/``.  Only the random seed
+changes; the rules are those of ``data/base/generators/``:
 
 * customers: ``random.Random(seed).sample(places_pool, n)`` (locations.py)
 * orders: 1-4 pieces with weights 40/30/20/10, drawn from furniture_clean.csv;
   loading 3 min + 0.05 min/kg, unloading 5 min + 0.05 min/kg (orders.py)
 * distances: haversine x 1.3, rounded to metres (Distances.py)
-* same depot, fleet, cost parameters and daily window as dataset/params.json
+* same depot, fleet, cost parameters and daily window as data/base/params.json
 
-Seed 42 with 250 customers reproduces dataset/ byte for byte (checked by
+Seed 42 with 250 customers reproduces data/base/ byte for byte (checked by
 tests/test_instances.py), which proves the rules are the same.
 
 Sets (disjoint seeds; seed 42 is never used, so the default instance stays
@@ -48,10 +48,10 @@ import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DATASET = ROOT / "dataset"
+DATASET = ROOT / "data" / "base"
 OUT = ROOT / "instances"
 
-# ---- the team's generator rules (dataset/generators/) ----------------------
+# ---- the team's generator rules (data/base/generators/) ----------------------
 ITEMS_PER_ORDER = [1, 2, 3, 4]
 ITEMS_WEIGHTS = [40, 30, 20, 10]
 LOAD_BASE_MIN, LOAD_PER_KG_MIN = 3.0, 0.05

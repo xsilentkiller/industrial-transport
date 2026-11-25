@@ -1,6 +1,6 @@
 """Benchmark instances on the real road network, 250 customers.
 
-Road distances exist for the 250 addresses of ``dataset_road/`` (GA team's
+Road distances exist for the 250 addresses of ``data/road_ga/`` (GA team's
 OSM matrices).  The benchmark keeps the brief's 250 customers, so every
 instance serves all 250 road-mapped addresses and the instances differ in
 their orders (what each customer buys: weight, volume, service time).
@@ -39,7 +39,7 @@ from pathlib import Path
 from experiments.make_instances import _csv_text, instance_stats, make_orders, read_csv
 
 ROOT = Path(__file__).resolve().parents[1]
-ROAD = ROOT / "dataset_road"
+ROAD = ROOT / "data" / "road_ga"
 OUT = ROOT / "instances"
 N = 250
 
@@ -129,7 +129,7 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=OUT)
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--road-dir", type=Path, default=ROAD,
-                    help="road dataset to slice (default dataset_road; e.g. dataset_osm)")
+                    help="road dataset to slice (default data/road_ga; e.g. data/osm)")
     a = ap.parse_args()
     ROAD = a.road_dir
 

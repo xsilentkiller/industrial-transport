@@ -1,4 +1,4 @@
-"""Instance generator: same rules as dataset/generators, deterministic."""
+"""Instance generator: same rules as data/base/generators, deterministic."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ class TestInstanceGenerator(unittest.TestCase):
             build_instance("repro", 250, 42, Path(tmp))
             for f in ("locations.csv", "orders.csv", "distances.csv", "vehicles.csv"):
                 ours = (Path(tmp) / f).read_bytes().replace(b"\r\n", b"\n")
-                team = (Path("dataset") / f).read_bytes().replace(b"\r\n", b"\n")
+                team = (Path("data/base") / f).read_bytes().replace(b"\r\n", b"\n")
                 self.assertEqual(ours, team, f)
 
     def test_deterministic(self) -> None:
@@ -29,7 +29,7 @@ class TestInstanceGenerator(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             build_instance("test_3001", 250, 3001, Path(tmp))
             data = load_problem(tmp)
-            default = load_problem("dataset")
+            default = load_problem("data/base")
         self.assertEqual(data.n_customers, 250)
         self.assertEqual(data.n_vehicles, 5)
         self.assertEqual(data.params.hard_day_end, default.params.hard_day_end)

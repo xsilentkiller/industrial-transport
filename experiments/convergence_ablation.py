@@ -77,7 +77,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--variants", nargs="+", default=["all"])
     ap.add_argument("--seeds", nargs="+", type=int, default=[1, 2, 3])
-    ap.add_argument("--dataset", default=str(ROOT / "dataset"))
+    ap.add_argument("--dataset", default=str(ROOT / "data" / "base"))
     ap.add_argument("--jobs", type=int, default=1)
     ap.add_argument("--out", default=str(ROOT / "results" / "convergence"))
     a = ap.parse_args()

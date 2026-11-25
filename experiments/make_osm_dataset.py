@@ -1,10 +1,10 @@
 """Build a road dataset by slicing the routed pool (no routing, seconds).
 
-    python -m experiments.make_osm_dataset --out dataset_osm               # same 250 customers + orders as dataset/
-    python -m experiments.make_osm_dataset --out dataset_osm_s9 --customers 250 --seed 9
+    python -m experiments.make_osm_dataset --out data/osm               # same 250 customers + orders as data/base/
+    python -m experiments.make_osm_dataset --out data/osm_s9 --customers 250 --seed 9
 
 Needs ``cache/road_pool/road_pool.npz`` from experiments/build_road_pool.py.
-Writes the same files as dataset_road/ (so main.py, the report and
+Writes the same files as data/road_ga/ (so main.py, the report and
 experiments/road_geometry.py work unchanged):
 
     locations.csv  orders.csv  vehicles.csv  furniture_clean.csv  params.json
@@ -35,8 +35,8 @@ from experiments.make_instances import (DEPOT, LOCATION_FIELDS, _csv_text, make_
 from src.data_loader import load_problem
 
 ROOT = Path(__file__).resolve().parents[1]
-DATASET = ROOT / "dataset"
-ROAD = ROOT / "dataset_road"
+DATASET = ROOT / "data" / "base"
+ROAD = ROOT / "data" / "road_ga"
 POOL_DIR = ROOT / "cache" / "road_pool"
 
 
@@ -100,10 +100,10 @@ def feasibility_problems(folder: Path) -> list[str]:
 
 def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--out", type=Path, default=ROOT / "dataset_osm")
+    ap.add_argument("--out", type=Path, default=ROOT / "data" / "osm")
     ap.add_argument("--pool", type=Path, default=POOL_DIR)
     ap.add_argument("--same-as", type=Path, default=None,
-                    help="copy customers and orders of this dataset (default: dataset/)")
+                    help="copy customers and orders of this dataset (default: data/base/)")
     ap.add_argument("--customers", type=int, default=None, help="sample this many usable places")
     ap.add_argument("--seed", type=int, default=42)
     a = ap.parse_args(argv)

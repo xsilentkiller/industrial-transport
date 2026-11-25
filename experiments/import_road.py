@@ -1,4 +1,4 @@
-"""Import the GA team's OpenStreetMap road matrices into ``dataset_road/``.
+"""Import the GA team's OpenStreetMap road matrices into ``data/road_ga/``.
 
 Source: ``data/shared_pso_250_road.json`` in
 https://github.com/huyuxuan028/transport-algorithms (the shared road
@@ -11,13 +11,13 @@ The importer generates nothing.  It checks that the GA file describes exactly
 our dataset (same coordinates, same order weights / volumes / service times),
 then writes:
 
-    dataset_road/params.json             dataset/params.json + "distance_source": "road",
+    data/road_ga/params.json             data/base/params.json + "distance_source": "road",
                                          16 h workday (back by 24:00, as the GA team)
-    dataset_road/road_distance_km.csv    directed km (same layout as distances.csv)
-    dataset_road/road_duration_min.csv   directed minutes
-    dataset_road/road_meta.json          checksums, OSM node ids, snapped coordinates,
+    data/road_ga/road_distance_km.csv    directed km (same layout as distances.csv)
+    data/road_ga/road_duration_min.csv   directed minutes
+    data/road_ga/road_meta.json          checksums, OSM node ids, snapped coordinates,
                                          speed assumptions, limitations
-    dataset_road/{vehicles,locations,orders,furniture_clean}.csv  copied from dataset/
+    data/road_ga/{vehicles,locations,orders,furniture_clean}.csv  copied from data/base/
 
 Usage:
     python -m experiments.import_road --source ../transport-algorithms/data/shared_pso_250_road.json
@@ -34,8 +34,8 @@ import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DATASET = ROOT / "dataset"
-OUT = ROOT / "dataset_road"
+DATASET = ROOT / "data" / "base"
+OUT = ROOT / "data" / "road_ga"
 
 # Checksum of the shared road file both teams use (GA repo, Nov 2026).
 EXPECTED_SHA256 = "6d794dff4a03cebb1f9127796209fa1f263450a780ce76ade9c26244b6a2676c"

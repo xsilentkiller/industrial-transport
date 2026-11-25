@@ -87,7 +87,7 @@ def make_problem(
 class TestRealThreeCustomerTrip(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.data = load_problem("dataset")
+        cls.data = load_problem("data/base")
 
     def test_three_customers_hand_calculation(self) -> None:
         # Customers 2, 5, 8 in a VW Caddy (vehicle index 0).

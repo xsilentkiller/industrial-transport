@@ -1,6 +1,6 @@
 """Road geometry of a solution's trips, for drawing routes on the map.
 
-The cost model only needs the road matrices in ``dataset_road/``.  To *draw*
+The cost model only needs the road matrices in ``data/road_ga/``.  To *draw*
 a route along the streets we also need the road graph itself: this module
 rebuilds it from an OpenStreetMap extract with the GA team's rules
 (``budapest_osm.graph_from_osm`` in huyuxuan028/transport-algorithms: same

@@ -5,13 +5,13 @@
 Pipeline (every step is cached under ``cache/`` and skipped when done):
 
 1. OSM extract ``cache/budapest_osm.json``: downloaded once from Overpass
-   with the query in dataset_road/road_meta.json (the GA team's query), cut
+   with the query in data/road_ga/road_meta.json (the GA team's query), cut
    into 4 x 4 bbox tiles (``cache/osm_tiles/``, resumable) and merged by id;
    or copied there by hand.  An existing file is never downloaded again.
 2. Motor-car graph with the GA team's rules (src/road_geometry.graph_from_osm).
 3. Drivable core: vertices reachable from AND back to the depot's vertex.
    Snapping only to the core means every pair of points is routable.
-4. Snap the depot + every place of dataset/places_pool.csv to its nearest
+4. Snap the depot + every place of data/base/places_pool.csv to its nearest
    core vertex.
 5. Time-minimising Dijkstra (src/road_geometry.paths_from) from every
    point to every point, in parallel, saved in resumable chunks.
@@ -47,8 +47,8 @@ import numpy as np
 from src.road_geometry import CLASSES, graph_from_osm, paths_from, sha256_file
 
 ROOT = Path(__file__).resolve().parents[1]
-DATASET = ROOT / "dataset"
-GA_META = ROOT / "dataset_road" / "road_meta.json"
+DATASET = ROOT / "data" / "base"
+GA_META = ROOT / "data" / "road_ga" / "road_meta.json"
 OSM_FILE = ROOT / "cache" / "budapest_osm.json"
 POOL_DIR = ROOT / "cache" / "road_pool"
 CHUNK = 50
@@ -214,7 +214,7 @@ def build_pool(osm: dict, points_lonlat: list[list[float]], part_dir: Path,
     }
 
 
-# Same public Overpass mirrors as dataset/generators/places_pool.py.
+# Same public Overpass mirrors as data/base/generators/places_pool.py.
 MIRRORS = [
     "https://overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
@@ -325,7 +325,7 @@ def download_tiled(query: str, bbox_wsen: list[float], dest: Path, tile_dir: Pat
 
 
 def read_points() ->tuple[list[str], list[list[float]]]:
-    """Depot (from dataset/locations.csv) + every pool place, as [lon, lat]."""
+    """Depot (from data/base/locations.csv) + every pool place, as [lon, lat]."""
     with open(DATASET / "locations.csv", newline="", encoding="utf-8") as f:
         depot = next(r for r in csv.DictReader(f) if r["type"] == "depot")
     with open(DATASET / "places_pool.csv", newline="", encoding="utf-8") as f:

@@ -40,7 +40,7 @@ def naive_two_opt(order, data):
 class TestFastTwoOpt(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.data = load_problem("dataset")
+        cls.data = load_problem("data/base")
 
     def test_same_result_as_naive(self) -> None:
         rng = np.random.default_rng(7)
@@ -59,7 +59,7 @@ class TestFastTwoOpt(unittest.TestCase):
 class TestCandidateScoring(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.data = load_problem("dataset")
+        cls.data = load_problem("data/base")
 
     def test_candidates_scored_like_the_incumbent(self) -> None:
         # With polish_candidates, a candidate gets the same trip polish as the

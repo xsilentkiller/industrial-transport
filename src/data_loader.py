@@ -503,7 +503,7 @@ def _load_orders(
 # ---------------------------------------------------------------------------
 # Public loader
 # ---------------------------------------------------------------------------
-def load_problem(dataset_dir: str | Path = "dataset") -> ProblemData:
+def load_problem(dataset_dir: str | Path = "data/base") -> ProblemData:
     """Read the six dataset files once and return plain arrays.
 
     No other module in the project reads a CSV.

@@ -146,7 +146,7 @@ class TestAssignmentRespectsWindow(unittest.TestCase):
 class TestRealDataset(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.data = load_problem("dataset")
+        cls.data = load_problem("data/base")
 
     def test_dataset_has_window(self) -> None:
         p = self.data.params
