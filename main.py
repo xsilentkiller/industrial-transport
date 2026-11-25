@@ -1,3 +1,23 @@
+<<<<<<< Updated upstream
+=======
+"""Furniture delivery optimiser -- the one entry point.
+
+Results go to ONE folder, output/, which always holds the LATEST run (any
+dataset; best_solution.json records which dataset it was):
+
+    best_solution.json     the plan and its costs
+    route_geometry.json    street geometry (road datasets, needs cache/budapest_osm.json)
+    report/                report.html, route_map.html (street / satellite), charts, CSVs
+
+    python main.py                                   # decoder checks + PSO + street geometry + report on dataset_osm/
+    python main.py --mode pso                        # PSO + street geometry + report (dataset_osm)
+    python main.py --mode report
+    python main.py --dataset dataset                 # the straight-line dataset instead
+    python main.py --mode road-data                  # OSM extract -> routed pool -> dataset_osm/
+    python main.py --mode tests
+"""
+
+>>>>>>> Stashed changes
 from __future__ import annotations
 
 import argparse
@@ -242,6 +262,32 @@ def _matching_geometry(folder: Path, payload: dict) -> dict | None:
     return geometry
 
 
+<<<<<<< Updated upstream
+=======
+def run_road_data(args: argparse.Namespace) -> int:
+    """OSM extract -> routed address pool -> road dataset (each step cached)."""
+    from experiments import build_road_pool, make_osm_dataset, osm_from_geofabrik
+    osm = Path(args.osm)
+    pbf = osm_from_geofabrik.PBF
+    if not osm.exists():
+        if not pbf.exists():
+            print(f"Missing {pbf}. Download it once with:\n  curl.exe -L -o {pbf} "
+                  "https://download.geofabrik.de/europe/hungary-latest.osm.pbf\n"
+                  "(or run python -m experiments.build_road_pool --download for Overpass)")
+            return 1
+        osm_from_geofabrik.main(["--pbf", str(pbf), "--out", str(osm)])
+    pool = build_road_pool.POOL_DIR / "road_pool.npz"
+    if pool.exists() and not args.rebuild_pool:
+        print(f"using routed pool {pool} (--rebuild-pool to route again)")
+    else:
+        build_road_pool.main(["--osm", str(osm)])
+    out = args.dataset
+    make_osm_dataset.main(["--out", out])
+    print(f"\nNext: python main.py --mode pso --dataset {out}")
+    return 0
+
+
+>>>>>>> Stashed changes
 def run_tests() -> int:
     suite = unittest.TestLoader().discover("tests")
     result = unittest.TextTestRunner(verbosity=2).run(suite)
@@ -255,8 +301,22 @@ def main(argv: list[str] | None = None) -> int:
         choices=["all", "decoder", "pso", "report", "tests"],
         default="all",
     )
+<<<<<<< Updated upstream
     parser.add_argument("--dataset", default="dataset")
     parser.add_argument("--output-dir", default="output")
+=======
+    parser.add_argument("--dataset", default="dataset_osm",
+                        help="dataset folder (default dataset_osm: own OSM road data; "
+                             "road-data: the folder to create)")
+    parser.add_argument("--output-dir", default="output",
+                        help="result folder; holds the latest run and is overwritten by the next")
+    parser.add_argument("--osm", default="cache/budapest_osm.json",
+                        help="OSM road extract for street geometry and road-data")
+    parser.add_argument("--no-geometry", action="store_true",
+                        help="do not compute street geometry (map draws straight lines)")
+    parser.add_argument("--rebuild-pool", action="store_true",
+                        help="road-data: route the address pool again")
+>>>>>>> Stashed changes
     parser.add_argument(
         "--input",
         default=None,

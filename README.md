@@ -17,8 +17,12 @@ separately.
 Requirements: Python 3.10+, NumPy, and Matplotlib.
 
 ```powershell
-# Full run: decoder checks + default PSO benchmark + visual report
+# Full run on dataset_osm (our own OSM road data, the default):
+# decoder checks + PSO + street geometry + visual report -> output/
 python main.py --mode all
+# the straight-line dataset or the GA road matrices instead
+python main.py --dataset dataset
+python main.py --dataset dataset_road
 
 # Decoder checks only (first 20 customers, full 250, timing)
 python main.py --mode decoder
