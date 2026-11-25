@@ -1,2 +1,4 @@
 numpy>=1.24
 matplotlib>=3.7
+# optional: only experiments/osm_from_geofabrik.py (OSM road extract from Geofabrik)
+# osmium>=4.0

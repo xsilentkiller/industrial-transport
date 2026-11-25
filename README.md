@@ -91,6 +91,41 @@ exactly (1,472.0597 EUR, `tests/test_road.py`). The report writes
 `route_map.html`, an interactive street map; with `route_geometry.json` the
 lines follow the roads and every leg is checked against the cost matrix.
 
+### Own road data from OSM (download once, route the pool once)
+
+Instead of the GA team's file, the road matrices can be built here for all
+1500 addresses of `dataset/places_pool.csv`; any dataset is then a slice of
+that pool (no re-routing). Same OSM query, road classes, speeds and Dijkstra
+as the GA team. Everything heavy is cached in `cache/` (not committed).
+
+```powershell
+# 1a. once: the OSM road extract -> cache/budapest_osm.json, either from Geofabrik (reliable) ...
+pip install osmium
+curl.exe -L -o cache\geofabrik\hungary-latest.osm.pbf https://download.geofabrik.de/europe/hungary-latest.osm.pbf
+python -m experiments.osm_from_geofabrik
+#     ... or from Overpass in 4x4 resumable tiles: add --download to step 1b
+# 1b. once: route depot + pool on it (resumable, ~2 min on 7 workers)
+python -m experiments.build_road_pool
+# 2. a road dataset: same customers/orders as dataset/ ...
+python -m experiments.make_osm_dataset --out dataset_osm
+#    ... or other customers from the usable pool
+python -m experiments.make_osm_dataset --out dataset_osm_s9 --customers 250 --seed 9
+# 3. use it like dataset_road
+python main.py --mode pso --dataset dataset_osm --output-dir output_osm
+python -m experiments.make_road_instances --road-dir dataset_osm --set road_tuning --out instances_osm
+```
+
+Check against the GA data (Geofabrik extract of 25 Nov 2026): all 251
+locations snap to the same OSM vertex; 97.7 % of the km and 99.1 % of the
+minutes agree within 0.1 % (mean difference 0.01 %), the rest are OSM edits
+since the GA snapshot. A PSO solution on `dataset_osm` draws 269/269 legs
+exactly on the cost matrix.
+
+Pool places that snap more than 150 m from a road or have a depot round trip
+over 180 min are excluded (`cache/road_pool/pool_meta.json` lists them).
+`make_osm_dataset` refuses to finish (no `params.json`) unless every order fits
+the largest vehicle and every customer can be served alone inside the day.
+
 ---
 
 ## Data loading
