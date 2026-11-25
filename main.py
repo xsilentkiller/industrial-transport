@@ -13,6 +13,7 @@ from src.data_loader import ProblemData, load_problem
 from src.decoder import DecoderConfig, check_solution, decode_tour
 from src.pso import MemeticPSO, PSOConfig, nearest_neighbor_tour
 from src.report import generate_report, load_payload
+from src.road_geometry import load_geometry
 
 
 def _permutation_ok(customers: list[int], n: int) -> bool:
@@ -196,7 +197,9 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
     print(f"\nSaved {path}")
 
     report_dir = Path(args.report_dir) if args.report_dir else out_dir / "report"
-    report_path = generate_report(data, payload, report_dir)
+    report_path = generate_report(
+        data, payload, report_dir, _matching_geometry(out_dir, payload)
+    )
     print(f"Saved report {report_path}")
 
 
@@ -218,9 +221,25 @@ def run_report(data: ProblemData, args: argparse.Namespace) -> int:
         if args.report_dir
         else input_path.parent / "report"
     )
-    report_path = generate_report(data, payload, report_dir)
+    report_path = generate_report(
+        data, payload, report_dir, _matching_geometry(input_path.parent, payload)
+    )
     print(f"Saved report {report_path}")
     return 0
+
+
+def _matching_geometry(folder: Path, payload: dict) -> dict | None:
+    """route_geometry.json next to the solution, if it belongs to it."""
+    geometry = load_geometry(folder / "route_geometry.json")
+    if geometry is None:
+        return None
+    ours = sorted(tuple(t["customers"]) for t in payload["best_solution"]["trips"])
+    theirs = sorted(tuple(t["customers"]) for t in geometry.get("trips", []))
+    if ours != theirs:
+        print("route_geometry.json is for another solution; drawing straight lines. "
+              "Re-run python -m experiments.road_geometry.")
+        return None
+    return geometry
 
 
 def run_tests() -> int:

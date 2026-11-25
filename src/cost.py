@@ -32,7 +32,7 @@ class PenaltyWeights:
     """
 
     per_kg_over: float = 1_000.0
-    per_m3_over: float = 10_000.0
+    per_m3_over: float = 10_000.0     # only above 100 % of the cargo volume
     per_minute_over_shift: float = 0.0  # 0 because vehicle-day overtime is paid
     per_customer_under_min: float = 2_000.0
     per_customer_over_max: float = 1_000_000.0
@@ -54,6 +54,9 @@ class SegmentStats:
     volume_m3: float
     loading_min: float
     unloading_min: float
+    # Road mode: driving minutes along the road legs (vehicle independent).
+    # Straight-line mode leaves it at 0 and time = km / vehicle speed.
+    road_min: float = 0.0
 
     @property
     def count(self) -> int:
@@ -80,6 +83,8 @@ class TripMetrics:
     wage_base_cost: float
     overtime_min: float
     overtime_cost: float
+    overflow_m3: float
+    overflow_cost: float
     base_cost_eur: float
     cost_eur: float
 
@@ -138,6 +143,8 @@ class TripMetrics:
             "volume_m3": self.volume_m3,
             "raw_volume_over_m3": self.raw_volume_over,
             "free_volume_over_m3": self.volume_over,
+            "overflow_m3": self.overflow_m3,
+            "overflow_cost": self.overflow_cost,
             "fuel_cost": self.fuel_cost,
             "maintenance_cost": self.maintenance_cost,
             "wage_base_cost": self.wage_base_cost,
@@ -164,11 +171,8 @@ def segment_stats(data: ProblemData, customers: tuple[int, ...] | list[int]) -> 
         return SegmentStats((), 0.0, 0.0, 0.0, 0.0, 0.0)
 
     arr = np.asarray(cust, dtype=np.int64)
-    d = data.distance
-    distance = float(d[0, arr[0]])
-    if len(arr) > 1:
-        distance += float(d[arr[:-1], arr[1:]].sum())
-    distance += float(d[arr[-1], 0])
+    distance = leg_sum(data.distance, arr)
+    road_min = leg_sum(data.duration, arr) if data.duration is not None else 0.0
 
     return SegmentStats(
         customers=cust,
@@ -177,7 +181,23 @@ def segment_stats(data: ProblemData, customers: tuple[int, ...] | list[int]) -> 
         volume_m3=float(data.volume[arr].sum()),
         loading_min=float(data.loading[arr].sum()),
         unloading_min=float(data.unloading[arr].sum()),
+        road_min=road_min,
     )
+
+
+def leg_sum(m: np.ndarray, arr: np.ndarray) -> float:
+    """depot -> arr[0] -> ... -> arr[-1] -> depot, summed over matrix ``m``."""
+    total = float(m[0, arr[0]])
+    if len(arr) > 1:
+        total += float(m[arr[:-1], arr[1:]].sum())
+    return total + float(m[arr[-1], 0])
+
+
+def drive_min(data: ProblemData, vehicle_index: int, distance_km: float, road_min: float) -> float:
+    """Driving minutes of a trip: road time in road mode, km / speed otherwise."""
+    if data.duration is not None:
+        return float(road_min)
+    return float(distance_km) / data.vehicles[vehicle_index].avg_speed_kmh * 60.0
 
 
 def segment_stats_from_cumulative(
@@ -187,6 +207,7 @@ def segment_stats_from_cumulative(
     volume_m3: float,
     loading_min: float,
     unloading_min: float,
+    road_min: float = 0.0,
 ) -> SegmentStats:
     """Build SegmentStats from values already computed by the Split DP."""
     return SegmentStats(
@@ -196,6 +217,7 @@ def segment_stats_from_cumulative(
         volume_m3=float(volume_m3),
         loading_min=float(loading_min),
         unloading_min=float(unloading_min),
+        road_min=float(road_min),
     )
 
 
@@ -212,7 +234,7 @@ def trip_metrics_from_stats(
     v = data.vehicles[vehicle_index]
     p = data.params
 
-    driving_min = stats.distance_km / v.avg_speed_kmh * 60.0
+    driving_min = drive_min(data, vehicle_index, stats.distance_km, stats.road_min)
     loading_min = stats.loading_min if p.loading_counts_as_work_time else 0.0
     unloading_min = stats.unloading_min
     total_min = driving_min + loading_min + unloading_min
@@ -225,28 +247,34 @@ def trip_metrics_from_stats(
     overtime_cost = (
         overtime_min / 60.0 * v.wage_per_h * max(0.0, p.overtime_multiplier - 1.0)
     )
-    base_cost_eur = fuel_cost + maintenance_cost + wage_base_cost
-    cost_eur = base_cost_eur + overtime_cost
-
     weight_over = max(0.0, stats.weight_kg - v.max_weight_kg)
     usable_volume = v.max_volume_m3 * (1.0 - p.required_free_volume_ratio)
     raw_volume_over = max(0.0, stats.volume_m3 - v.max_volume_m3)
     volume_over = max(0.0, stats.volume_m3 - usable_volume)
+    # Volume in the 90-100 % band is allowed but paid for (real cost, not an
+    # infeasibility).  Volume above 100 % is a capacity violation (penalty).
+    overflow_m3 = max(0.0, min(stats.volume_m3, v.max_volume_m3) - usable_volume)
+    overflow_cost = p.volume_overflow_eur_per_m3 * overflow_m3
+
+    base_cost_eur = fuel_cost + maintenance_cost + wage_base_cost + overflow_cost
+    cost_eur = base_cost_eur + overtime_cost
+
     under_min = max(0, p.min_customers_per_trip - stats.count)
     over_max = max(0, stats.count - p.max_customers_per_trip)
 
     penalty = (
         weights.per_kg_over * weight_over
-        + weights.per_m3_over * volume_over
+        + weights.per_m3_over * raw_volume_over
         + weights.per_customer_under_min * under_min
         + weights.per_customer_over_max * over_max
     )
 
     capacity_ok = weight_over <= 1e-9 and raw_volume_over <= 1e-9
+    # True when the 10 % reserve is untouched; informational only now.
     free_volume_ok = volume_over <= 1e-9
     min_customers_ok = under_min == 0
     max_customers_ok = over_max == 0
-    feasible = capacity_ok and free_volume_ok and min_customers_ok and max_customers_ok
+    feasible = capacity_ok and min_customers_ok and max_customers_ok
 
     return TripMetrics(
         vehicle_index=vehicle_index,
@@ -264,6 +292,8 @@ def trip_metrics_from_stats(
         wage_base_cost=wage_base_cost,
         overtime_min=overtime_min,
         overtime_cost=overtime_cost,
+        overflow_m3=overflow_m3,
+        overflow_cost=overflow_cost,
         base_cost_eur=base_cost_eur,
         cost_eur=cost_eur,
         weight_over=weight_over,
@@ -338,8 +368,9 @@ class DayMetrics:
 
 def return_leg_min(data: ProblemData, vehicle_index: int, last_customer: int) -> float:
     """Driving minutes from a trip's last customer back to the depot."""
-    v = data.vehicles[vehicle_index]
-    return float(data.distance[int(last_customer), 0]) / v.avg_speed_kmh * 60.0
+    c = int(last_customer)
+    road = float(data.duration[c, 0]) if data.duration is not None else 0.0
+    return drive_min(data, vehicle_index, float(data.distance[c, 0]), road)
 
 
 def day_metrics(

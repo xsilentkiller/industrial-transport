@@ -57,6 +57,42 @@ embedded charts. Standalone PNG charts and CSV tables are written next to it.
 
 ---
 
+## Real road network (with the GA team)
+
+`dataset_road/` is the same 250-customer dataset on **real Budapest roads**:
+directed road distances and driving times taken from the GA team's
+OpenStreetMap graph (`data/shared_pso_250_road.json` in
+huyuxuan028/transport-algorithms, sha256 `6d794dff…`). In road mode a leg's
+driving time is the road time (same for every vehicle) and fuel/maintenance
+are paid on road km. The road benchmark keeps the brief's **250 customers**
+and the 5-vehicle fleet, with the **shared 16-hour workday** of the GA team
+(start 08:00, back at the depot by 24:00, first 8 h at the normal wage, the
+rest at 2x): on roads, 250 customers do not fit the 08:00-23:00 window with
+this fleet. All other rules are unchanged.
+
+```powershell
+# re-import (only needed if the GA team publishes a new road file)
+python -m experiments.import_road --source ..\transport-algorithms\data\shared_pso_250_road.json
+
+# solve on roads
+python main.py --mode pso --dataset dataset_road
+
+# road benchmark instances (250 customers, orders vary by seed)
+python -m experiments.make_road_instances --set all     # 100 test instances, all 250 customers
+python -m experiments.make_road_instances --set all --check
+
+# draw the routes along the streets (needs the OSM extract once)
+python -m experiments.road_geometry --solution output/best_solution.json --osm cache/budapest_osm.json --download
+python main.py --mode report --dataset dataset_road
+```
+
+Our evaluator reproduces the GA validator's cost of the shared reference plan
+exactly (1,472.0597 EUR, `tests/test_road.py`). The report writes
+`route_map.html`, an interactive street map; with `route_geometry.json` the
+lines follow the roads and every leg is checked against the cost matrix.
+
+---
+
 ## Data loading
 
 `src/data_loader.py` is the **only module that opens a CSV file**. It reads the

@@ -12,6 +12,16 @@ locations.csv        depot + customers (lat/lon, ids)
 orders.csv           demand, loading/unloading times
 distances.csv        251 x 251 distance matrix (km)
 furniture_clean.csv  item table used to cross-check order totals
+
+Road mode (``"distance_source": "road"`` in params.json) reads, instead of
+distances.csv:
+
+road_distance_km.csv   directed road distance of the fastest path (km)
+road_duration_min.csv  directed driving time of the same path (min)
+
+Both come from the GA team's OpenStreetMap road graph (see
+experiments/import_road.py).  In road mode every vehicle drives a leg in the
+road time; fuel and maintenance are paid on road kilometres.
 """
 
 from __future__ import annotations
@@ -45,6 +55,15 @@ class Params:
     allow_multiple_trips_per_vehicle: bool
     must_return_to_depot: bool
     loading_counts_as_work_time: bool
+
+    # Packing mode 1: a trip may use the 10 % reserve (90-100 % of the cargo
+    # volume) for this fee per m3 above the 90 % line.  Above 100 % is
+    # physically impossible and stays forbidden.
+    volume_overflow_eur_per_m3: float = 100.0
+
+    # "euclid" = distances.csv (haversine x 1.3, time = km / avg speed)
+    # "road"   = road_distance_km.csv + road_duration_min.csv (directed)
+    distance_source: str = "euclid"
 
     # Daily working window (optional; None = no limit, the original V0 model).
     # Clock times are "HH:MM" strings; every vehicle starts at day_start.
@@ -176,6 +195,9 @@ class ProblemData:
     item_ids: tuple[tuple[str, ...], ...] = ()
     furniture: tuple[FurnitureItem, ...] = ()
     customer_ids: np.ndarray | None = None
+    # Road mode only: (n+1, n+1) directed driving minutes, same for every
+    # vehicle.  None = straight-line mode (time = km / vehicle speed).
+    duration: np.ndarray | None = None
 
     # Fast vehicle arrays used by the decoder.  They are derived from
     # ``vehicles`` and ``params`` in __post_init__.
@@ -186,6 +208,8 @@ class ProblemData:
     vehicle_wage: np.ndarray = field(init=False, repr=False)
     vehicle_fuel_rate: np.ndarray = field(init=False, repr=False)
     vehicle_maint_per_km: np.ndarray = field(init=False, repr=False)
+    leg_cost: np.ndarray = field(init=False, repr=False)
+    symmetric: bool = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
         self.distance = np.asarray(self.distance, dtype=np.float64)
@@ -197,6 +221,10 @@ class ProblemData:
         n = self.distance.shape[0]
         if self.distance.shape != (n, n):
             raise ValueError("distance matrix must be square")
+        if self.duration is not None:
+            self.duration = np.asarray(self.duration, dtype=np.float64)
+            if self.duration.shape != (n, n):
+                raise ValueError("duration matrix must match the distance matrix")
         for name in ("weight", "volume", "loading", "unloading"):
             arr = getattr(self, name)
             if arr.shape != (n,):
@@ -236,7 +264,26 @@ class ProblemData:
             dtype=np.float64,
         )
 
+        # Matrix used by routing heuristics (nearest neighbour, 2-opt): plain
+        # km in straight-line mode (unchanged behaviour); in road mode the
+        # fleet-average EUR of a leg, because a short but slow road can cost
+        # more than a longer fast one.
+        if self.duration is None:
+            self.leg_cost = self.distance
+        else:
+            per_km = float(np.mean(
+                self.vehicle_fuel_rate * self.params.fuel_price_per_l
+                + self.vehicle_maint_per_km
+            ))
+            per_min = float(np.mean(self.vehicle_wage)) / 60.0
+            self.leg_cost = self.distance * per_km + self.duration * per_min
+        self.symmetric = bool(np.allclose(self.leg_cost, self.leg_cost.T, atol=1e-9))
+
     # ------------------------------------------------------------------
+    @property
+    def road_mode(self) -> bool:
+        return self.duration is not None
+
     @property
     def n_customers(self) -> int:
         return int(self.distance.shape[0] - 1)
@@ -369,6 +416,33 @@ def _load_distances(path: Path, n: int) -> np.ndarray:
     return d
 
 
+def _load_directed_matrix(path: Path, n: int, what: str) -> np.ndarray:
+    """Directed (asymmetric) matrix with the same layout as distances.csv."""
+    with path.open(newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        header = next(reader)
+        col_ids = [int(x) for x in header[1:]]
+        row_ids: list[int] = []
+        values: list[list[float]] = []
+        for row in reader:
+            row_ids.append(int(row[0]))
+            values.append([float(x) for x in row[1:]])
+    if col_ids != list(range(n)) or row_ids != list(range(n)):
+        raise ValueError(f"{path.name}: rows/columns are not 0..N")
+    m = np.asarray(values, dtype=np.float64)
+    if m.shape != (n, n):
+        raise ValueError(f"{path.name}: shape {m.shape}, expected ({n}, {n})")
+    if not np.all(np.isfinite(m)):
+        raise ValueError(f"{path.name}: unreachable pair (non-finite {what})")
+    if np.max(np.abs(np.diag(m))) > 1e-12:
+        raise ValueError(f"{path.name}: diagonal must be zero")
+    # Zero off-diagonal entries are allowed: two addresses can snap to the
+    # same road vertex (road_meta.json lists those pairs).
+    if np.any(m < 0.0):
+        raise ValueError(f"{path.name}: negative {what}")
+    return m
+
+
 def _load_orders(
     path: Path,
     n: int,
@@ -448,7 +522,14 @@ def load_problem(dataset_dir: str | Path = "dataset") -> ProblemData:
     if params.depot_id != 0:
         raise ValueError("this loader expects depot_id 0 (distance matrix row/column 0)")
 
-    distance = _load_distances(root / "distances.csv", n)
+    duration = None
+    if params.distance_source == "road":
+        distance = _load_directed_matrix(root / "road_distance_km.csv", n, "distance")
+        duration = _load_directed_matrix(root / "road_duration_min.csv", n, "duration")
+    elif params.distance_source == "euclid":
+        distance = _load_distances(root / "distances.csv", n)
+    else:
+        raise ValueError(f"unknown distance_source {params.distance_source!r}")
     weight, volume, loading, unloading, order_ids, item_ids = _load_orders(
         root / "orders.csv", n, furniture
     )
@@ -466,4 +547,5 @@ def load_problem(dataset_dir: str | Path = "dataset") -> ProblemData:
         order_ids=order_ids,
         item_ids=tuple(item_ids),
         furniture=furniture,
+        duration=duration,
     )

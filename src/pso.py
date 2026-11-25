@@ -106,7 +106,7 @@ def nearest_neighbor_tour(data: ProblemData) -> list[int]:
     tour: list[int] = []
     cur = 0
     for _ in range(n):
-        dist = data.distance[cur].copy()
+        dist = data.leg_cost[cur].copy()
         dist[~unvisited] = np.inf
         nxt = int(np.argmin(dist))
         tour.append(nxt)
@@ -124,7 +124,7 @@ def randomized_nearest_neighbor_tour(
     tour: list[int] = []
     cur = 0
     for _ in range(n):
-        dist = data.distance[cur].copy()
+        dist = data.leg_cost[cur].copy()
         dist[~unvisited] = np.inf
         candidates = np.argsort(dist)[: max(1, min(k, int(unvisited.sum())))]
         nxt = int(candidates[int(rng.integers(0, len(candidates)))])
@@ -171,7 +171,7 @@ def _nearest_neighbor_order(data: ProblemData, subset: np.ndarray | list[int]) -
     cur = 0
     out: list[int] = []
     while unvisited:
-        nxt = min(unvisited, key=lambda c: data.distance[cur, c])
+        nxt = min(unvisited, key=lambda c: data.leg_cost[cur, c])
         out.append(nxt)
         unvisited.remove(nxt)
         cur = nxt
@@ -201,7 +201,45 @@ def volume_aware_nearest_neighbor_tour(
     return low_order + high_order
 
 
-def two_opt_order(order: list[int], D: np.ndarray) -> list[int]:
+def two_opt_order_directed(order: list[int], D: np.ndarray) -> list[int]:
+    """First-improvement 2-opt for an asymmetric matrix (road legs).
+
+    Reversing order[i..j] also reverses every leg inside the segment, so the
+    move is priced with prefix sums of the forward and backward leg costs
+    (O(1) per move, O(n) to rebuild the sums after an accepted move).
+    """
+    order = list(order)
+    n = len(order)
+    if n < 3:
+        return order
+
+    def prefix(seq: list[int]) -> tuple[np.ndarray, np.ndarray]:
+        a = np.asarray(seq, dtype=np.int64)
+        fwd = np.concatenate(([0.0], np.cumsum(D[a[:-1], a[1:]])))
+        bwd = np.concatenate(([0.0], np.cumsum(D[a[1:], a[:-1]])))
+        return fwd, bwd
+
+    fwd, bwd = prefix(order)
+    improved = True
+    while improved:
+        improved = False
+        for i in range(n - 1):
+            for j in range(i + 2, n):
+                prev = order[i - 1] if i > 0 else 0
+                nxt = order[j + 1] if j + 1 < n else 0
+                a, b = order[i], order[j]
+                inner_old = fwd[j] - fwd[i]
+                inner_new = bwd[j] - bwd[i]
+                delta = (D[prev, b] + D[a, nxt] + inner_new
+                         - D[prev, a] - D[b, nxt] - inner_old)
+                if delta < -1e-9:
+                    order[i : j + 1] = order[i : j + 1][::-1]
+                    fwd, bwd = prefix(order)
+                    improved = True
+    return order
+
+
+def two_opt_order(order: list[int], D: np.ndarray, symmetric: bool | None = None) -> list[int]:
     """First-improvement 2-opt on one trip (depot -> order -> depot).
 
     Each move reverses order[i..j] (at least three customers) and is priced by
@@ -209,6 +247,10 @@ def two_opt_order(order: list[int], D: np.ndarray) -> list[int]:
     recomputing the whole trip.  Same scan order and acceptance rule as the
     original implementation, so it returns the same trip.
     """
+    if symmetric is None:
+        symmetric = bool(np.allclose(D, D.T, atol=1e-9))
+    if not symmetric:
+        return two_opt_order_directed(order, D)
     order = list(order)
     n = len(order)
     improved = True
@@ -239,13 +281,13 @@ def improve_solution_trips(
     the assignment can move the improved trips between vehicles.
     """
     best = sol
-    D = data.distance
+    D = data.leg_cost
     for _ in range(max(1, passes)):
         segments = []
         for trip in best.trips:
             order = list(trip.customers)
             if len(order) >= 3:
-                order = two_opt_order(order, D)
+                order = two_opt_order(order, D, data.symmetric)
             segments.append(segment_stats(data, order))
         new = assign_trips(data, segments, config, method="trip-2opt")
         if new.objective < best.objective - 1e-9:
@@ -340,7 +382,7 @@ class MemeticPSO:
         k = max(1, min(k, n - 1))
         out: dict[int, np.ndarray] = {}
         for c in range(1, n + 1):
-            dist = self.data.distance[c].copy()
+            dist = self.data.leg_cost[c].copy()
             dist[c] = np.inf
             dist[0] = np.inf
             out[c] = np.argsort(dist)[:k].astype(np.int64)

@@ -71,7 +71,7 @@ class TestDecoder(unittest.TestCase):
             self.assertTrue(
                 np.any(
                     (s.weight_kg <= self.data.vehicle_weight_cap + 1e-9)
-                    & (s.volume_m3 <= self.data.vehicle_usable_volume + 1e-9)
+                    & (s.volume_m3 <= self.data.vehicle_volume_cap + 1e-9)
                 )
             )
 

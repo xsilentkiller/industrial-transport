@@ -4,3 +4,4 @@ __pycache__/
 # only the manifest with their checksums is committed.
 instances/*
 !instances/manifest.json
+!instances/road_manifest.json

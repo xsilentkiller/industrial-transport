@@ -278,7 +278,7 @@ def _any_vehicle_can_carry(
     return bool(
         np.any(
             (weight_kg <= data.vehicle_weight_cap + 1e-9)
-            & (volume_m3 <= data.vehicle_usable_volume + 1e-9)
+            & (volume_m3 <= data.vehicle_volume_cap + 1e-9)
         )
     )
 
@@ -293,14 +293,15 @@ def greedy_cut(
         return []
     max_customers = config.max_count
     d = data.distance
+    t = data.duration if data.duration is not None else np.zeros_like(d)
 
     segments: list[SegmentStats] = []
     current: list[int] = []
-    weight = volume = loading = unloading = distance = 0.0
+    weight = volume = loading = unloading = distance = road = 0.0
     last = 0
 
     def close() -> None:
-        nonlocal current, weight, volume, loading, unloading, distance, last
+        nonlocal current, weight, volume, loading, unloading, distance, road, last
         if current:
             segments.append(
                 SegmentStats(
@@ -310,16 +311,18 @@ def greedy_cut(
                     volume_m3=volume,
                     loading_min=loading,
                     unloading_min=unloading,
+                    road_min=road,
                 )
             )
         current = []
-        weight = volume = loading = unloading = distance = 0.0
+        weight = volume = loading = unloading = distance = road = 0.0
         last = 0
 
     for c in tour:
         c = int(c)
         if current:
             trial_dist = distance - d[last, 0] + d[last, c] + d[c, 0]
+            trial_road = road - t[last, 0] + t[last, c] + t[c, 0]
             trial_w = weight + data.weight[c]
             trial_v = volume + data.volume[c]
             fits = _any_vehicle_can_carry(
@@ -331,6 +334,7 @@ def greedy_cut(
                 loading += data.loading[c]
                 unloading += data.unloading[c]
                 distance = trial_dist
+                road = trial_road
                 last = c
                 continue
             close()
@@ -343,6 +347,7 @@ def greedy_cut(
         loading = data.loading[c]
         unloading = data.unloading[c]
         distance = d[0, c] + d[c, 0]
+        road = t[0, c] + t[c, 0]
         last = c
 
     close()
@@ -399,12 +404,24 @@ def split_dp(
     else:
         cum_d = np.zeros(1, dtype=np.float64)
 
+    road_mode = data.duration is not None
+    if road_mode:
+        tm = data.duration
+        t0 = tm[0, tour_arr]
+        tback = tm[tour_arr, 0]
+        if n > 1:
+            cum_t = np.concatenate(([0.0], np.cumsum(tm[tour_arr[:-1], tour_arr[1:]])))
+        else:
+            cum_t = np.zeros(1, dtype=np.float64)
+
     dp = np.full(n + 1, np.inf, dtype=np.float64)
     prev = np.full(n + 1, -1, dtype=np.int64)
     dp[0] = 0.0
 
     cap_w = data.vehicle_weight_cap
-    cap_v = data.vehicle_usable_volume
+    cap_v = data.vehicle_usable_volume      # 90 % line: fee starts here
+    cap_v_full = data.vehicle_volume_cap    # 100 %: hard limit
+    overflow_rate = p.volume_overflow_eur_per_m3
     speeds = data.vehicle_speed
     wages = data.vehicle_wage
     fuel_rates = data.vehicle_fuel_rate
@@ -432,6 +449,8 @@ def split_dp(
         unloading = cum_unload[js + 1] - cum_unload[i]
         service = unloading + (loading if p.loading_counts_as_work_time else 0.0)
         distance = d0[i] + (cum_d[js] - cum_d[i]) + dback[js]
+        if road_mode:
+            road_drive = t0[i] + (cum_t[js] - cum_t[i]) + tback[js]
 
         count_pen = (
             w.per_customer_under_min * np.maximum(0, min_customers - cnt)
@@ -440,7 +459,10 @@ def split_dp(
 
         best = np.full(len(js), np.inf, dtype=np.float64)
         for k in range(data.n_vehicles):
-            time = distance * (60.0 / speeds[k]) + service
+            if road_mode:
+                time = road_drive + service
+            else:
+                time = distance * (60.0 / speeds[k]) + service
             base = (
                 distance * (fuel_rates[k] * fuel_price + maint[k])
                 + wages[k] * (time / 60.0)
@@ -451,9 +473,12 @@ def split_dp(
             )
             cap_pen = (
                 w.per_kg_over * np.maximum(0.0, weight - cap_w[k])
-                + w.per_m3_over * np.maximum(0.0, volume - cap_v[k])
+                + w.per_m3_over * np.maximum(0.0, volume - cap_v_full[k])
             )
-            total = base + overtime + cap_pen + count_pen
+            overflow = overflow_rate * np.clip(
+                volume - cap_v[k], 0.0, cap_v_full[k] - cap_v[k]
+            )
+            total = base + overtime + overflow + cap_pen + count_pen
             np.minimum(best, total, out=best)
 
         if config.dp_trip_fixed_cost:
@@ -488,6 +513,9 @@ def split_dp(
                 volume_m3=float(cum_v[j] - cum_v[i]),
                 loading_min=float(cum_load[j] - cum_load[i]),
                 unloading_min=float(cum_unload[j] - cum_unload[i]),
+                road_min=(
+                    float(t0[i] + (cum_t[jj] - cum_t[i]) + tback[jj]) if road_mode else 0.0
+                ),
             )
         )
         j = i
@@ -884,11 +912,6 @@ def check_solution(
                 f"trip {t}: capacity violation "
                 f"(+{trip.metrics.weight_over:.3f} kg, "
                 f"+{trip.metrics.raw_volume_over:.4f} m3 raw)"
-            )
-        if not trip.metrics.free_volume_ok:
-            errors.append(
-                f"trip {t}: free-volume violation "
-                f"(+{trip.metrics.volume_over:.4f} m3 beyond the 10% reserve)"
             )
         if trip.vehicle_index < 0 or trip.vehicle_index >= data.n_vehicles:
             errors.append(f"trip {t}: invalid vehicle index {trip.vehicle_index}")

@@ -224,14 +224,77 @@ class TestOvertime(unittest.TestCase):
 
 
 class TestFreeVolume(unittest.TestCase):
-    def test_ten_customers_break_ten_percent_free_volume(self) -> None:
-        # 10 customers x 0.30 m3 = 3.00 m3.
-        # Caddy raw volume = 3.10 m3, but usable = 3.10 * 0.90 = 2.79 m3.
+    def _caddy_trip(self, per_customer_m3: float):
         n = 11
         d = np.abs(np.arange(n)[:, None] - np.arange(n)[None, :]).astype(float)
         params = base_params(
             num_customers=10,
             min_customers_per_trip=10,
+            required_free_volume_ratio=0.10,
+        )
+        data = make_problem(
+            d,
+            weight=np.array([0.0] + [10.0] * 10),
+            volume=np.array([0.0] + [per_customer_m3] * 10),
+            loading=np.array([0.0] + [1.0] * 10),
+            unloading=np.array([0.0] + [1.0] * 10),
+            params=params,
+            vehicles=(caddy(),),
+        )
+        return data, trip_metrics(data, 0, list(range(1, 11)))
+
+    def test_reserve_used_pays_overflow_fee(self) -> None:
+        # 10 x 0.30 m3 = 3.00 m3 in a Caddy: usable 2.79 m3, physical 3.10 m3.
+        # 0.21 m3 of the 10 % reserve is used: fee 0.21 x 100 EUR, trip feasible.
+        data, m = self._caddy_trip(0.30)
+        self.assertAlmostEqual(m.volume_m3, 3.0)
+        self.assertTrue(m.capacity_ok)
+        self.assertFalse(m.free_volume_ok)   # reserve is touched (informational)
+        self.assertAlmostEqual(m.overflow_m3, 0.21, places=9)
+        self.assertAlmostEqual(
+            m.overflow_cost, 0.21 * data.params.volume_overflow_eur_per_m3, places=9
+        )
+        self.assertTrue(m.feasible)
+        self.assertAlmostEqual(m.penalty, 0.0, places=9)
+        # The fee is part of the real cost.
+        self.assertAlmostEqual(
+            m.base_cost_eur,
+            m.fuel_cost + m.maintenance_cost + m.wage_base_cost + m.overflow_cost,
+            places=9,
+        )
+
+    def test_above_physical_volume_is_infeasible(self) -> None:
+        # 10 x 0.32 m3 = 3.20 m3 > 3.10 m3: impossible, penalised.
+        data, m = self._caddy_trip(0.32)
+        self.assertFalse(m.capacity_ok)
+        self.assertFalse(m.feasible)
+        self.assertAlmostEqual(m.raw_volume_over, 0.10, places=9)
+        self.assertAlmostEqual(m.overflow_m3, 0.31, places=9)  # band is capped
+        self.assertAlmostEqual(
+            m.penalty, 0.10 * DEFAULT_WEIGHTS.per_m3_over, places=9
+        )
+
+    def test_below_ninety_percent_has_no_fee(self) -> None:
+        data, m = self._caddy_trip(0.25)   # 2.50 m3 < 2.79 m3
+        self.assertTrue(m.free_volume_ok)
+        self.assertEqual(m.overflow_cost, 0.0)
+        self.assertTrue(m.feasible)
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+class TestOverflowSplitConsistency(unittest.TestCase):
+    def test_split_dp_prices_overflow_like_cost_function(self) -> None:
+        # One Caddy, 10 customers that only fit by using the reserve.
+        # The DP objective must equal the trip cost incl. the overflow fee.
+        from src.decoder import DecoderConfig, split_dp
+
+        n = 11
+        d = np.abs(np.arange(n)[:, None] - np.arange(n)[None, :]).astype(float)
+        params = base_params(
+            num_customers=10, min_customers_per_trip=10,
             required_free_volume_ratio=0.10,
         )
         data = make_problem(
@@ -243,22 +306,8 @@ class TestFreeVolume(unittest.TestCase):
             params=params,
             vehicles=(caddy(),),
         )
-
-        m = trip_metrics(data, 0, list(range(1, 11)))
-        self.assertAlmostEqual(m.volume_m3, 3.0)
-        self.assertAlmostEqual(m.weight_kg, 100.0)
-        self.assertTrue(m.capacity_ok)       # weight is fine
-        self.assertFalse(m.free_volume_ok)   # 3.00 > 2.79
-        self.assertAlmostEqual(m.volume_over, 0.21, places=9)
-        self.assertTrue(m.min_customers_ok)
-        self.assertFalse(m.feasible)
-        self.assertAlmostEqual(
-            m.penalty, 0.21 * DEFAULT_WEIGHTS.per_m3_over, places=9
-        )
-        # True cost and penalty are stored separately.
-        self.assertGreater(m.cost_eur, 0.0)
-        self.assertGreater(m.cost_eur + m.penalty, m.cost_eur)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        segs = split_dp(data, list(range(1, 11)), DecoderConfig())
+        self.assertEqual(len(segs), 1)
+        m = trip_metrics(data, 0, segs[0].customers)
+        self.assertTrue(m.feasible)
+        self.assertGreater(m.overflow_cost, 0.0)

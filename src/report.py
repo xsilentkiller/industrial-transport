@@ -13,6 +13,9 @@ vehicle_timeline.png    vehicle-day Gantt chart
 cost_breakdown.png      stacked cost components and total pie
 trip_capacity.png       weight/volume utilisation and customer counts
 route_map.png           route map and trip distance/cost scatter
+route_map.html          interactive street map (Leaflet + OSM tiles, needs internet
+                        for the tiles; routes follow the roads when
+                        route_geometry.json is available)
 summary.csv             solution, search and configuration summary
 vehicles.csv            per-vehicle aggregates
 trips.csv               per-trip details
@@ -122,7 +125,7 @@ def _trip_records(data: ProblemData, solution: dict) -> list[dict]:
         k = int(trip["vehicle_index"])
         vehicle = data.vehicles[k]
         weight_cap = float(vehicle.max_weight_kg)
-        volume_cap = float(data.vehicle_usable_volume[k])
+        volume_cap = float(data.vehicle_volume_cap[k])
         weight = _num(trip.get("weight_kg"))
         volume = _num(trip.get("volume_m3"))
         time_min = _num(trip.get("time_min"))
@@ -148,6 +151,8 @@ def _trip_records(data: ProblemData, solution: dict) -> list[dict]:
                 "wage_base_cost": _num(trip.get("wage_base_cost")),
                 "overtime_cost": _num(trip.get("overtime_cost")),
                 "base_cost_eur": _num(trip.get("base_cost_eur")),
+                "overflow_m3": _num(trip.get("overflow_m3")),
+                "overflow_cost": _num(trip.get("overflow_cost")),
                 "cost_eur": _num(trip.get("cost_eur")),
                 "penalty": _num(trip.get("penalty")),
                 "feasible": bool(trip.get("feasible", False)),
@@ -170,6 +175,7 @@ def _vehicle_records(
         maintenance = sum(row["maintenance_cost"] for row in rows)
         wages = sum(row["wage_base_cost"] for row in rows)
         ot_cost = _num(overtime_cost[k]) if k < len(overtime_cost) else 0.0
+        overflow = sum(row["overflow_cost"] for row in rows)
         records.append(
             {
                 "vehicle_index": k,
@@ -189,9 +195,10 @@ def _vehicle_records(
                 "maintenance_cost": maintenance,
                 "wage_base_cost": wages,
                 "overtime_cost": ot_cost,
-                "total_cost": fuel + maintenance + wages + ot_cost,
+                "overflow_cost": overflow,
+                "total_cost": fuel + maintenance + wages + ot_cost + overflow,
                 "weight_cap_kg": float(vehicle.max_weight_kg),
-                "volume_cap_m3": float(data.vehicle_usable_volume[k]),
+                "volume_cap_m3": float(data.vehicle_volume_cap[k]),
             }
         )
     return records
@@ -643,9 +650,43 @@ def _plot_trip_capacity(trips: list[dict], path: Path) -> None:
     plt.close(fig)
 
 
+def _geometry_by_trip(solution: dict, geometry: dict | None) -> list[list[dict] | None]:
+    """Road legs for each solution trip (None = no geometry for that trip)."""
+    out: list[list[dict] | None] = []
+    geo_trips = (geometry or {}).get("trips", [])
+    lookup = {tuple(int(c) for c in g["customers"]): g["legs"] for g in geo_trips}
+    for trip in solution.get("trips", []):
+        out.append(lookup.get(tuple(int(c) for c in trip.get("customers", []))))
+    return out
+
+
+def route_mode_caption(data: ProblemData, geometry: dict | None) -> str:
+    if data.road_mode and geometry:
+        s = geometry.get("summary", {})
+        return (
+            "Routes follow the OpenStreetMap road graph (GA team's road network): "
+            f"{s.get('legs', 0)} legs, {s.get('exact', 0)} identical to the cost "
+            f"matrix, {s.get('close', 0)} within {100 * s.get('tolerance', 0.02):.0f}%, "
+            f"{s.get('differs', 0)} differing, {s.get('unroutable', 0)} not routable "
+            "(dashed). Costs and times use the directed road matrices."
+        )
+    if data.road_mode:
+        return (
+            "Costs and times use the directed OSM road matrices, but the map draws "
+            "straight lines between stops because no route_geometry.json was found "
+            "(run python -m experiments.road_geometry)."
+        )
+    return (
+        "Straight-line distance mode (haversine x 1.3): routes are drawn depot to "
+        "customers and back as straight lines."
+    )
+
+
 def _plot_route_map(
-    data: ProblemData, solution: dict, trips: list[dict], path: Path
+    data: ProblemData, solution: dict, trips: list[dict], path: Path,
+    geometry: dict | None = None,
 ) -> None:
+    legs_by_trip = _geometry_by_trip(solution, geometry)
     fig, (ax_map, ax_scatter) = plt.subplots(
         1, 2, figsize=(14, 6.2), gridspec_kw={"width_ratios": [1.45, 1]}
     )
@@ -676,9 +717,19 @@ def _plot_route_map(
             for trip in solution.get("trips", [])
             if int(trip["vehicle_index"]) == k
         ]
-        for trip in vehicle_trips:
+        for t_index, trip in enumerate(solution.get("trips", [])):
+            if int(trip["vehicle_index"]) != k:
+                continue
             customers = [int(c) for c in trip.get("customers", [])]
             if not customers:
+                continue
+            legs = legs_by_trip[t_index]
+            if legs:
+                for leg in legs:
+                    lat, lon = zip(*leg["points"])
+                    dashed = leg["status"] == "unroutable"
+                    ax_map.plot(lon, lat, color=color, lw=0.9, alpha=0.7, zorder=2,
+                                ls="--" if dashed else "-")
                 continue
             xs = [data.lon[0]] + [data.lon[c] for c in customers] + [data.lon[0]]
             ys = [data.lat[0]] + [data.lat[c] for c in customers] + [data.lat[0]]
@@ -699,7 +750,10 @@ def _plot_route_map(
                 label=f"V{vehicle.vehicle_id} {vehicle.type_id}",
             )
 
-    ax_map.set_title("Delivery routes")
+    ax_map.set_title(
+        "Delivery routes on the road network" if any(legs_by_trip)
+        else "Delivery routes (straight lines between stops)"
+    )
     ax_map.set_xlabel("Longitude")
     ax_map.set_ylabel("Latitude")
     ax_map.set_aspect("equal", adjustable="datalim")
@@ -720,7 +774,9 @@ def _plot_route_map(
             label=f"V{vehicle.vehicle_id} {vehicle.type_id}",
         )
 
-    ax_scatter.set_xlabel("Trip distance (km)")
+    ax_scatter.set_xlabel(
+        "Trip road distance (km)" if data.road_mode else "Trip distance (km)"
+    )
     ax_scatter.set_ylabel("Standalone trip cost (EUR)")
     ax_scatter.set_title("Trip distance vs standalone cost")
     ax_scatter.legend(fontsize=7)
@@ -742,6 +798,7 @@ def _build_html(
     summary_rows: list[tuple[str, str, str]],
     charts: dict[str, Path],
     out_dir: Path,
+    route_caption: str | None = None,
 ) -> str:
     feasible = bool(solution.get("feasible"))
     check_errors = payload.get("check_errors") or []
@@ -818,6 +875,7 @@ def _build_html(
             f"{row['volume_m3']:.3f}",
             f"{row['weight_util_pct']:.1f}",
             f"{row['volume_util_pct']:.1f}",
+            f"{row['overflow_cost']:.2f}",
             f"{row['cost_eur']:.2f}",
             "yes" if row["feasible"] else "no",
         ]
@@ -834,11 +892,12 @@ def _build_html(
             "Volume (m3)",
             "Weight util. (%)",
             "Volume util. (%)",
+            "Overflow fee (EUR)",
             "Cost (EUR)",
             "Feasible",
         ],
         trip_rows,
-        numeric_columns={0, 2, 3, 4, 5, 6, 7, 8, 9},
+        numeric_columns={0, 2, 3, 4, 5, 6, 7, 8, 9, 10},
     )
 
     chart_sections = [
@@ -869,9 +928,10 @@ def _build_html(
         (
             "Route map and trip cost",
             charts["route_map"],
-            "Routes are drawn depot to customers and back. The scatter plot uses "
-            "the standalone trip cost; the solution total adds vehicle-day "
-            "overtime once.",
+            (route_caption or "Routes are drawn depot to customers and back.")
+            + " The scatter plot uses the standalone trip cost; the solution total "
+            "adds vehicle-day overtime once. Open route_map.html for the "
+            "interactive street map.",
         ),
     ]
     chart_html = "".join(
@@ -1048,7 +1108,8 @@ tbody tr:hover {{ background: #f8fafc; }}
   {trip_table}
   <p class="caption">Trip cost is the standalone cost of that trip. Weight
   utilisation uses the vehicle weight limit; volume utilisation uses the
-  usable volume after the 10% free-space reserve.</p>
+  full cargo volume (above 90 % a fee of 100 EUR per m3 is charged and is
+  included in the trip cost; 100 % is the hard limit).</p>
 </section>
 
 {errors_html}
@@ -1067,7 +1128,9 @@ tbody tr:hover {{ background: #f8fafc; }}
     <li>The convergence chart is the PSO loss curve: lower is better.</li>
     <li>The timeline assumes trips are performed sequentially in solution
     order; it is a workload view, not a clock schedule.</li>
-    <li>The route map uses the latitude/longitude in <code>locations.csv</code>.</li>
+    <li>The route map uses the latitude/longitude in <code>locations.csv</code>;
+    in road mode the lines follow the OpenStreetMap road graph when
+    <code>route_geometry.json</code> is present.</li>
     <li>The solution is a heuristic result, not a certified global optimum.</li>
   </ul>
 </section>
@@ -1084,8 +1147,13 @@ def generate_report(
     data: ProblemData,
     payload: dict,
     output_dir: str | Path = "output/report",
+    geometry: dict | None = None,
 ) -> Path:
-    """Generate HTML, PNG and CSV report files.  Returns the HTML path."""
+    """Generate HTML, PNG and CSV report files.  Returns the HTML path.
+
+    ``geometry`` is the output of experiments/road_geometry.py; with it the
+    routes are drawn along the roads, without it as straight lines.
+    """
     out_dir = Path(output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1231,16 +1299,88 @@ def generate_report(
     _plot_vehicle_timeline(data, solution, charts["vehicle_timeline"])
     _plot_cost_breakdown(vehicles, charts["cost_breakdown"])
     _plot_trip_capacity(trips, charts["trip_capacity"])
-    _plot_route_map(data, solution, trips, charts["route_map"])
+    _plot_route_map(data, solution, trips, charts["route_map"], geometry)
+    caption = route_mode_caption(data, geometry)
+    write_route_map_html(data, solution, geometry, out_dir / "route_map.html", caption)
 
     report_path = out_dir / "report.html"
     report_path.write_text(
         _build_html(
-            payload, solution, trips, vehicles, summary_rows, charts, out_dir
+            payload, solution, trips, vehicles, summary_rows, charts, out_dir,
+            route_caption=caption,
         ),
         encoding="utf-8",
     )
     return report_path
+
+
+def write_route_map_html(
+    data: ProblemData,
+    solution: dict,
+    geometry: dict | None,
+    path: Path,
+    caption: str,
+) -> Path:
+    """Interactive street map: one layer per vehicle, popups per stop.
+
+    Leaflet and the OpenStreetMap tiles load from the internet when the page
+    is opened; the route data itself is embedded in the file.
+    """
+    legs_by_trip = _geometry_by_trip(solution, geometry)
+    routes = []
+    for t_index, trip in enumerate(solution.get("trips", [])):
+        k = int(trip["vehicle_index"])
+        customers = [int(c) for c in trip.get("customers", [])]
+        legs = legs_by_trip[t_index]
+        if legs:
+            lines = [{"points": leg["points"], "dashed": leg["status"] == "unroutable"}
+                     for leg in legs]
+        else:
+            stops = [0] + customers + [0]
+            lines = [{"points": [[float(data.lat[c]), float(data.lon[c])] for c in stops],
+                      "dashed": False}]
+        routes.append({
+            "vehicle": k, "trip": t_index + 1, "customers": customers,
+            "km": _num(trip.get("distance_km")), "hours": _num(trip.get("time_min")) / 60.0,
+            "cost": _num(trip.get("cost_eur")), "lines": lines,
+        })
+    payload = {
+        "depot": [float(data.lat[0]), float(data.lon[0])],
+        "stops": [[float(data.lat[i]), float(data.lon[i])] for i in range(len(data.lat))],
+        "vehicles": [f"V{v.vehicle_id} {v.type_id}" for v in data.vehicles],
+        "colors": [VEHICLE_COLORS[k % len(VEHICLE_COLORS)] for k in range(data.n_vehicles)],
+        "routes": routes,
+    }
+    data_json = json.dumps(payload).replace("</", "<\\/")
+    page = """<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Delivery routes - street map</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>body{margin:0;font:14px system-ui,sans-serif;color:#1d2b36}
+header{padding:10px 16px;background:#f4f7fa;border-bottom:1px solid #d6dee6}
+h1{font-size:18px;margin:0 0 4px}p{margin:4px 0;max-width:1100px}
+#map{height:calc(100vh - 140px);min-height:420px}label{margin-right:14px;font-weight:600}
+</style></head><body><header><h1>Delivery routes on the Budapest street map</h1>
+<p>__CAPTION__</p><p id="toggles"></p></header><div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>const d=__DATA__;
+const map=L.map('map');L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(map);
+const groups=d.vehicles.map(()=>L.layerGroup().addTo(map));const bounds=[d.depot];
+d.routes.forEach(r=>{const c=d.colors[r.vehicle];r.lines.forEach(l=>{bounds.push(...l.points);
+L.polyline(l.points,{color:c,weight:4,opacity:.85,dashArray:l.dashed?'6 6':null})
+.bindPopup(d.vehicles[r.vehicle]+' - trip '+r.trip+'<br>'+r.customers.length+' stops, '+r.km.toFixed(1)+' km, '+r.hours.toFixed(2)+' h, EUR '+r.cost.toFixed(2))
+.addTo(groups[r.vehicle]);});
+r.customers.forEach((cu,i)=>L.circleMarker(d.stops[cu],{radius:4,color:c,fillOpacity:.9})
+.bindPopup('Customer '+cu+'<br>'+d.vehicles[r.vehicle]+', trip '+r.trip+', stop '+(i+1)).addTo(groups[r.vehicle]));});
+L.marker(d.depot).bindPopup('Depot').addTo(map);map.fitBounds(bounds,{padding:[20,20]});
+const t=document.getElementById('toggles');d.vehicles.forEach((v,k)=>{const lab=document.createElement('label');
+lab.style.color=d.colors[k];const cb=document.createElement('input');cb.type='checkbox';cb.checked=true;
+cb.onchange=()=>cb.checked?groups[k].addTo(map):map.removeLayer(groups[k]);lab.append(cb,' '+v);t.append(lab);});
+</script></body></html>"""
+    page = page.replace("__CAPTION__", html.escape(caption)).replace("__DATA__", data_json)
+    path.write_text(page, encoding="utf-8")
+    return path
 
 
 def load_payload(path: str | Path = "output/best_solution.json") -> dict:
