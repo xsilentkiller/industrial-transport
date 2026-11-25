@@ -13,7 +13,8 @@ vehicle_timeline.png    vehicle-day Gantt chart
 cost_breakdown.png      stacked cost components and total pie
 trip_capacity.png       weight/volume utilisation and customer counts
 route_map.png           route map and trip distance/cost scatter
-route_map.html          interactive street map (Leaflet + OSM tiles, needs internet
+route_map.html          interactive map (Leaflet; street map, Esri satellite or
+                        satellite + labels, switchable; needs internet
                         for the tiles; routes follow the roads when
                         route_geometry.json is available)
 summary.csv             solution, search and configuration summary
@@ -1323,7 +1324,7 @@ def write_route_map_html(
 ) -> Path:
     """Interactive street map: one layer per vehicle, popups per stop.
 
-    Leaflet and the OpenStreetMap tiles load from the internet when the page
+    Leaflet and the Esri street/satellite tiles load from the internet when the page
     is opened; the route data itself is embedded in the file.
     """
     legs_by_trip = _geometry_by_trip(solution, geometry)
@@ -1364,10 +1365,20 @@ h1{font-size:18px;margin:0 0 4px}p{margin:4px 0;max-width:1100px}
 <p>__CAPTION__</p><p id="toggles"></p></header><div id="map"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>const d=__DATA__;
-const map=L.map('map');L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(map);
+const map=L.map('map');
+const esri=s=>'https://server.arcgisonline.com/ArcGIS/rest/services/'+s+'/MapServer/tile/{z}/{y}/{x}';
+const esriAttr='Imagery &copy; Esri, Maxar, Earthstar Geographics, and the GIS User Community';
+// Esri street tiles: tile.openstreetmap.org blocks pages opened as local
+// files (no Referer, see osm.wiki/Blocked), which is how this report is opened.
+const street=L.tileLayer(esri('World_Street_Map'),{maxZoom:19,
+attribution:'Tiles &copy; Esri &mdash; Esri, HERE, Garmin, USGS, &copy; OpenStreetMap contributors, and the GIS User Community'}).addTo(map);
+const sat=()=>L.tileLayer(esri('World_Imagery'),{maxZoom:19,attribution:esriAttr});
+const hybrid=L.layerGroup([sat(),L.tileLayer(esri('Reference/World_Transportation'),{maxZoom:19,opacity:.7}),
+L.tileLayer(esri('Reference/World_Boundaries_and_Places'),{maxZoom:19})]);
+L.control.layers({'Street map':street,'Satellite':sat(),'Satellite + labels':hybrid},null,{collapsed:false}).addTo(map);
 const groups=d.vehicles.map(()=>L.layerGroup().addTo(map));const bounds=[d.depot];
 d.routes.forEach(r=>{const c=d.colors[r.vehicle];r.lines.forEach(l=>{bounds.push(...l.points);
+L.polyline(l.points,{color:'#fff',weight:7,opacity:.6,interactive:false}).addTo(groups[r.vehicle]);
 L.polyline(l.points,{color:c,weight:4,opacity:.85,dashArray:l.dashed?'6 6':null})
 .bindPopup(d.vehicles[r.vehicle]+' - trip '+r.trip+'<br>'+r.customers.length+' stops, '+r.km.toFixed(1)+' km, '+r.hours.toFixed(2)+' h, EUR '+r.cost.toFixed(2))
 .addTo(groups[r.vehicle]);});
