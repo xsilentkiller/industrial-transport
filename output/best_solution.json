@@ -8,7 +8,7 @@
     "local_search_budget": 40,
     "final_local_search_budget": 120
   },
-  "runtime_sec": 242.57304029999068,
+  "runtime_sec": 132.26055740000447,
   "evaluations": 1841,
   "best_feasible_cost": 1212.7838365333334,
   "check_errors": [],

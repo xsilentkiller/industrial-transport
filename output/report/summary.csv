@@ -20,7 +20,7 @@ Daily window,Vehicle 2,"08:00-16:50, last delivery 16:35"
 Daily window,Vehicle 3,"08:00-22:11, last delivery 21:47"
 Daily window,Vehicle 4,"08:00-21:05, last delivery 20:43"
 Daily window,Vehicle 5,"08:00-19:12, last delivery 18:50"
-Search,Runtime,242.6 s
+Search,Runtime,132.3 s
 Search,Decoder evaluations,"1,841"
 Search,Best feasible cost,"1,212.78 EUR"
 Search,Final check_solution,no errors

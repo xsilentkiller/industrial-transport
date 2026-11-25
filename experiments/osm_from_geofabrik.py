@@ -69,11 +69,11 @@ def extract(pbf: Path, excluded: set[str], bbox_wsen: list[float]) -> dict:
     return {"elements": elements + ways}
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--pbf", type=Path, default=PBF)
     ap.add_argument("--out", type=Path, default=OUT)
-    a = ap.parse_args()
+    a = ap.parse_args(argv)
     if a.out.exists():
         raise SystemExit(f"{a.out} already exists; delete it first to rebuild")
     query = json.loads(GA_META.read_text(encoding="utf-8"))["osm_extract_source"]["query"]

@@ -3,6 +3,8 @@
     python -m experiments.road_geometry --solution output/best_solution.json \
         --osm cache/budapest_osm.json [--download]
 
+(main.py already does this after every PSO run on a road dataset.)
+
 Needs the OpenStreetMap highway extract of Budapest (about 100 MB JSON).
 Best: the frozen file the GA team built the matrices from
 (transport-algorithms ``cache/budapest_city_osm.json``, sha256 in
@@ -43,7 +45,37 @@ def download(query: str, dest: Path) -> None:
     dest.write_bytes(body)
 
 
-def main() -> None:
+def solution_geometry(data, dataset: Path, payload: dict, osm_path: Path,
+                      tolerance: float = 0.02, progress=None) -> dict:
+    """Street geometry of a saved solution (used by main.py and the CLI below)."""
+    meta = json.loads((Path(dataset) / "road_meta.json").read_text(encoding="utf-8"))
+    digest = sha256_file(osm_path)
+    frozen = digest == meta.get("osm_raw_sha256")
+    print("OSM extract:", "the one the matrices were built from (exact)" if frozen
+          else f"different extract {digest[:12]} (legs are checked against the matrix)")
+    sol = payload["best_solution"]
+    trips = [{"vehicle_id": t.get("vehicle_id"), "customers": [int(c) for c in t["customers"]]}
+             for t in sol["trips"]]
+    # Instance customers are a subset of the road-mapped addresses: map
+    # local ids to the OSM vertices through the instance's own road_meta.
+    coords = [[float(data.lon[i]), float(data.lat[i])] for i in range(len(data.lon))]
+    print("Reading the road graph and routing the legs...")
+    osm = json.loads(Path(osm_path).read_text(encoding="utf-8"))
+    geo = trip_geometry(trips, osm, meta, coords, data.distance, data.duration,
+                        tolerance, progress=progress)
+    geo["osm_sha256"] = digest
+    geo["osm_is_frozen_extract"] = frozen
+    return geo
+
+
+def save_geometry(geo: dict, out: Path) -> None:
+    out.write_text(json.dumps(geo) + "\n", encoding="utf-8")
+    s = geo["summary"]
+    print(f"Saved {out}: {s['legs']} legs - {s['exact']} exact, {s['close']} close, "
+          f"{s['differs']} differ, {s['unroutable']} unroutable")
+
+
+def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--solution", type=Path, default=Path("output/best_solution.json"))
     ap.add_argument("--dataset", type=Path, default=Path("dataset_road"))
@@ -53,46 +85,24 @@ def main() -> None:
     ap.add_argument("--tolerance", type=float, default=0.02,
                     help="relative km/min difference still counted as matching")
     ap.add_argument("--out", type=Path, default=None)
-    a = ap.parse_args()
+    a = ap.parse_args(argv)
 
     data = load_problem(a.dataset)
     if not data.road_mode:
         raise SystemExit(f"{a.dataset} is not a road dataset (distance_source != road)")
-    meta = json.loads((a.dataset / "road_meta.json").read_text(encoding="utf-8"))
-
     if not a.osm.exists():
         if not a.download:
-            raise SystemExit(f"{a.osm} not found. Copy the GA team's cache/budapest_city_osm.json "
-                             "there, or add --download.")
+            raise SystemExit(f"{a.osm} not found: build it with "
+                             "python -m experiments.osm_from_geofabrik, or add --download.")
+        meta = json.loads((a.dataset / "road_meta.json").read_text(encoding="utf-8"))
         print("Downloading the OSM highway extract (one request, ~1-2 min)...")
         download(meta["osm_extract_source"]["query"], a.osm)
 
-    digest = sha256_file(a.osm)
-    frozen = digest == meta.get("osm_raw_sha256")
-    print("OSM extract:", "frozen GA extract (exact)" if frozen
-          else f"different extract {digest[:12]} (legs are checked against the matrix)")
-
     payload = json.loads(a.solution.read_text(encoding="utf-8"))
-    sol = payload["best_solution"]
-    trips = [{"vehicle_id": t.get("vehicle_id"), "customers": [int(c) for c in t["customers"]]}
-             for t in sol["trips"]]
-    # Instance customers are a subset of the 250 road-mapped addresses: map
-    # local ids to the OSM vertices through the instance's own road_meta.
-    coords = [[float(data.lon[i]), float(data.lat[i])] for i in range(len(data.lon))]
-
-    print("Reading the road graph and routing the legs...")
-    osm = json.loads(a.osm.read_text(encoding="utf-8"))
-    geo = trip_geometry(trips, osm, meta, coords, data.distance, data.duration,
-                        a.tolerance, progress=lambda i, n: print(f"  {i}/{n} sources"))
-    geo["osm_sha256"] = digest
-    geo["osm_is_frozen_extract"] = frozen
+    geo = solution_geometry(data, a.dataset, payload, a.osm, a.tolerance,
+                            progress=lambda i, n: print(f"  {i}/{n} sources"))
     geo["solution"] = str(a.solution)
-
-    out = a.out or a.solution.parent / "route_geometry.json"
-    out.write_text(json.dumps(geo) + "\n", encoding="utf-8")
-    s = geo["summary"]
-    print(f"Saved {out}: {s['legs']} legs - {s['exact']} exact, {s['close']} close, "
-          f"{s['differs']} differ, {s['unroutable']} unroutable")
+    save_geometry(geo, a.out or a.solution.parent / "route_geometry.json")
 
 
 if __name__ == "__main__":

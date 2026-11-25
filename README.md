@@ -40,20 +40,31 @@ Useful PSO options:
 ```powershell
 python main.py --mode pso --swarm 30 --iterations 120 --seed 42
 python main.py --mode pso --time-limit 60
-python main.py --mode pso --output-dir output
+python main.py --mode pso --dataset dataset_osm      # another dataset
 
 # Report options
 python main.py --mode report --input output/best_solution.json
-python main.py --mode report --report-dir output/report
+python main.py --mode report --report-dir somewhere/report
 ```
 
-The best solution is written to `output/best_solution.json`, including the
-trip list, per-trip metrics, fleet totals, PSO configuration, runtime, and
-search history.
+**`output/` always holds the latest run only** (any dataset; the next run
+replaces it, `--output-dir` picks another folder):
 
-The visual report is written to `output/report/report.html` (or the directory
-given by `--report-dir`). It is a single self-contained HTML file with
-embedded charts. Standalone PNG charts and CSV tables are written next to it.
+```
+output/
+  best_solution.json     the plan; its "dataset" field says which dataset it was
+  route_geometry.json    road datasets only: street geometry of the routes
+  report/                report.html, route_map.html, charts, CSV tables
+```
+
+To keep a result, copy the folder or run with `--output-dir` elsewhere.
+`best_solution.json` holds the trip list, per-trip metrics, fleet totals, PSO
+configuration, runtime, and search history. `report/report.html` is a single
+self-contained HTML file with embedded charts; standalone PNG charts, CSV
+tables and `route_map.html` (street map / satellite / satellite + labels) are
+written next to it. On a road dataset `main.py` also computes
+`route_geometry.json` (needs `cache/budapest_osm.json`; skip with
+`--no-geometry`), so the map follows the streets.
 
 ---
 
@@ -81,8 +92,8 @@ python main.py --mode pso --dataset dataset_road
 python -m experiments.make_road_instances --set all     # 100 test instances, all 250 customers
 python -m experiments.make_road_instances --set all --check
 
-# draw the routes along the streets (needs the OSM extract once)
-python -m experiments.road_geometry --solution output/best_solution.json --osm cache/budapest_osm.json --download
+# the routes are drawn along the streets automatically when cache/budapest_osm.json
+# exists (python main.py --mode road-data builds it); a report alone:
 python main.py --mode report --dataset dataset_road
 ```
 
@@ -98,20 +109,25 @@ Instead of the GA team's file, the road matrices can be built here for all
 that pool (no re-routing). Same OSM query, road classes, speeds and Dijkstra
 as the GA team. Everything heavy is cached in `cache/` (not committed).
 
+Through `main.py` (each step is skipped when its cached result exists):
+
 ```powershell
-# 1a. once: the OSM road extract -> cache/budapest_osm.json, either from Geofabrik (reliable) ...
+# once: the Geofabrik Hungary file (316 MB) and pyosmium
 pip install osmium
 curl.exe -L -o cache\geofabrik\hungary-latest.osm.pbf https://download.geofabrik.de/europe/hungary-latest.osm.pbf
-python -m experiments.osm_from_geofabrik
-#     ... or from Overpass in 4x4 resumable tiles: add --download to step 1b
-# 1b. once: route depot + pool on it (resumable, ~2 min on 7 workers)
-python -m experiments.build_road_pool
-# 2. a road dataset: same customers/orders as dataset/ ...
-python -m experiments.make_osm_dataset --out dataset_osm
-#    ... or other customers from the usable pool
+# OSM extract -> routed pool (~3 min on 7 workers) -> dataset_osm/
+python main.py --mode road-data
+# solve, draw along the streets, report: all in output/
+python main.py --mode pso --dataset dataset_osm
+```
+
+The same steps one by one, with more options:
+
+```powershell
+python -m experiments.osm_from_geofabrik                 # extract from Geofabrik ...
+python -m experiments.build_road_pool [--download]       # ... or Overpass tiles; routes the pool
+python -m experiments.make_osm_dataset --out dataset_osm  # same customers/orders as dataset/
 python -m experiments.make_osm_dataset --out dataset_osm_s9 --customers 250 --seed 9
-# 3. use it like dataset_road
-python main.py --mode pso --dataset dataset_osm --output-dir output_osm
 python -m experiments.make_road_instances --road-dir dataset_osm --set road_tuning --out instances_osm
 ```
 
@@ -292,7 +308,7 @@ Diagnosis (default instance, daily window): in V0 the best plan came from the
 start heuristics and the swarm never improved it. Two causes were found and
 fixed; each fix is a setting in `PSOConfig`, measured with
 `python -m experiments.convergence_ablation` (seeds 1-3) and plotted with
-`experiments/plot_convergence.py`.
+`experiments/plot_convergence.py` (results in `results/convergence/`).
 
 | Variant | Mean final cost | Swarm improvements | Runtime | Kept |
 |---|---:|---:|---:|---|
@@ -379,7 +395,7 @@ certified global optimum.
 ## Project layout
 
 ```text
-main.py                 CLI: decoder checks, PSO, report, tests
+main.py                 CLI: decoder checks, PSO, report, road-data, tests
 src/data_loader.py      the only CSV reader; returns ProblemData
 src/cost.py             trip metrics, cost formulas, penalties, overtime
 src/decoder.py          random keys, greedy cut, Split DP, assignment, checks
@@ -389,8 +405,12 @@ tests/test_cost.py      hand-checked cost, overtime, free-volume tests
 tests/test_decoder.py   first-20, full-250, Split/coverage/timing tests
 tests/test_report.py    report files, tables, and chart smoke test
 dataset/                benchmark instance (read-only)
-output/                 best_solution.json
-output/report/          report.html, PNG charts, CSV tables
+dataset_road/           same instance on the GA team's road matrices
+dataset_osm/            same instance on our own OSM road matrices
+experiments/            instance generators, road pipeline, convergence study
+cache/                  OSM extract and routed pool (local, not committed)
+output/                 latest run: best_solution.json, route_geometry.json, report/
+results/                convergence study results and curves
 ```
 
 ---
@@ -427,7 +447,7 @@ Decoder checks:
 ## Visual report
 
 `python main.py --mode report` builds `output/report/report.html` from an
-existing `output/best_solution.json`. The same report is generated
+existing `output/best_solution.json` (use the same `--dataset` as the run). The same report is generated
 automatically after `--mode pso` and `--mode all`.
 
 The HTML file is self-contained (charts are embedded), so it can be opened
