@@ -304,9 +304,9 @@ def run_road_data(args: argparse.Namespace) -> int:
 
 
 def run_tests() -> int:
-    suite = unittest.TestLoader().discover("tests")
-    result = unittest.TextTestRunner(verbosity=2).run(suite)
-    return 0 if result.wasSuccessful() else 1
+    """All tests once, with a per-file summary (same as python run_tests.py)."""
+    from run_tests import run_all
+    return run_all(verbose=False)
 
 
 def main(argv: list[str] | None = None) -> int:

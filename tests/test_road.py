@@ -1,4 +1,5 @@
-"""Road mode: GA team's OSM road matrices (data/road_ga/)."""
+"""Road mode: GA team's OSM road matrices (data/road_ga/) and our own
+OSM road data (data/osm/), plus the OSM pipeline on a tiny synthetic map."""
 
 from __future__ import annotations
 
@@ -85,6 +86,74 @@ class TestRoadData(unittest.TestCase):
         sol = decode_tour(self.road, nearest_neighbor_tour(self.road))
         served = sorted(c for t in sol.trips for c in t.customers)
         self.assertEqual(served, list(range(1, 251)))
+
+
+class TestOsmData(unittest.TestCase):
+    """Our own OSM road data (data/osm/, built by main.py --mode road-data)."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.osm = load_problem(ROOT / "data" / "osm")
+        cls.ga = load_problem(ROOT / "data" / "road_ga")
+        cls.base = load_problem(ROOT / "data" / "base")
+        cls.meta = json.loads((ROOT / "data" / "osm" / "road_meta.json").read_text(encoding="utf-8"))
+        cls.ga_meta = json.loads((ROOT / "data" / "road_ga" / "road_meta.json").read_text(encoding="utf-8"))
+
+    def test_loaded_as_road(self) -> None:
+        self.assertTrue(self.osm.road_mode)
+        self.assertFalse(self.osm.symmetric)           # one-way streets
+        self.assertEqual(self.osm.distance.shape, (251, 251))
+        self.assertEqual(self.osm.duration.shape, (251, 251))
+
+    def test_same_customers_and_orders_as_base(self) -> None:
+        for name in ("weight", "volume", "loading", "unloading", "lat", "lon"):
+            np.testing.assert_array_equal(getattr(self.osm, name), getattr(self.base, name))
+
+    def test_same_road_vertices_as_ga(self) -> None:
+        self.assertEqual(self.meta["osm_node_ids"], self.ga_meta["osm_node_ids"])
+
+    def test_matrices_agree_with_ga(self) -> None:
+        off = ~np.eye(251, dtype=bool)
+        for ours, theirs in ((self.osm.distance, self.ga.distance),
+                             (self.osm.duration, self.ga.duration)):
+            rel = np.abs(ours - theirs)[off] / np.maximum(theirs[off], 0.05)
+            self.assertLess(rel.mean(), 0.001)          # mean difference < 0.1 %
+            self.assertGreater(np.mean(rel < 1e-3), 0.95)   # >95 % of pairs within 0.1 %
+            self.assertAlmostEqual(ours.sum() / theirs.sum(), 1.0, places=3)
+
+    def test_every_customer_feasible(self) -> None:
+        from experiments.make_osm_dataset import feasibility_problems
+        self.assertEqual(feasibility_problems(ROOT / "data" / "osm"), [])
+
+    def test_meta_supports_street_geometry(self) -> None:
+        self.assertIn("own OSM pool", self.meta["source"])
+        self.assertEqual(len(self.meta["osm_node_ids"]), 251)
+        self.assertEqual(len(self.meta["snapped_coordinates_lonlat"]), 251)
+        self.assertIn("query", self.meta["osm_extract_source"])
+        self.assertLessEqual(self.meta["max_snap_distance_m"], 150.0)
+
+    def test_decoder_on_osm_roads(self) -> None:
+        sol = decode_tour(self.osm, nearest_neighbor_tour(self.osm))
+        served = sorted(c for t in sol.trips for c in t.customers)
+        self.assertEqual(served, list(range(1, 251)))
+        for t in sol.trips:
+            ref = segment_stats(self.osm, t.customers)
+            self.assertAlmostEqual(t.metrics.distance_km, ref.distance_km, places=6)
+            self.assertAlmostEqual(t.metrics.driving_min,
+                                   leg_sum(self.osm.duration, np.asarray([0, *t.customers, 0])),
+                                   places=6)
+
+    def test_osm_instances_are_slices(self) -> None:
+        import csv
+        folders = sorted((ROOT / "instances_osm" / "road_tuning").glob("road_tune_*"))
+        if not folders:
+            self.skipTest("instances_osm not present")
+        for d in folders:
+            inst = load_problem(d)
+            with open(d / "locations.csv", newline="", encoding="utf-8") as f:
+                idx = np.asarray([int(r["source_location_id"]) for r in csv.DictReader(f)])
+            np.testing.assert_allclose(inst.distance, self.osm.distance[np.ix_(idx, idx)])
+            np.testing.assert_allclose(inst.duration, self.osm.duration[np.ix_(idx, idx)])
 
 
 class TestCrossCheckWithGA(unittest.TestCase):

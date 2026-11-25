@@ -33,10 +33,10 @@ python main.py --mode pso
 # Rebuild the visual report from an existing solution
 python main.py --mode report
 
-# Unit tests
-python main.py --mode tests
+# All tests at once, with a per-file summary (what each file checks, which data)
+python run_tests.py          # add -v to list every test
 # or
-python -m unittest discover -s tests -v
+python main.py --mode tests
 ```
 
 Useful PSO options:
@@ -404,7 +404,7 @@ output/                 latest run: best_solution.json, route_geometry.json, rep
 
 ## Verification and test results
 
-`python -m unittest discover -s tests -v` runs 11 tests. All pass.
+`python run_tests.py` runs all 57 tests (7 files) in about 4 s. All pass.
 
 Hand-checked cases include:
 
