@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 """Furniture delivery optimiser -- the one entry point.
 
 Results go to ONE folder, output/, which always holds the LATEST run (any
@@ -17,7 +15,6 @@ dataset; best_solution.json records which dataset it was):
     python main.py --mode tests
 """
 
->>>>>>> Stashed changes
 from __future__ import annotations
 
 import argparse
@@ -172,8 +169,10 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
     print("\nBest overall (may include penalty):")
     print_solution_summary(data, result.best_solution)
 
-    out_dir = Path(args.output_dir)
+    out_dir = run_dir(args)
     out_dir.mkdir(parents=True, exist_ok=True)
+    # The folder holds only the latest run: drop the previous run's geometry.
+    (out_dir / "route_geometry.json").unlink(missing_ok=True)
     chosen = (
         result.best_feasible_solution
         if result.best_feasible_solution is not None
@@ -218,21 +217,26 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
 
     report_dir = Path(args.report_dir) if args.report_dir else out_dir / "report"
     report_path = generate_report(
-        data, payload, report_dir, _matching_geometry(out_dir, payload)
+        data, payload, report_dir, _geometry_for(data, args, out_dir, payload)
     )
     print(f"Saved report {report_path}")
+
+
+def run_dir(args: argparse.Namespace) -> Path:
+    """The single result folder: it always holds the latest run (any dataset)."""
+    return Path(args.output_dir)
 
 
 def run_report(data: ProblemData, args: argparse.Namespace) -> int:
     input_path = (
         Path(args.input)
         if args.input
-        else Path(args.output_dir) / "best_solution.json"
+        else run_dir(args) / "best_solution.json"
     )
     if not input_path.exists():
         print(
             f"Input not found: {input_path}. "
-            "Run 'python main.py --mode pso' first."
+            f"Run 'python main.py --mode pso --dataset {args.dataset}' first."
         )
         return 1
     payload = load_payload(input_path)
@@ -242,28 +246,40 @@ def run_report(data: ProblemData, args: argparse.Namespace) -> int:
         else input_path.parent / "report"
     )
     report_path = generate_report(
-        data, payload, report_dir, _matching_geometry(input_path.parent, payload)
+        data, payload, report_dir, _geometry_for(data, args, input_path.parent, payload)
     )
     print(f"Saved report {report_path}")
     return 0
 
 
-def _matching_geometry(folder: Path, payload: dict) -> dict | None:
-    """route_geometry.json next to the solution, if it belongs to it."""
-    geometry = load_geometry(folder / "route_geometry.json")
-    if geometry is None:
-        return None
+def _same_trips(geometry: dict, payload: dict) -> bool:
     ours = sorted(tuple(t["customers"]) for t in payload["best_solution"]["trips"])
     theirs = sorted(tuple(t["customers"]) for t in geometry.get("trips", []))
-    if ours != theirs:
-        print("route_geometry.json is for another solution; drawing straight lines. "
-              "Re-run python -m experiments.road_geometry.")
+    return ours == theirs
+
+
+def _geometry_for(data: ProblemData, args: argparse.Namespace,
+                  folder: Path, payload: dict) -> dict | None:
+    """Street geometry of this solution: reuse route_geometry.json if it fits,
+    else compute it (road datasets with the OSM extract), else straight lines."""
+    path = folder / "route_geometry.json"
+    geometry = load_geometry(path)
+    if geometry is not None and _same_trips(geometry, payload):
+        return geometry
+    if not data.road_mode or args.no_geometry:
         return None
+    osm = Path(args.osm)
+    if not osm.exists():
+        print(f"No {osm}: the map draws straight lines "
+              "(python main.py --mode road-data builds the extract).")
+        return None
+    from experiments.road_geometry import save_geometry, solution_geometry
+    print("\nComputing street geometry for the route map...")
+    geometry = solution_geometry(data, Path(args.dataset), payload, osm)
+    save_geometry(geometry, path)
     return geometry
 
 
-<<<<<<< Updated upstream
-=======
 def run_road_data(args: argparse.Namespace) -> int:
     """OSM extract -> routed address pool -> road dataset (each step cached)."""
     from experiments import build_road_pool, make_osm_dataset, osm_from_geofabrik
@@ -287,7 +303,6 @@ def run_road_data(args: argparse.Namespace) -> int:
     return 0
 
 
->>>>>>> Stashed changes
 def run_tests() -> int:
     suite = unittest.TestLoader().discover("tests")
     result = unittest.TextTestRunner(verbosity=2).run(suite)
@@ -295,16 +310,13 @@ def run_tests() -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         "--mode",
-        choices=["all", "decoder", "pso", "report", "tests"],
+        choices=["all", "decoder", "pso", "report", "road-data", "tests"],
         default="all",
     )
-<<<<<<< Updated upstream
-    parser.add_argument("--dataset", default="dataset")
-    parser.add_argument("--output-dir", default="output")
-=======
     parser.add_argument("--dataset", default="dataset_osm",
                         help="dataset folder (default dataset_osm: own OSM road data; "
                              "road-data: the folder to create)")
@@ -316,7 +328,6 @@ def main(argv: list[str] | None = None) -> int:
                         help="do not compute street geometry (map draws straight lines)")
     parser.add_argument("--rebuild-pool", action="store_true",
                         help="road-data: route the address pool again")
->>>>>>> Stashed changes
     parser.add_argument(
         "--input",
         default=None,
@@ -339,6 +350,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.mode == "tests":
         return run_tests()
+    if args.mode == "road-data":
+        return run_road_data(args)
 
     data = load_problem(args.dataset)
     print(f"Loaded: {data.summary()}")

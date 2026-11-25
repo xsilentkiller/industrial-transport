@@ -98,7 +98,7 @@ def feasibility_problems(folder: Path) -> list[str]:
     return problems
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--out", type=Path, default=ROOT / "dataset_osm")
     ap.add_argument("--pool", type=Path, default=POOL_DIR)
@@ -106,7 +106,7 @@ def main() -> None:
                     help="copy customers and orders of this dataset (default: dataset/)")
     ap.add_argument("--customers", type=int, default=None, help="sample this many usable places")
     ap.add_argument("--seed", type=int, default=42)
-    a = ap.parse_args()
+    a = ap.parse_args(argv)
     same_as = None if a.customers else (a.same_as or DATASET)
 
     pool, pmeta = load_pool(a.pool)

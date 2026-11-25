@@ -8,15 +8,9 @@
     "local_search_budget": 40,
     "final_local_search_budget": 120
   },
-<<<<<<< Updated upstream
-  "runtime_sec": 242.57304029999068,
-  "evaluations": 1841,
-  "best_feasible_cost": 1212.7838365333334,
-=======
-  "runtime_sec": 160.09578299999703,
+  "runtime_sec": 147.93668620000244,
   "evaluations": 1836,
   "best_feasible_cost": 1734.9409210266667,
->>>>>>> Stashed changes
   "check_errors": [],
   "best_solution": {
     "method": "split-soft",

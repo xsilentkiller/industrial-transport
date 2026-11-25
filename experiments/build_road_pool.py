@@ -336,7 +336,7 @@ def read_points() ->tuple[list[str], list[list[float]]]:
     return place_ids, points
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--osm", type=Path, default=OSM_FILE)
     ap.add_argument("--out", type=Path, default=POOL_DIR)
@@ -345,7 +345,7 @@ def main() -> None:
     ap.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     ap.add_argument("--max-snap-m", type=float, default=150.0)
     ap.add_argument("--max-round-trip-min", type=float, default=180.0)
-    a = ap.parse_args()
+    a = ap.parse_args(argv)
 
     ga = json.loads(GA_META.read_text(encoding="utf-8"))
     source = ga["osm_extract_source"]

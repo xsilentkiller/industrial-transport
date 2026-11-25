@@ -47,6 +47,8 @@ COST_COMPONENTS = [
     ("fuel_cost", "Fuel", "#3498DB"),
     ("maintenance_cost", "Maintenance", "#95A5A6"),
     ("wage_base_cost", "Wages (base)", "#2ECC71"),
+    # Paid use of the 10 % volume reserve (90-100 % full): a real cost, not a penalty.
+    ("overflow_cost", "Volume overflow fee", "#E67E22"),
 ]
 
 
@@ -561,15 +563,27 @@ def _plot_cost_breakdown(vehicles: list[dict], path: Path) -> None:
     totals.append(float(overtime.sum()))
     pie_labels = [label for _, label, _ in COST_COMPONENTS] + ["OT premium"]
     pie_colors = [color for _, _, color in COST_COMPONENTS] + [OVERTIME_COLOR]
-    if sum(totals) > 1e-9:
+    grand = sum(totals)
+    if grand > 1e-9:
+        # Small parts (e.g. the overflow fee, ~0.1 %) get no wedge label, which
+        # would overlap; the legend names every part with its EUR amount.
+        big = [t / grand >= 0.01 for t in totals]
         ax_pie.pie(
             totals,
-            labels=pie_labels,
+            labels=[lab if b else "" for lab, b in zip(pie_labels, big)],
             colors=pie_colors,
-            autopct="%1.1f%%",
+            autopct=lambda pct: f"{pct:.1f}%" if pct >= 1.0 else "",
             startangle=90,
             textprops={"fontsize": 8},
             wedgeprops={"edgecolor": "white"},
+        )
+        ax_pie.legend(
+            [f"{lab}: {t:,.2f} EUR" for lab, t in zip(pie_labels, totals)],
+            loc="upper center",
+            bbox_to_anchor=(0.5, -0.02),
+            fontsize=7.5,
+            ncol=2,
+            frameon=False,
         )
     else:
         ax_pie.text(
@@ -917,8 +931,10 @@ def _build_html(
         (
             "Cost breakdown",
             charts["cost_breakdown"],
-            "Fuel, maintenance and base wages per vehicle, plus the vehicle-day "
-            "overtime premium and the total cost composition.",
+            "Fuel, maintenance, base wages and the volume overflow fee (paid use of "
+            "the 10 % volume reserve) per vehicle, plus the vehicle-day overtime "
+            "premium and the total cost composition. Bar totals equal each "
+            "vehicle's total cost.",
         ),
         (
             "Capacity and trip size",
