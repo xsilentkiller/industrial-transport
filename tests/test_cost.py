@@ -118,12 +118,16 @@ class TestRealThreeCustomerTrip(unittest.TestCase):
         self.assertTrue(m.capacity_ok)
         self.assertTrue(m.free_volume_ok)
         self.assertTrue(m.max_customers_ok)
-        # Only 3 customers, so the soft minimum is violated.
+        # Only 3 customers, so the soft minimum is violated: the trip is still
+        # allowed (feasible) but pays 7 x 500 EUR penalty, not in the cost.
         self.assertEqual(m.under_min, 7)
-        self.assertFalse(m.feasible)
+        self.assertFalse(m.min_customers_ok)
+        self.assertTrue(m.feasible)
         self.assertAlmostEqual(
             m.penalty, 7 * DEFAULT_WEIGHTS.per_customer_under_min, places=9
         )
+        self.assertAlmostEqual(m.penalty, 3500.0, places=9)
+        self.assertAlmostEqual(m.cost_eur, 25.803496, places=9)
 
 
 class TestOvertime(unittest.TestCase):
@@ -264,15 +268,13 @@ class TestFreeVolume(unittest.TestCase):
         )
 
     def test_above_physical_volume_is_infeasible(self) -> None:
-        # 10 x 0.32 m3 = 3.20 m3 > 3.10 m3: impossible, penalised.
+        # 10 x 0.32 m3 = 3.20 m3 > 3.10 m3: impossible (hard rule, no price).
         data, m = self._caddy_trip(0.32)
         self.assertFalse(m.capacity_ok)
         self.assertFalse(m.feasible)
         self.assertAlmostEqual(m.raw_volume_over, 0.10, places=9)
         self.assertAlmostEqual(m.overflow_m3, 0.31, places=9)  # band is capped
-        self.assertAlmostEqual(
-            m.penalty, 0.10 * DEFAULT_WEIGHTS.per_m3_over, places=9
-        )
+        self.assertAlmostEqual(m.penalty, 0.0, places=9)  # no penalty can buy it
 
     def test_below_ninety_percent_has_no_fee(self) -> None:
         data, m = self._caddy_trip(0.25)   # 2.50 m3 < 2.79 m3

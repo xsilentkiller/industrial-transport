@@ -40,8 +40,9 @@ def _permutation_ok(customers: list[int], n: int) -> bool:
 def print_solution_summary(data: ProblemData, sol) -> None:
     print(
         f"  true EUR cost : {sol.true_cost_eur:10.2f}\n"
-        f"  penalty       : {sol.penalty:10.2f}\n"
-        f"  feasible      : {sol.feasible}\n"
+        f"  penalty       : {sol.penalty:10.2f}  (soft {sol.soft_penalty:.2f}, not real money)\n"
+        f"  feasible      : {sol.feasible}  "
+        f"({'all hard rules hold' if sol.feasible else 'a hard rule is broken'})\n"
         f"  trips         : {sol.n_trips}\n"
         f"  distance      : {sol.total_distance_km:10.1f} km\n"
         f"  working time  : {sol.total_time_min / 60:10.2f} h\n"
@@ -164,7 +165,7 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
         print("\nBest FEASIBLE solution (benchmark number):")
         print_solution_summary(data, result.best_feasible_solution)
     else:
-        print("\nNo feasible solution found (penalty > 0 for all candidates).")
+        print("\nNo feasible solution found (a hard rule is broken in every candidate).")
 
     print("\nBest overall (may include penalty):")
     print_solution_summary(data, result.best_solution)
