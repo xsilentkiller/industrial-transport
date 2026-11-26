@@ -1,5 +1,5 @@
 {
-  "dataset": "dataset_osm",
+  "dataset": "data/osm",
   "config": {
     "swarm_size": 20,
     "iterations": 60,
@@ -8,7 +8,7 @@
     "local_search_budget": 40,
     "final_local_search_budget": 120
   },
-  "runtime_sec": 147.93668620000244,
+  "runtime_sec": 141.49758310004836,
   "evaluations": 1836,
   "best_feasible_cost": 1734.9409210266667,
   "check_errors": [],

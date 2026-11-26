@@ -338,14 +338,16 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Report directory (default: <output-dir>/report or <input>/report)",
     )
-    parser.add_argument("--swarm", type=int, default=20)
-    parser.add_argument("--iterations", type=int, default=60)
-    parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--ls-interval", type=int, default=5)
-    parser.add_argument("--ls-budget", type=int, default=40)
-    parser.add_argument("--final-ls-budget", type=int, default=120)
-    parser.add_argument("--time-limit", type=float, default=0.0)
-    parser.add_argument("--log-interval", type=int, default=10)
+    # PSO defaults come from PSOConfig in src/pso.py: change them there only.
+    pso = PSOConfig()
+    parser.add_argument("--swarm", type=int, default=pso.swarm_size)
+    parser.add_argument("--iterations", type=int, default=pso.iterations)
+    parser.add_argument("--seed", type=int, default=pso.seed)
+    parser.add_argument("--ls-interval", type=int, default=pso.local_search_interval)
+    parser.add_argument("--ls-budget", type=int, default=pso.local_search_budget)
+    parser.add_argument("--final-ls-budget", type=int, default=pso.final_local_search_budget)
+    parser.add_argument("--time-limit", type=float, default=pso.max_seconds)
+    parser.add_argument("--log-interval", type=int, default=pso.log_interval)
     args = parser.parse_args(argv)
 
     if args.mode == "tests":
