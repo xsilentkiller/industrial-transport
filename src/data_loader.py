@@ -250,6 +250,19 @@ class ProblemData:
         self.vehicle_usable_volume = self.vehicle_volume_cap * (
             1.0 - self.params.required_free_volume_ratio
         )
+        # Capacity is a hard rule: every single order must fit on at least
+        # one vehicle, otherwise no legal plan exists at all.
+        fits_any = np.any(
+            (self.weight[:, None] <= self.vehicle_weight_cap[None, :] + 1e-9)
+            & (self.volume[:, None] <= self.vehicle_volume_cap[None, :] + 1e-9),
+            axis=1,
+        )
+        if not fits_any.all():
+            bad = [int(i) for i in np.flatnonzero(~fits_any)]
+            raise ValueError(
+                f"orders of customers {bad[:10]} fit on no vehicle "
+                "(weight or volume above every vehicle's capacity)"
+            )
         self.vehicle_speed = np.array(
             [v.avg_speed_kmh for v in self.vehicles], dtype=np.float64
         )

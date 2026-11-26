@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parent
 # What each test file checks and on which data (shown in the summary).
 ABOUT = {
     "test_cost": "trip cost by hand, overtime, overflow fee      | data/base + synthetic",
+    "test_constraints": "hard capacity, soft min/max customer counts  | synthetic + data/base",
     "test_day_window": "working day, 2x overtime, day-end rules       | synthetic + data/base",
     "test_decoder": "tour -> trips, coverage, 10-50, capacity      | data/base",
     "test_convergence": "PSO fixes: fast 2-opt, scoring, seeding       | data/base",

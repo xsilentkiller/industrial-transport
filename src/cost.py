@@ -25,23 +25,37 @@ from .data_loader import ProblemData
 class PenaltyWeights:
     """EUR penalty per unit of constraint violation.
 
-    The defaults make capacity / max-50 violations overwhelmingly expensive.
-    The minimum-customer rule is deliberately *soft* (the user's choice), but
-    still expensive enough that the optimizer only uses a short trip when it
-    buys a real saving.
+    Penalties are never real money: they are kept apart from ``cost_eur`` /
+    ``true_cost_eur`` and only steer the search.
+
+    * Weight above the payload and volume above 100 % of the cargo space are
+      *impossible*: they have no penalty, a trip that breaks them simply
+      cannot be put on that vehicle (see :func:`fits_vehicle`).
+    * The customer-count rules are *soft*: a trip may have fewer than the
+      minimum or more than the maximum customers, but pays a penalty for
+      each customer below / above the limit.
     """
 
-    per_kg_over: float = 1_000.0
-    per_m3_over: float = 10_000.0     # only above 100 % of the cargo volume
     per_minute_over_shift: float = 0.0  # 0 because vehicle-day overtime is paid
-    per_customer_under_min: float = 2_000.0
-    per_customer_over_max: float = 1_000_000.0
+    per_customer_under_min: float = 500.0   # soft: short trips discouraged
+    per_customer_over_max: float = 100.0    # soft: long trips discouraged
     # Daily window (hard rules, priced so that breaking them never pays):
     per_minute_past_day_end: float = 1_000.0     # back at depot after 23:00
     per_minute_late_delivery: float = 1_000.0    # last customer after 22:00
 
 
 DEFAULT_WEIGHTS = PenaltyWeights()
+
+# Rounding tolerance of the hard capacity check (kg and m3).
+CAPACITY_TOL = 1e-9
+
+
+def fits_vehicle(data: ProblemData, vehicle_index: int, weight_kg: float, volume_m3: float) -> bool:
+    """Hard rule: the load must not exceed the payload or 100 % of the volume."""
+    return bool(
+        weight_kg <= data.vehicle_weight_cap[vehicle_index] + CAPACITY_TOL
+        and volume_m3 <= data.vehicle_volume_cap[vehicle_index] + CAPACITY_TOL
+    )
 
 
 @dataclass(frozen=True)
@@ -262,19 +276,20 @@ def trip_metrics_from_stats(
     under_min = max(0, p.min_customers_per_trip - stats.count)
     over_max = max(0, stats.count - p.max_customers_per_trip)
 
+    # Soft rules only: capacity is a hard rule and never has a price.
     penalty = (
-        weights.per_kg_over * weight_over
-        + weights.per_m3_over * raw_volume_over
-        + weights.per_customer_under_min * under_min
+        weights.per_customer_under_min * under_min
         + weights.per_customer_over_max * over_max
     )
 
-    capacity_ok = weight_over <= 1e-9 and raw_volume_over <= 1e-9
+    capacity_ok = weight_over <= CAPACITY_TOL and raw_volume_over <= CAPACITY_TOL
     # True when the 10 % reserve is untouched; informational only now.
     free_volume_ok = volume_over <= 1e-9
     min_customers_ok = under_min == 0
     max_customers_ok = over_max == 0
-    feasible = capacity_ok and min_customers_ok and max_customers_ok
+    # Feasible = every hard rule holds.  The count rules are soft: breaking
+    # them costs a penalty but the trip is still allowed.
+    feasible = capacity_ok
 
     return TripMetrics(
         vehicle_index=vehicle_index,

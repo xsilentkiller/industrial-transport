@@ -336,6 +336,8 @@ def _plot_convergence(
         )
     ax_cost.set_xlabel("Iteration")
     ax_cost.set_ylabel("EUR")
+    # Plain euro values on the axis (no "+1.565e3" offset label).
+    ax_cost.ticklabel_format(axis="y", useOffset=False, style="plain")
     ax_cost.set_title("Convergence / loss curve")
     ax_cost.legend(loc="upper right")
     ax_cost.grid(True, alpha=0.25, ls="--")
@@ -388,7 +390,12 @@ def _plot_convergence(
         ax_penalty.set_yscale("symlog", linthresh=1.0)
         ax_penalty.set_ylabel("Penalty (EUR, symlog)")
     else:
-        ax_penalty.axhline(0, color="#27AE60", lw=2)
+        # Draw the zero line over the real iteration range (axhline alone
+        # leaves matplotlib's default 0..1 x-axis).
+        if len(iterations):
+            ax_penalty.plot(iterations, [0.0] * len(iterations), color="#27AE60", lw=2)
+        else:
+            ax_penalty.axhline(0, color="#27AE60", lw=2)
         ax_penalty.text(
             0.5,
             0.58,

@@ -312,13 +312,17 @@ class MemeticPSO:
         self.rng = np.random.default_rng(config.seed)
         self.n = data.n_customers
 
-        # Fast path inside the swarm: Split DP only, no greedy baseline, no
-        # assignment swaps.  The final solution is re-decoded with the full
-        # decoder.
+        # Fast path inside the swarm: Split DP only, no greedy baseline.
+        # Assignment swaps stay ON: without them the swarm scores tours with a
+        # weaker decoder than the seeded incumbent (data/osm: 1,578.50 vs
+        # 1,565.95 EUR on the same tour), so no particle could ever beat it
+        # and the convergence curve stayed flat.  Swaps also make the decode
+        # faster (fewer daily-window violations for the polish to repair):
+        # 57 vs 74 ms per evaluation.
         self.fast_decoder = replace(
             config.decoder,
             use_greedy_baseline=False,
-            assignment_swaps=False,
+            assignment_swaps=True,
         )
         self.final_decoder = replace(
             config.decoder,
@@ -336,6 +340,7 @@ class MemeticPSO:
 
         self.best_feasible_solution: Solution | None = None
         self.best_feasible_score = np.inf
+        self._best_feasible_objective = np.inf
         self.seed_solution: Solution | None = None
         self.restarts = 0
 
@@ -366,9 +371,13 @@ class MemeticPSO:
         return score, sol, pos
 
     def _update_feasible(self, sol: Solution) -> None:
-        if sol.feasible and sol.true_cost_eur < self.best_feasible_score - 1e-9:
+        # Feasible = all hard rules hold; the plan may still pay a soft
+        # (customer-count) penalty, so plans are compared on the objective
+        # (true cost + soft penalty).  The reported score stays the true cost.
+        if sol.feasible and sol.objective < self._best_feasible_objective - 1e-9:
             self.best_feasible_solution = sol
             self.best_feasible_score = sol.true_cost_eur
+            self._best_feasible_objective = sol.objective
 
     def _update_global(self, score: float, sol: Solution, position: np.ndarray) -> None:
         self._update_feasible(sol)
@@ -638,6 +647,9 @@ class MemeticPSO:
         self._iteration = 0
         self._init_particles()
         self._seed_incumbents()
+        # Iteration 0 = the starting point, so the curve shows what the
+        # swarm adds on top of the construction heuristics.
+        self._record(0)
 
         n = self.n
         cfg = self.config

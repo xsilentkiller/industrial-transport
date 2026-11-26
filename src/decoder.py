@@ -5,7 +5,9 @@ Pipeline
 1. ``keys_to_tour`` sorts the random keys into a giant tour.
 2. ``greedy_cut`` makes a quick capacity-aware partition (baseline).
 3. ``split_dp`` solves the optimal contiguous partition of that same giant
-   tour, with a soft minimum-customer penalty and a hard maximum of 50.
+   tour.  Capacity (weight and 100 % volume) is hard: a trip that does not
+   fit a vehicle is never put on it.  The minimum / maximum customer counts
+   are soft penalties.
 4. ``assign_trips`` assigns the resulting trips to the five vehicles,
    charging vehicle-day overtime, and refines the assignment with moves.
 """
@@ -17,6 +19,7 @@ from dataclasses import dataclass
 import numpy as np
 
 from .cost import (
+    CAPACITY_TOL,
     DEFAULT_WEIGHTS,
     PenaltyWeights,
     SegmentStats,
@@ -53,6 +56,12 @@ class DecoderConfig:
     assignment_swaps: bool = False
 
     penalty: PenaltyWeights = DEFAULT_WEIGHTS
+
+    # Longest trip (in customers) the Split DP tries.  The maximum-customer
+    # rule is soft, so the DP must look past it; capacity and time stop real
+    # trips far earlier (~20 customers on the current data).  The DP runtime
+    # grows linearly with this bound.
+    dp_max_trip_len: int = 100
 
     @property
     def min_count(self) -> int:
@@ -128,6 +137,8 @@ class Solution:
     vehicle_night_min: np.ndarray | None = None
     vehicle_last_delivery_min: np.ndarray | None = None
     vehicle_day_penalty: np.ndarray | None = None
+    # Part of ``penalty`` from soft rules (customer counts); the rest is hard.
+    soft_penalty: float = 0.0
 
     def __iter__(self):
         return iter(self.trips)
@@ -151,6 +162,8 @@ class Solution:
             "method": self.method,
             "true_cost_eur": self.true_cost_eur,
             "penalty": self.penalty,
+            "soft_penalty": self.soft_penalty,
+            "hard_penalty": self.penalty - self.soft_penalty,
             "objective": self.objective,
             "feasible": self.feasible,
             "n_trips": self.n_trips,
@@ -375,7 +388,7 @@ def split_dp(
     if enforce_min is None:
         enforce_min = config.enforce_min_customers
 
-    max_len = min(config.max_count, n)
+    max_len = min(max(config.max_count, config.dp_max_trip_len), n)
     min_len = max(1, config.min_count) if enforce_min else 1
     if min_len > max_len:
         # Cannot satisfy the minimum; fall back to the soft version.
@@ -471,14 +484,16 @@ def split_dp(
                 np.maximum(0.0, time - shift_min)
                 * (wages[k] * ot_extra_rate / 60.0)
             )
-            cap_pen = (
-                w.per_kg_over * np.maximum(0.0, weight - cap_w[k])
-                + w.per_m3_over * np.maximum(0.0, volume - cap_v_full[k])
-            )
             overflow = overflow_rate * np.clip(
                 volume - cap_v[k], 0.0, cap_v_full[k] - cap_v[k]
             )
-            total = base + overtime + overflow + cap_pen + count_pen
+            total = base + overtime + overflow + count_pen
+            # Hard capacity: a segment that does not fit vehicle k is
+            # impossible on k (no penalty can buy it).
+            fits = (weight <= cap_w[k] + CAPACITY_TOL) & (
+                volume <= cap_v_full[k] + CAPACITY_TOL
+            )
+            total = np.where(fits, total, np.inf)
             np.minimum(best, total, out=best)
 
         if config.dp_trip_fixed_cost:
@@ -493,8 +508,13 @@ def split_dp(
             prev[idx] = i
 
     if not np.isfinite(dp[n]) or prev[n] < 0:
-        # No partition exists (normally only when n < min and enforce_min).
-        return [segment_stats(data, tour)]
+        # No partition exists (only possible with enforce_min, when the
+        # minimum count cannot be met within capacity).  Never fall back to
+        # one oversized trip: use the soft version, which always has a
+        # solution because every single order fits some vehicle.
+        if min_len > 1:
+            return split_dp(data, tour, config, enforce_min=False)
+        return greedy_cut(data, tour, config)
 
     # Backtrack and rebuild the segment statistics from the cumulative sums.
     chosen: list[SegmentStats] = []
@@ -502,7 +522,7 @@ def split_dp(
     while j > 0:
         i = int(prev[j])
         if i < 0:
-            return [segment_stats(data, tour)]
+            return greedy_cut(data, tour, config)
         jj = j - 1
         customers = tuple(int(x) for x in tour_arr[i : jj + 1])
         chosen.append(
@@ -586,6 +606,19 @@ def assign_trips(
         [[metrics[i][k].penalty for k in range(V)] for i in range(m)],
         dtype=np.float64,
     )
+    # Hard capacity: trip i may only ever be put on a vehicle it fits.
+    fits = np.array(
+        [[metrics[i][k].capacity_ok for k in range(V)] for i in range(m)],
+        dtype=bool,
+    )
+    no_vehicle = np.flatnonzero(~fits.any(axis=1))
+    if len(no_vehicle):
+        i = int(no_vehicle[0])
+        raise ValueError(
+            f"trip {list(segments[i].customers)} "
+            f"({segments[i].weight_kg:.1f} kg, {segments[i].volume_m3:.3f} m3) "
+            "fits on no vehicle; it must be split before assignment"
+        )
     # Return leg of each trip on each vehicle: decides when the last delivery
     # of a vehicle-day happens (the trip with the longest return goes last).
     rets = np.array(
@@ -630,6 +663,8 @@ def assign_trips(
         best_delta = np.inf
         best_time = np.inf
         for k in range(V):
+            if not fits[i, k]:
+                continue
             t_new = vehicle_times[k] + times[i, k]
             r_new = max(vehicle_rets[k], rets[i, k])
             delta = (
@@ -651,7 +686,8 @@ def assign_trips(
                 best_time = vehicle_times[k]
                 best_k = k
         if best_k < 0:
-            best_k = 0
+            # Unreachable: every trip fits at least one vehicle (checked above).
+            best_k = int(np.flatnonzero(fits[i])[0])
         assign[i] = best_k
         vehicle_times[best_k] += times[i, best_k]
         vehicle_rets[best_k] = max(vehicle_rets[best_k], rets[i, best_k])
@@ -669,7 +705,7 @@ def assign_trips(
                 best_delta = 0.0
                 best_new_max = old_max
                 for b in range(V):
-                    if b == a:
+                    if b == a or not fits[i, b]:
                         continue
                     Tb = vehicle_times[b]
                     old = (
@@ -717,7 +753,7 @@ def assign_trips(
                 a = int(assign[i])
                 for j in range(i + 1, m):
                     b = int(assign[j])
-                    if a == b:
+                    if a == b or not (fits[i, b] and fits[j, a]):
                         continue
                     Ta = vehicle_times[a]
                     Tb = vehicle_times[b]
@@ -799,12 +835,17 @@ def assign_trips(
     true_cost = sum(
         trip.metrics.base_cost_eur for trip in trips
     ) + day_overtime_cost
-    penalty = (
-        sum(trip.metrics.penalty for trip in trips)
-        + day_penalty
-        + shift_w * float(np.maximum(0.0, vehicle_total_min - shift_min).sum())
+    # Penalties are never added to the true cost; only to the search
+    # objective.  Soft = customer-count rules (allowed, discouraged).
+    # Hard = daily window (priced so high that breaking it never pays).
+    soft_penalty = float(sum(trip.metrics.penalty for trip in trips))
+    hard_penalty = day_penalty + shift_w * float(
+        np.maximum(0.0, vehicle_total_min - shift_min).sum()
     )
-    feasible = penalty <= 1e-7
+    penalty = soft_penalty + hard_penalty
+    # Feasible = every hard rule holds (capacity, daily window).  A plan
+    # that only breaks soft rules is still a legal plan.
+    feasible = hard_penalty <= 1e-7 and all(t.metrics.capacity_ok for t in trips)
 
     return Solution(
         trips=trips,
@@ -812,6 +853,7 @@ def assign_trips(
         penalty=float(penalty),
         objective=float(true_cost + penalty),
         feasible=feasible,
+        soft_penalty=soft_penalty,
         total_distance_km=float(total_distance),
         total_time_min=float(total_time),
         total_weight_kg=float(total_weight),
@@ -869,11 +911,27 @@ def make_chunk_solution(
     chunk_size: int = 10,
     config: DecoderConfig = DecoderConfig(),
 ) -> Solution:
-    """Deterministic feasible seed: cut the tour into fixed-size chunks."""
-    segments = [
-        segment_stats(data, tour[i : i + chunk_size])
-        for i in range(0, len(tour), chunk_size)
-    ]
+    """Deterministic seed: cut the tour into fixed-size chunks.
+
+    A chunk is cut early when the next customer would not fit on any
+    vehicle, so the seed never breaks the hard capacity rule.
+    """
+    segments: list[SegmentStats] = []
+    current: list[int] = []
+    weight = volume = 0.0
+    for c in tour:
+        c = int(c)
+        w_new = weight + data.weight[c]
+        v_new = volume + data.volume[c]
+        if current and not _any_vehicle_can_carry(
+            data, w_new, v_new, len(current) + 1, chunk_size
+        ):
+            segments.append(segment_stats(data, current))
+            current, w_new, v_new = [], data.weight[c], data.volume[c]
+        current.append(c)
+        weight, volume = w_new, v_new
+    if current:
+        segments.append(segment_stats(data, current))
     return assign_trips(data, segments, config, method=f"chunk-{chunk_size}")
 
 
@@ -884,8 +942,13 @@ def check_solution(
     data: ProblemData,
     solution: Solution,
     require_min_customers: bool = False,
+    require_max_customers: bool = False,
 ) -> list[str]:
-    """Return a list of human-readable problems; empty means all checks pass."""
+    """Return a list of human-readable problems; empty means all checks pass.
+
+    Capacity is always checked (hard rule).  The customer-count limits are
+    soft, so they are only reported when explicitly required.
+    """
     errors: list[str] = []
     seen: list[int] = []
     n = data.n_customers
@@ -899,7 +962,7 @@ def check_solution(
         for c in cust:
             if not (1 <= c <= n):
                 errors.append(f"trip {t}: customer {c} outside 1..{n}")
-        if len(cust) > p.max_customers_per_trip:
+        if require_max_customers and len(cust) > p.max_customers_per_trip:
             errors.append(
                 f"trip {t}: {len(cust)} customers > max {p.max_customers_per_trip}"
             )
