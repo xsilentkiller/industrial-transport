@@ -1,0 +1,118 @@
+<h2>Rush-order demo page: which layout?</h2>
+<p class="subtitle">Live in the presentation: pick a time and an address, press “Add rush order”, the plan re-optimises (~20–40 s) and the page shows what changed. Click the layout that would show off the model’s flexibility best.</p>
+
+<div class="options">
+
+  <!-- A -->
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Map first + control panel</h3>
+      <p>One big map with all routes. Right panel: clock, address, items, button, and the “what changed” summary. Simplest to follow for an audience.</p>
+      <div class="mockup">
+        <div class="mockup-header">Furniture delivery · Budapest · live re-planning</div>
+        <div class="mockup-body" style="display:flex;gap:10px">
+          <div style="flex:3">
+            <svg viewBox="0 0 300 190" style="width:100%;background:#eef1ec;border-radius:6px">
+              <path d="M150 170 L90 120 L70 60 L120 40 L150 170" fill="none" stroke="#2a78d6" stroke-width="2"/>
+              <path d="M150 170 L200 110 L250 70 L230 140 L150 170" fill="none" stroke="#eb6834" stroke-width="2"/>
+              <path d="M150 170 L140 100 L180 50 L210 40 L150 170" fill="none" stroke="#1baf7a" stroke-width="2"/>
+              <path d="M150 170 L60 150 L40 110 L150 170" fill="none" stroke="#eda100" stroke-width="2"/>
+              <circle cx="120" cy="80" r="7" fill="#e34948" stroke="#fff" stroke-width="2"/>
+              <text x="130" y="77" font-size="9" fill="#222">RUSH 11:00</text>
+              <rect x="143" y="163" width="14" height="14" fill="#222"/>
+              <text x="160" y="178" font-size="8" fill="#555">depot</text>
+            </svg>
+          </div>
+          <div style="flex:2;font-size:12px">
+            <div class="label">Time now</div>
+            <div class="mock-input">11:00 ◀━━━●━━━━▶</div>
+            <div class="label" style="margin-top:6px">Address</div>
+            <div class="mock-input">click on map · Tímár u. 14</div>
+            <div class="label" style="margin-top:6px">Items</div>
+            <div class="mock-input">Sofa (2-seat) ▾</div>
+            <button class="mock-button" style="margin-top:8px;width:100%">Add rush order</button>
+            <div style="margin-top:10px;border-top:1px solid #ddd;padding-top:6px">
+              <b>Result</b><br>
+              Van 3 (Sprinter) waits 20 min, leaves 11:30<br>
+              Real cost 1,476.50 → <b>1,501.10 €</b> (+24.60)<br>
+              7 customers moved between vans
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Before / after side by side</h3>
+      <p>Controls in a bar on top, two maps (plan before and after the rush order) and a change table below. Makes the difference very visible, maps are smaller.</p>
+      <div class="mockup">
+        <div class="mockup-header">Furniture delivery · live re-planning</div>
+        <div class="mockup-body">
+          <div class="mock-nav">⏱ 11:00 ▾ &nbsp;|&nbsp; 📍 click map &nbsp;|&nbsp; 🛋 Sofa ▾ &nbsp;|&nbsp; [ Add rush order ] &nbsp;|&nbsp; [ Reset ]</div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <div style="flex:1;text-align:center;font-size:11px">
+              <svg viewBox="0 0 150 100" style="width:100%;background:#eef1ec;border-radius:6px">
+                <path d="M75 90 L40 60 L35 25 L60 20 L75 90" fill="none" stroke="#2a78d6" stroke-width="2"/>
+                <path d="M75 90 L100 55 L125 35 L115 70 L75 90" fill="none" stroke="#eb6834" stroke-width="2"/>
+                <rect x="70" y="86" width="9" height="9" fill="#222"/>
+              </svg>
+              Before · 1,476.50 €
+            </div>
+            <div style="flex:1;text-align:center;font-size:11px">
+              <svg viewBox="0 0 150 100" style="width:100%;background:#eef1ec;border-radius:6px">
+                <path d="M75 90 L40 60 L35 25 L60 20 L75 90" fill="none" stroke="#2a78d6" stroke-width="2"/>
+                <path d="M75 90 L60 40 L100 55 L125 35 L115 70 L75 90" fill="none" stroke="#eb6834" stroke-width="2.5"/>
+                <circle cx="60" cy="40" r="5" fill="#e34948" stroke="#fff" stroke-width="1.5"/>
+                <rect x="70" y="86" width="9" height="9" fill="#222"/>
+              </svg>
+              After · <b>1,501.10 €</b> (+24.60)
+            </div>
+          </div>
+          <div class="placeholder" style="margin-top:8px;font-size:11px">What changed: rush order → Van 3 (waits 20 min) · 7 customers moved · overtime +0.4 h</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Map + live timeline (“play the day”)</h3>
+      <p>Map on top, the vans’ day as a timeline underneath with a moving clock. Press play, the vans move; at 11:00 add the rush order and watch the timeline re-shape. Most dramatic, most work.</p>
+      <div class="mockup">
+        <div class="mockup-header">Furniture delivery · play the day</div>
+        <div class="mockup-body">
+          <div style="display:flex;gap:8px">
+            <svg viewBox="0 0 300 110" style="flex:3;background:#eef1ec;border-radius:6px">
+              <path d="M150 100 L90 70 L70 30 L120 20 L150 100" fill="none" stroke="#2a78d6" stroke-width="2"/>
+              <path d="M150 100 L200 60 L250 35 L230 80 L150 100" fill="none" stroke="#eb6834" stroke-width="2"/>
+              <circle cx="95" cy="68" r="5" fill="#2a78d6"/><text x="100" y="66" font-size="8">V1</text>
+              <circle cx="215" cy="52" r="5" fill="#eb6834"/><text x="220" y="50" font-size="8">V3</text>
+              <circle cx="120" cy="45" r="6" fill="#e34948" stroke="#fff" stroke-width="2"/>
+              <rect x="144" y="95" width="12" height="12" fill="#222"/>
+            </svg>
+            <div style="flex:1;font-size:11px">
+              <button class="mock-button" style="width:100%">▶ Play</button>
+              <button class="mock-button" style="width:100%;margin-top:4px">+ Rush order</button>
+              <div style="margin-top:6px">+24.60 €</div>
+            </div>
+          </div>
+          <svg viewBox="0 0 300 60" style="width:100%;margin-top:6px">
+            <text x="0" y="12" font-size="8">V1</text><rect x="20" y="4" width="120" height="10" fill="#2a78d6" opacity=".6"/><rect x="142" y="4" width="90" height="10" fill="#2a78d6" opacity=".6"/>
+            <text x="0" y="30" font-size="8">V3</text><rect x="20" y="22" width="100" height="10" fill="#eb6834" opacity=".6"/><rect x="122" y="22" width="12" height="10" fill="#bbb"/><rect x="134" y="22" width="110" height="10" fill="#eb6834" opacity=".9"/>
+            <text x="0" y="48" font-size="8">V5</text><rect x="20" y="40" width="160" height="10" fill="#6250d6" opacity=".6"/>
+            <line x1="122" y1="0" x2="122" y2="56" stroke="#e34948" stroke-width="1.5"/><text x="125" y="58" font-size="7" fill="#e34948">11:00 now</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<p class="subtitle" style="margin-top:14px">Grey block on V3’s timeline = waiting at the depot for the rush order to be ready. Any layout can have a Reset button and allow a second rush order later in the day.</p>

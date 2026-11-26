@@ -25,6 +25,7 @@ ABOUT = {
     "test_day_window": "working day, 2x overtime, day-end rules       | synthetic + data/base",
     "test_decoder": "tour -> trips, coverage, 10-50, capacity      | data/base",
     "test_convergence": "PSO fixes: fast 2-opt, scoring, seeding       | data/base",
+    "test_tune": "tuning: gaps, ranking, rounds, resume, files  | synthetic instances",
     "test_report": "report files and charts                       | data/base",
     "test_instances": "straight-line instance generator              | data/base",
     "test_road": "road mode, GA cross-check, OSM data, pipeline | data/road_ga + data/osm + synthetic",

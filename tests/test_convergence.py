@@ -87,5 +87,41 @@ class TestCandidateScoring(unittest.TestCase):
         self.assertLess(rank_shift / self.data.n_customers, 0.10)
 
 
+class TestPatience(unittest.TestCase):
+    """Early stopping: stop after `patience` iterations without improvement."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import tempfile
+        from pathlib import Path
+
+        from experiments.make_instances import build_instance
+
+        cls._tmp = tempfile.TemporaryDirectory()
+        folder = Path(cls._tmp.name) / "tiny"
+        build_instance("tiny", 30, 1, folder)
+        cls.data = load_problem(folder)
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls._tmp.cleanup()
+
+    def _run(self, **kw):
+        cfg = PSOConfig(swarm_size=4, local_search_interval=5, verbose=False, **kw)
+        return MemeticPSO(self.data, cfg).run()
+
+    def test_patience_stops_early(self) -> None:
+        result = self._run(iterations=200, patience=5)
+        self.assertTrue(result.stopped_early)
+        self.assertLess(result.iterations_run, 200)
+        # history holds iteration 0 plus every iteration that ran
+        self.assertEqual(len(result.history), result.iterations_run + 1)
+
+    def test_patience_zero_runs_all(self) -> None:
+        result = self._run(iterations=8, patience=0)
+        self.assertFalse(result.stopped_early)
+        self.assertEqual(result.iterations_run, 8)
+
+
 if __name__ == "__main__":
     unittest.main()

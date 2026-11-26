@@ -68,6 +68,10 @@ class PSOConfig:
     diversity_restart_fraction: float = 0.3
 
     max_seconds: float = 0.0
+    # Early stopping: end the run after this many iterations without a new
+    # global best (0 = off, always run all `iterations`).  The final polish
+    # still runs.  `iterations` then acts as an upper limit.
+    patience: int = 0
     verbose: bool = True
     log_interval: int = 10
 
@@ -84,6 +88,8 @@ class PSOResult:
     runtime_sec: float
     evaluations: int
     seed_solution: Solution | None
+    iterations_run: int = 0        # iterations actually performed
+    stopped_early: bool = False    # True when patience ended the run
 
 
 @dataclass
@@ -653,6 +659,8 @@ class MemeticPSO:
 
         n = self.n
         cfg = self.config
+        iterations_run = 0
+        stopped_early = False
 
         for iteration in range(1, cfg.iterations + 1):
             self._iteration = iteration
@@ -721,8 +729,18 @@ class MemeticPSO:
                 self.restarts += 1
 
             self._record(iteration)
+            iterations_run = iteration
             if cfg.verbose and (iteration % cfg.log_interval == 0 or iteration == 1):
                 self._log(iteration)
+
+            # Early stopping (patience): no new global best for too long.
+            if cfg.patience > 0 and iteration - self._last_improvement >= cfg.patience:
+                stopped_early = True
+                if cfg.verbose:
+                    if iteration % cfg.log_interval != 0:
+                        self._log(iteration)
+                    print(f"early stop: no improvement for {cfg.patience} iterations")
+                break
 
         # Final polish: full decoder on the best tour, then a longer local
         # search on the best feasible tour.
@@ -747,6 +765,8 @@ class MemeticPSO:
             runtime_sec=runtime,
             evaluations=self.evaluations,
             seed_solution=self.seed_solution,
+            iterations_run=iterations_run,
+            stopped_early=stopped_early,
         )
 
     def _final_polish(self) -> None:

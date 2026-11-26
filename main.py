@@ -156,6 +156,7 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
         local_search_budget=args.ls_budget,
         final_local_search_budget=args.final_ls_budget,
         max_seconds=args.time_limit,
+        patience=args.patience,
         verbose=True,
         log_interval=max(1, args.log_interval),
         decoder=DecoderConfig(),
@@ -163,7 +164,11 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
     result = MemeticPSO(data, cfg).run()
 
     print()
-    print(f"PSO finished in {result.runtime_sec:.1f} s, {result.evaluations} decoder calls")
+    print(
+        f"PSO finished in {result.runtime_sec:.1f} s, {result.evaluations} decoder calls, "
+        f"{result.iterations_run} iterations"
+        + (" (early stop)" if result.stopped_early else "")
+    )
     if result.seed_solution is not None:
         print(
             f"Deterministic feasible seed: EUR {result.seed_solution.true_cost_eur:.2f}, "
@@ -201,6 +206,9 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
             "local_search_interval": cfg.local_search_interval,
             "local_search_budget": cfg.local_search_budget,
             "final_local_search_budget": cfg.final_local_search_budget,
+            "patience": cfg.patience,
+            "iterations_run": result.iterations_run,
+            "stopped_early": result.stopped_early,
         },
         "runtime_sec": result.runtime_sec,
         "evaluations": result.evaluations,
@@ -356,6 +364,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--ls-budget", type=int, default=pso.local_search_budget)
     parser.add_argument("--final-ls-budget", type=int, default=pso.final_local_search_budget)
     parser.add_argument("--time-limit", type=float, default=pso.max_seconds)
+    parser.add_argument("--patience", type=int, default=pso.patience,
+                        help="stop after this many iterations without improvement "
+                             "(0 = off; --iterations is then an upper limit)")
     parser.add_argument("--log-interval", type=int, default=pso.log_interval)
     args = parser.parse_args(argv)
 
