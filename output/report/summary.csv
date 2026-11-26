@@ -1,7 +1,18 @@
 ﻿section,key,value
-Solution,True cost,"1,477.26 EUR"
-Solution,Penalty,0.00 EUR
-Solution,Objective,"1,477.26 EUR"
+Real cost,Fuel,124.28 EUR
+Real cost,Maintenance,102.34 EUR
+Real cost,Wages (base rate),888.94 EUR
+Real cost,Overtime premium,360.94 EUR
+Real cost,Night premium,0.00 EUR
+Real cost,Total real cost,"1,476.50 EUR"
+Penalty,Fewer than min customers per trip (soft),0.00
+Penalty,More than max customers per trip (soft),0.00
+Penalty,10 % volume reserve used (90-100 % full) (soft),0.76
+Penalty,Last delivery after the deadline (hard),0.00
+Penalty,Back at the depot after day end (hard),0.00
+Penalty,Minutes over the shift (weight 0 by default) (hard),0.00
+Penalty,Total penalty,"0.76 (soft 0.76, hard 0.00)"
+Search,Objective (real cost + penalty),"1,477.26"
 Solution,Feasible,yes
 Solution,Trips,16
 Solution,Distance,824.6 km
@@ -20,9 +31,9 @@ Daily window,Vehicle 2,"08:00-20:43, last delivery 20:21"
 Daily window,Vehicle 3,"08:00-23:54, last delivery 23:18"
 Daily window,Vehicle 4,"08:00-23:42, last delivery 23:11"
 Daily window,Vehicle 5,"08:00-20:57, last delivery 20:32"
-Search,Runtime,140.2 s
+Search,Runtime,154.0 s
 Search,Decoder evaluations,"1,830"
-Search,Best feasible cost,"1,477.26 EUR"
+Search,Best feasible cost,"1,476.50 EUR"
 Search,Final check_solution,no errors
 Config,Swarm size,20
 Config,Iterations,60

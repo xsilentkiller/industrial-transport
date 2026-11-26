@@ -207,5 +207,27 @@ class TestSoftCustomerCounts(unittest.TestCase):
         self.assertAlmostEqual(sol.objective - sol.true_cost_eur, 3500.0)
 
 
+class TestCostPenaltySeparation(unittest.TestCase):
+    def test_breakdowns_sum_to_totals_and_never_mix(self) -> None:
+        data = load_problem("data/base")
+        rng = np.random.default_rng(3)
+        for _ in range(3):
+            sol = decode_tour(data, (rng.permutation(data.n_customers) + 1).tolist())
+            self.assertAlmostEqual(sum(sol.cost_breakdown.values()), sol.true_cost_eur, places=6)
+            self.assertAlmostEqual(sum(sol.penalty_breakdown.values()), sol.penalty, places=6)
+            self.assertAlmostEqual(sol.objective, sol.true_cost_eur + sol.penalty, places=6)
+            for t in sol.trips:
+                m = t.metrics
+                self.assertAlmostEqual(
+                    m.base_cost_eur, m.fuel_cost + m.maintenance_cost + m.wage_base_cost
+                )
+                self.assertAlmostEqual(
+                    m.penalty, m.under_min_penalty + m.over_max_penalty + m.overflow_penalty
+                )
+            d = sol.as_dict()
+            self.assertIn("cost_breakdown", d)
+            self.assertIn("penalty_breakdown", d)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -57,8 +57,8 @@ class Params:
     loading_counts_as_work_time: bool
 
     # Packing mode 1: a trip may use the 10 % reserve (90-100 % of the cargo
-    # volume) for this fee per m3 above the 90 % line.  Above 100 % is
-    # physically impossible and stays forbidden.
+    # volume) for this PENALTY per m3 above the 90 % line (search only, never
+    # part of the real cost).  Above 100 % is physically impossible.
     volume_overflow_eur_per_m3: float = 100.0
 
     # "euclid" = distances.csv (haversine x 1.3, time = km / avg speed)

@@ -34,6 +34,8 @@ class PenaltyWeights:
     * The customer-count rules are *soft*: a trip may have fewer than the
       minimum or more than the maximum customers, but pays a penalty for
       each customer below / above the limit.
+    * Using the 10 % volume reserve (90-100 % full) is *soft* too; its rate
+      is ``params.volume_overflow_eur_per_m3`` (per m3 above the 90 % line).
     """
 
     per_minute_over_shift: float = 0.0  # 0 because vehicle-day overtime is paid
@@ -98,15 +100,18 @@ class TripMetrics:
     overtime_min: float
     overtime_cost: float
     overflow_m3: float
-    overflow_cost: float
-    base_cost_eur: float
-    cost_eur: float
+    base_cost_eur: float          # real money: fuel + maintenance + base wages
+    cost_eur: float               # real money: base + trip-level overtime
 
     weight_over: float
     raw_volume_over: float
     volume_over: float
     under_min: int
     over_max: int
+    # Penalties (search only, never money).  penalty = sum of the three.
+    under_min_penalty: float
+    over_max_penalty: float
+    overflow_penalty: float       # use of the 10 % volume reserve
     penalty: float
 
     capacity_ok: bool
@@ -158,7 +163,7 @@ class TripMetrics:
             "raw_volume_over_m3": self.raw_volume_over,
             "free_volume_over_m3": self.volume_over,
             "overflow_m3": self.overflow_m3,
-            "overflow_cost": self.overflow_cost,
+            # Real cost (company money)
             "fuel_cost": self.fuel_cost,
             "maintenance_cost": self.maintenance_cost,
             "wage_base_cost": self.wage_base_cost,
@@ -166,6 +171,10 @@ class TripMetrics:
             "overtime_cost": self.overtime_cost,
             "base_cost_eur": self.base_cost_eur,
             "cost_eur": self.cost_eur,
+            # Penalty (search only)
+            "under_min_penalty": self.under_min_penalty,
+            "over_max_penalty": self.over_max_penalty,
+            "overflow_penalty": self.overflow_penalty,
             "penalty": self.penalty,
             "feasible": self.feasible,
             "violations": self.violations,
@@ -265,22 +274,24 @@ def trip_metrics_from_stats(
     usable_volume = v.max_volume_m3 * (1.0 - p.required_free_volume_ratio)
     raw_volume_over = max(0.0, stats.volume_m3 - v.max_volume_m3)
     volume_over = max(0.0, stats.volume_m3 - usable_volume)
-    # Volume in the 90-100 % band is allowed but paid for (real cost, not an
-    # infeasibility).  Volume above 100 % is a capacity violation (penalty).
+    # Volume in the 90-100 % band (the 10 % reserve) is allowed but
+    # discouraged: a soft PENALTY, not company money.  Volume above 100 % is
+    # impossible (capacity_ok = False).
     overflow_m3 = max(0.0, min(stats.volume_m3, v.max_volume_m3) - usable_volume)
-    overflow_cost = p.volume_overflow_eur_per_m3 * overflow_m3
 
-    base_cost_eur = fuel_cost + maintenance_cost + wage_base_cost + overflow_cost
+    # Real cost: only money the company actually pays.
+    base_cost_eur = fuel_cost + maintenance_cost + wage_base_cost
     cost_eur = base_cost_eur + overtime_cost
 
     under_min = max(0, p.min_customers_per_trip - stats.count)
     over_max = max(0, stats.count - p.max_customers_per_trip)
 
-    # Soft rules only: capacity is a hard rule and never has a price.
-    penalty = (
-        weights.per_customer_under_min * under_min
-        + weights.per_customer_over_max * over_max
-    )
+    # Soft-rule penalties (search only).  Capacity is a hard rule and never
+    # has a price.
+    under_min_penalty = weights.per_customer_under_min * under_min
+    over_max_penalty = weights.per_customer_over_max * over_max
+    overflow_penalty = p.volume_overflow_eur_per_m3 * overflow_m3
+    penalty = under_min_penalty + over_max_penalty + overflow_penalty
 
     capacity_ok = weight_over <= CAPACITY_TOL and raw_volume_over <= CAPACITY_TOL
     # True when the 10 % reserve is untouched; informational only now.
@@ -308,7 +319,6 @@ def trip_metrics_from_stats(
         overtime_min=overtime_min,
         overtime_cost=overtime_cost,
         overflow_m3=overflow_m3,
-        overflow_cost=overflow_cost,
         base_cost_eur=base_cost_eur,
         cost_eur=cost_eur,
         weight_over=weight_over,
@@ -316,6 +326,9 @@ def trip_metrics_from_stats(
         volume_over=volume_over,
         under_min=under_min,
         over_max=over_max,
+        under_min_penalty=under_min_penalty,
+        over_max_penalty=over_max_penalty,
+        overflow_penalty=overflow_penalty,
         penalty=penalty,
         capacity_ok=capacity_ok,
         free_volume_ok=free_volume_ok,

@@ -14,7 +14,7 @@ Pipeline
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 
@@ -137,8 +137,13 @@ class Solution:
     vehicle_night_min: np.ndarray | None = None
     vehicle_last_delivery_min: np.ndarray | None = None
     vehicle_day_penalty: np.ndarray | None = None
-    # Part of ``penalty`` from soft rules (customer counts); the rest is hard.
+    # Part of ``penalty`` from soft rules (counts, volume reserve); the rest
+    # is hard (daily window).
     soft_penalty: float = 0.0
+    # Line items.  cost_breakdown sums to true_cost_eur (company money, for
+    # analysis); penalty_breakdown sums to penalty (search only).
+    cost_breakdown: dict = field(default_factory=dict)
+    penalty_breakdown: dict = field(default_factory=dict)
 
     def __iter__(self):
         return iter(self.trips)
@@ -164,6 +169,8 @@ class Solution:
             "penalty": self.penalty,
             "soft_penalty": self.soft_penalty,
             "hard_penalty": self.penalty - self.soft_penalty,
+            "cost_breakdown": dict(self.cost_breakdown),
+            "penalty_breakdown": dict(self.penalty_breakdown),
             "objective": self.objective,
             "feasible": self.feasible,
             "n_trips": self.n_trips,
@@ -484,10 +491,11 @@ def split_dp(
                 np.maximum(0.0, time - shift_min)
                 * (wages[k] * ot_extra_rate / 60.0)
             )
-            overflow = overflow_rate * np.clip(
+            # Soft penalty for using the 10 % reserve (search only).
+            overflow_pen = overflow_rate * np.clip(
                 volume - cap_v[k], 0.0, cap_v_full[k] - cap_v[k]
             )
-            total = base + overtime + overflow + count_pen
+            total = base + overtime + overflow_pen + count_pen
             # Hard capacity: a segment that does not fit vehicle k is
             # impossible on k (no penalty can buy it).
             fits = (weight <= cap_w[k] + CAPACITY_TOL) & (
@@ -847,6 +855,26 @@ def assign_trips(
     # that only breaks soft rules is still a legal plan.
     feasible = hard_penalty <= 1e-7 and all(t.metrics.capacity_ok for t in trips)
 
+    cost_breakdown = {
+        "fuel": float(sum(t.metrics.fuel_cost for t in trips)),
+        "maintenance": float(sum(t.metrics.maintenance_cost for t in trips)),
+        "wages_base": float(sum(t.metrics.wage_base_cost for t in trips)),
+        "overtime_premium": float(sum(d.overtime_cost for d in days)),
+        "night_premium": float(sum(d.night_cost for d in days)),
+    }
+    penalty_breakdown = {
+        # soft
+        "under_min_customers": float(sum(t.metrics.under_min_penalty for t in trips)),
+        "over_max_customers": float(sum(t.metrics.over_max_penalty for t in trips)),
+        "volume_reserve_used": float(sum(t.metrics.overflow_penalty for t in trips)),
+        # hard (priced so high that breaking them never pays)
+        "late_last_delivery": float(sum(
+            weights.per_minute_late_delivery * d.late_delivery_min for d in days)),
+        "back_after_day_end": float(sum(
+            weights.per_minute_past_day_end * d.past_day_end_min for d in days)),
+        "over_shift": float(shift_w * np.maximum(0.0, vehicle_total_min - shift_min).sum()),
+    }
+
     return Solution(
         trips=trips,
         true_cost_eur=float(true_cost),
@@ -854,6 +882,8 @@ def assign_trips(
         objective=float(true_cost + penalty),
         feasible=feasible,
         soft_penalty=soft_penalty,
+        cost_breakdown=cost_breakdown,
+        penalty_breakdown=penalty_breakdown,
         total_distance_km=float(total_distance),
         total_time_min=float(total_time),
         total_weight_kg=float(total_weight),

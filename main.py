@@ -38,9 +38,17 @@ def _permutation_ok(customers: list[int], n: int) -> bool:
 
 
 def print_solution_summary(data: ProblemData, sol) -> None:
+    print("  REAL COST (company money, for analysis)")
+    for name, value in sol.cost_breakdown.items():
+        print(f"    {name:20s}: {value:10.2f} EUR")
+    print(f"    {'= real cost':20s}: {sol.true_cost_eur:10.2f} EUR")
+    print("  PENALTY (search only, not money)")
+    for name, value in sol.penalty_breakdown.items():
+        print(f"    {name:20s}: {value:10.2f}")
     print(
-        f"  true EUR cost : {sol.true_cost_eur:10.2f}\n"
-        f"  penalty       : {sol.penalty:10.2f}  (soft {sol.soft_penalty:.2f}, not real money)\n"
+        f"    {'= penalty':20s}: {sol.penalty:10.2f}  "
+        f"(soft {sol.soft_penalty:.2f}, hard {sol.penalty - sol.soft_penalty:.2f})\n"
+        f"  objective     : {sol.objective:10.2f}  (real cost + penalty, what the search minimises)\n"
         f"  feasible      : {sol.feasible}  "
         f"({'all hard rules hold' if sol.feasible else 'a hard rule is broken'})\n"
         f"  trips         : {sol.n_trips}\n"

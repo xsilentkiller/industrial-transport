@@ -47,9 +47,26 @@ COST_COMPONENTS = [
     ("fuel_cost", "Fuel", "#3498DB"),
     ("maintenance_cost", "Maintenance", "#95A5A6"),
     ("wage_base_cost", "Wages (base)", "#2ECC71"),
-    # Paid use of the 10 % volume reserve (90-100 % full): a real cost, not a penalty.
-    ("overflow_cost", "Volume overflow fee", "#E67E22"),
+    # Only real company money here.  Penalties (incl. the volume-reserve
+    # penalty) are reported separately and never mixed into the cost.
 ]
+
+# Labels of the solution-level line items (decoder.Solution breakdowns).
+COST_LABELS = {
+    "fuel": "Fuel",
+    "maintenance": "Maintenance",
+    "wages_base": "Wages (base rate)",
+    "overtime_premium": "Overtime premium",
+    "night_premium": "Night premium",
+}
+PENALTY_LABELS = {
+    "under_min_customers": ("soft", "Fewer than min customers per trip"),
+    "over_max_customers": ("soft", "More than max customers per trip"),
+    "volume_reserve_used": ("soft", "10 % volume reserve used (90-100 % full)"),
+    "late_last_delivery": ("hard", "Last delivery after the deadline"),
+    "back_after_day_end": ("hard", "Back at the depot after day end"),
+    "over_shift": ("hard", "Minutes over the shift (weight 0 by default)"),
+}
 
 
 # ---------------------------------------------------------------------------
@@ -155,7 +172,7 @@ def _trip_records(data: ProblemData, solution: dict) -> list[dict]:
                 "overtime_cost": _num(trip.get("overtime_cost")),
                 "base_cost_eur": _num(trip.get("base_cost_eur")),
                 "overflow_m3": _num(trip.get("overflow_m3")),
-                "overflow_cost": _num(trip.get("overflow_cost")),
+                "overflow_penalty": _num(trip.get("overflow_penalty")),
                 "cost_eur": _num(trip.get("cost_eur")),
                 "penalty": _num(trip.get("penalty")),
                 "feasible": bool(trip.get("feasible", False)),
@@ -178,7 +195,7 @@ def _vehicle_records(
         maintenance = sum(row["maintenance_cost"] for row in rows)
         wages = sum(row["wage_base_cost"] for row in rows)
         ot_cost = _num(overtime_cost[k]) if k < len(overtime_cost) else 0.0
-        overflow = sum(row["overflow_cost"] for row in rows)
+        penalty = sum(row["penalty"] for row in rows)
         records.append(
             {
                 "vehicle_index": k,
@@ -198,8 +215,8 @@ def _vehicle_records(
                 "maintenance_cost": maintenance,
                 "wage_base_cost": wages,
                 "overtime_cost": ot_cost,
-                "overflow_cost": overflow,
-                "total_cost": fuel + maintenance + wages + ot_cost + overflow,
+                "total_cost": fuel + maintenance + wages + ot_cost,  # real money
+                "trip_penalty": penalty,                             # search only
                 "weight_cap_kg": float(vehicle.max_weight_kg),
                 "volume_cap_m3": float(data.vehicle_volume_cap[k]),
             }
@@ -236,14 +253,46 @@ def _day_window_rows(payload: dict, solution: dict) -> list[tuple[str, str, str]
     return rows
 
 
+def _cost_rows(solution: dict) -> list[tuple[str, str, str]]:
+    """Real cost line items (company money, for analysis)."""
+    breakdown = solution.get("cost_breakdown") or {}
+    rows = [
+        ("Real cost", COST_LABELS.get(key, key), f"{_num(value):,.2f} EUR")
+        for key, value in breakdown.items()
+    ]
+    rows.append(
+        ("Real cost", "Total real cost", f"{_num(solution.get('true_cost_eur')):,.2f} EUR")
+    )
+    return rows
+
+
+def _penalty_rows(solution: dict) -> list[tuple[str, str, str]]:
+    """Penalty line items (search only, never money)."""
+    breakdown = solution.get("penalty_breakdown") or {}
+    rows = []
+    for key, value in breakdown.items():
+        kind, label = PENALTY_LABELS.get(key, ("", key))
+        rows.append(("Penalty", f"{label} ({kind})" if kind else label, f"{_num(value):,.2f}"))
+    soft = _num(solution.get("soft_penalty"))
+    total = _num(solution.get("penalty"))
+    rows.append(
+        ("Penalty", "Total penalty", f"{total:,.2f} (soft {soft:,.2f}, hard {total - soft:,.2f})")
+    )
+    return rows
+
+
 def _summary_rows(payload: dict, solution: dict) -> list[tuple[str, str, str]]:
     config = payload.get("config", {})
     check_errors = payload.get("check_errors") or []
     feasible_cost = payload.get("best_feasible_cost")
     rows = [
-        ("Solution", "True cost", f"{_num(solution.get('true_cost_eur')):,.2f} EUR"),
-        ("Solution", "Penalty", f"{_num(solution.get('penalty')):,.2f} EUR"),
-        ("Solution", "Objective", f"{_num(solution.get('objective')):,.2f} EUR"),
+        *_cost_rows(solution),
+        *_penalty_rows(solution),
+        (
+            "Search",
+            "Objective (real cost + penalty)",
+            f"{_num(solution.get('objective')):,.2f}",
+        ),
         ("Solution", "Feasible", "yes" if solution.get("feasible") else "no"),
         ("Solution", "Trips", f"{int(_num(solution.get('n_trips')))}"),
         ("Solution", "Distance", f"{_num(solution.get('total_distance_km')):,.1f} km"),
@@ -572,7 +621,7 @@ def _plot_cost_breakdown(vehicles: list[dict], path: Path) -> None:
     pie_colors = [color for _, _, color in COST_COMPONENTS] + [OVERTIME_COLOR]
     grand = sum(totals)
     if grand > 1e-9:
-        # Small parts (e.g. the overflow fee, ~0.1 %) get no wedge label, which
+        # Small parts (e.g. the night premium) get no wedge label, which
         # would overlap; the legend names every part with its EUR amount.
         big = [t / grand >= 0.01 for t in totals]
         ax_pie.pie(
@@ -830,8 +879,12 @@ def _build_html(
         status_text += " / check errors"
 
     cards = [
-        ("True cost", f"{_num(solution.get('true_cost_eur')):,.2f} EUR", "good"),
-        ("Penalty", f"{_num(solution.get('penalty')):,.2f} EUR", "good"),
+        ("Real cost (company)", f"{_num(solution.get('true_cost_eur')):,.2f} EUR", "good"),
+        (
+            "Penalty (search only)",
+            f"{_num(solution.get('penalty')):,.2f}",
+            "good" if _num(solution.get("penalty")) <= 1e-9 else "warn",
+        ),
         ("Trips", f"{int(_num(solution.get('n_trips')))}", ""),
         ("Distance", f"{_num(solution.get('total_distance_km')):,.1f} km", ""),
         ("Working time", f"{_num(solution.get('total_time_min')) / 60:,.2f} h", ""),
@@ -843,6 +896,17 @@ def _build_html(
         f"<div class='card {cls}'><div class='label'>{html.escape(label)}</div>"
         f"<div class='value'>{html.escape(value)}</div></div>"
         for label, value, cls in cards
+    )
+
+    cost_table = _html_table(
+        ["Real cost item", "EUR"],
+        [[key, value.replace(" EUR", "")] for _, key, value in _cost_rows(solution)],
+        numeric_columns={1},
+    )
+    penalty_table = _html_table(
+        ["Penalty item (not money)", "Penalty"],
+        [[key, value] for _, key, value in _penalty_rows(solution)],
+        numeric_columns={1},
     )
 
     summary_table = _html_table(
@@ -897,8 +961,8 @@ def _build_html(
             f"{row['volume_m3']:.3f}",
             f"{row['weight_util_pct']:.1f}",
             f"{row['volume_util_pct']:.1f}",
-            f"{row['overflow_cost']:.2f}",
             f"{row['cost_eur']:.2f}",
+            f"{row['penalty']:.2f}",
             "yes" if row["feasible"] else "no",
         ]
         for row in trips
@@ -914,8 +978,8 @@ def _build_html(
             "Volume (m3)",
             "Weight util. (%)",
             "Volume util. (%)",
-            "Overflow fee (EUR)",
-            "Cost (EUR)",
+            "Real cost (EUR)",
+            "Penalty",
             "Feasible",
         ],
         trip_rows,
@@ -938,10 +1002,10 @@ def _build_html(
         (
             "Cost breakdown",
             charts["cost_breakdown"],
-            "Fuel, maintenance, base wages and the volume overflow fee (paid use of "
-            "the 10 % volume reserve) per vehicle, plus the vehicle-day overtime "
-            "premium and the total cost composition. Bar totals equal each "
-            "vehicle's total cost.",
+            "Real company cost only: fuel, maintenance and base wages per vehicle, "
+            "plus the vehicle-day overtime premium and the total cost "
+            "composition. Bar totals equal each vehicle's real cost. Penalties "
+            "are not money and are listed separately above.",
         ),
         (
             "Capacity and trip size",
@@ -1091,6 +1155,7 @@ tbody tr:hover {{ background: #f8fafc; }}
 .links a {{ color: var(--accent); text-decoration: none; margin-right: 14px; }}
 .links a:hover {{ text-decoration: underline; }}
 .note {{ color: var(--muted); font-size: 13px; }}
+.split {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }}
 .missing {{ color: var(--bad); }}
 @media (max-width: 700px) {{
   .wrap {{ padding: 18px 12px; }}
@@ -1112,6 +1177,19 @@ tbody tr:hover {{ background: #f8fafc; }}
 </header>
 
 <div class="cards">{card_html}</div>
+
+<section>
+  <h2>Real cost (company) vs penalty (algorithm)</h2>
+  <p class="caption">The real cost is the money the company pays and is the
+  number to analyse. Penalties are never money: the search adds them to the
+  real cost only to steer itself away from discouraged (soft) or forbidden
+  (hard) plans. Weight above payload and volume above 100 % are impossible
+  and have no penalty.</p>
+  <div class="split">
+    <div>{cost_table}</div>
+    <div>{penalty_table}</div>
+  </div>
+</section>
 
 {chart_html}
 
