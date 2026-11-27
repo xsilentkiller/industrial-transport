@@ -29,6 +29,7 @@ from __future__ import annotations
 import csv
 import json
 from dataclasses import MISSING, dataclass, field
+from functools import cached_property
 from pathlib import Path
 from typing import Any
 
@@ -73,7 +74,9 @@ class Params:
     last_delivery_by: str | None = None  # last customer served by this time
     hard_day_end: str | None = None      # vehicle back at the depot by this time
 
-    @property
+    # Cached: these are read millions of times per run (frozen dataclass,
+    # so the values never change after loading).
+    @cached_property
     def shift_minutes(self) -> float:
         return float(self.shift_hours) * 60.0
 
@@ -83,15 +86,15 @@ class Params:
             return None
         return _clock_min(clock) - _clock_min(self.day_start)
 
-    @property
+    @cached_property
     def night_from_min(self) -> float | None:
         return self.minutes_after_start(self.night_rate_from)
 
-    @property
+    @cached_property
     def last_delivery_min(self) -> float | None:
         return self.minutes_after_start(self.last_delivery_by)
 
-    @property
+    @cached_property
     def day_end_min(self) -> float | None:
         return self.minutes_after_start(self.hard_day_end)
 

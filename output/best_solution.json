@@ -11,7 +11,7 @@
     "iterations_run": 175,
     "stopped_early": true
   },
-  "runtime_sec": 611.8889499999932,
+  "runtime_sec": 27.567157900019083,
   "evaluations": 6789,
   "best_feasible_cost": 1500.9542374133334,
   "check_errors": [],

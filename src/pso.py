@@ -16,6 +16,7 @@ import numpy as np
 
 from .data_loader import ProblemData
 from .cost import segment_stats
+from .kernels import two_opt_directed_kernel, two_opt_symmetric_kernel
 from .decoder import (
     DecoderConfig,
     Solution,
@@ -219,36 +220,12 @@ def two_opt_order_directed(order: list[int], D: np.ndarray) -> list[int]:
     Reversing order[i..j] also reverses every leg inside the segment, so the
     move is priced with prefix sums of the forward and backward leg costs
     (O(1) per move, O(n) to rebuild the sums after an accepted move).
+    Runs in compiled code (src/kernels.py).
     """
-    order = list(order)
-    n = len(order)
-    if n < 3:
-        return order
-
-    def prefix(seq: list[int]) -> tuple[np.ndarray, np.ndarray]:
-        a = np.asarray(seq, dtype=np.int64)
-        fwd = np.concatenate(([0.0], np.cumsum(D[a[:-1], a[1:]])))
-        bwd = np.concatenate(([0.0], np.cumsum(D[a[1:], a[:-1]])))
-        return fwd, bwd
-
-    fwd, bwd = prefix(order)
-    improved = True
-    while improved:
-        improved = False
-        for i in range(n - 1):
-            for j in range(i + 2, n):
-                prev = order[i - 1] if i > 0 else 0
-                nxt = order[j + 1] if j + 1 < n else 0
-                a, b = order[i], order[j]
-                inner_old = fwd[j] - fwd[i]
-                inner_new = bwd[j] - bwd[i]
-                delta = (D[prev, b] + D[a, nxt] + inner_new
-                         - D[prev, a] - D[b, nxt] - inner_old)
-                if delta < -1e-9:
-                    order[i : j + 1] = order[i : j + 1][::-1]
-                    fwd, bwd = prefix(order)
-                    improved = True
-    return order
+    if len(order) < 3:
+        return list(order)
+    arr = np.array(order, dtype=np.int64)
+    return two_opt_directed_kernel(arr, np.ascontiguousarray(D, dtype=np.float64)).tolist()
 
 
 def two_opt_order(order: list[int], D: np.ndarray, symmetric: bool | None = None) -> list[int]:
@@ -257,27 +234,17 @@ def two_opt_order(order: list[int], D: np.ndarray, symmetric: bool | None = None
     Each move reverses order[i..j] (at least three customers) and is priced by
     the change of its two end edges only, O(1) per move, instead of
     recomputing the whole trip.  Same scan order and acceptance rule as the
-    original implementation, so it returns the same trip.
+    original implementation, so it returns the same trip.  Runs in compiled
+    code (src/kernels.py).
     """
     if symmetric is None:
         symmetric = bool(np.allclose(D, D.T, atol=1e-9))
     if not symmetric:
         return two_opt_order_directed(order, D)
-    order = list(order)
-    n = len(order)
-    improved = True
-    while improved:
-        improved = False
-        for i in range(n - 1):
-            for j in range(i + 2, n):
-                prev = order[i - 1] if i > 0 else 0
-                nxt = order[j + 1] if j + 1 < n else 0
-                a, b = order[i], order[j]
-                delta = D[prev, b] + D[a, nxt] - D[prev, a] - D[b, nxt]
-                if delta < -1e-9:
-                    order[i : j + 1] = order[i : j + 1][::-1]
-                    improved = True
-    return order
+    if len(order) < 3:
+        return list(order)
+    arr = np.array(order, dtype=np.int64)
+    return two_opt_symmetric_kernel(arr, np.ascontiguousarray(D, dtype=np.float64)).tolist()
 
 
 def improve_solution_trips(

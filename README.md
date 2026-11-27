@@ -22,8 +22,15 @@ separately.
 
 ## Quick start
 
-Requirements: Python 3.10+, NumPy, and Matplotlib (`osmium` only to rebuild
-the OSM road data, see below).
+Requirements: Python 3.10+, NumPy, Matplotlib and Numba
+(`pip install -r requirements.txt`; `osmium` only to rebuild the OSM road
+data, see below).  Numba compiles the solver's inner loops (Split DP,
+trip-to-vehicle assignment, 2-opt) in `src/kernels.py`: a PSO run is about
+18x faster with identical results (`tests/test_kernels.py` compares every
+kernel with the original Python code).  The first run after installing
+compiles the kernels (a few seconds); the machine code is then cached in
+`src/__pycache__/`.  Without Numba the same code runs as plain Python, much
+slower.
 
 `main.py` is the single entry point:
 
@@ -430,6 +437,7 @@ src/data_loader.py               the only CSV reader; returns ProblemData
 src/cost.py                      trip metrics, cost formulas, overflow fee, penalties, overtime
 src/decoder.py                   random keys, greedy cut, Split DP, assignment, checks
 src/pso.py                       PSO, construction heuristics, local search, polish
+src/kernels.py                   Numba-compiled inner loops: Split DP, assignment, 2-opt
 src/report.py                    HTML/PNG/CSV report, street/satellite route map
 src/road_geometry.py             OSM road graph and Dijkstra (shared by pool and map)
 
@@ -445,6 +453,7 @@ tests/test_cost.py               hand-checked cost, overtime, overflow fee
 tests/test_day_window.py         working day, 2x overtime, day-end rules
 tests/test_decoder.py            first-20, full-250, Split/coverage/timing
 tests/test_convergence.py        PSO fixes (fast 2-opt, scoring, seeding)
+tests/test_kernels.py            Numba kernels give exactly the original results
 tests/test_report.py             report files, tables, charts
 tests/test_instances.py          straight-line instance generator
 tests/test_road.py               road mode, GA cross-check, OSM data, OSM pipeline

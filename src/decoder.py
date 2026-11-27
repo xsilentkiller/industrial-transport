@@ -31,6 +31,24 @@ from .cost import (
     trip_metrics_from_stats,
 )
 from .data_loader import ProblemData
+from .kernels import assign_kernel, split_dp_kernel
+
+
+def _f64(a) -> np.ndarray:
+    """Contiguous float64 view/copy for the compiled kernels."""
+    return np.ascontiguousarray(a, dtype=np.float64)
+
+
+def _vehicle_arrays(data: ProblemData) -> dict[str, np.ndarray]:
+    return {
+        "speeds": _f64(data.vehicle_speed),
+        "wages": _f64(data.vehicle_wage),
+        "fuel_rates": _f64(data.vehicle_fuel_rate),
+        "maint": _f64(data.vehicle_maint_per_km),
+        "cap_w": _f64(data.vehicle_weight_cap),
+        "cap_v": _f64(data.vehicle_usable_volume),
+        "cap_v_full": _f64(data.vehicle_volume_cap),
+    }
 
 
 @dataclass(frozen=True)
@@ -433,87 +451,31 @@ def split_dp(
             cum_t = np.concatenate(([0.0], np.cumsum(tm[tour_arr[:-1], tour_arr[1:]])))
         else:
             cum_t = np.zeros(1, dtype=np.float64)
+    else:
+        t0 = tback = cum_t = np.zeros(1, dtype=np.float64)
 
-    dp = np.full(n + 1, np.inf, dtype=np.float64)
-    prev = np.full(n + 1, -1, dtype=np.int64)
-    dp[0] = 0.0
-
-    cap_w = data.vehicle_weight_cap
-    cap_v = data.vehicle_usable_volume      # 90 % line: fee starts here
-    cap_v_full = data.vehicle_volume_cap    # 100 %: hard limit
-    overflow_rate = p.volume_overflow_eur_per_m3
-    speeds = data.vehicle_speed
-    wages = data.vehicle_wage
-    fuel_rates = data.vehicle_fuel_rate
-    maint = data.vehicle_maint_per_km
-    shift_min = p.shift_minutes
-    ot_extra_rate = max(0.0, p.overtime_multiplier - 1.0)
-    fuel_price = p.fuel_price_per_l
-
-    min_customers = p.min_customers_per_trip
-    max_customers = p.max_customers_per_trip
-
-    for i in range(n):
-        if not np.isfinite(dp[i]):
-            continue
-        j0 = i + min_len - 1
-        j1 = min(n - 1, i + max_len - 1)
-        if j0 > j1:
-            continue
-        js = np.arange(j0, j1 + 1, dtype=np.int64)
-        cnt = js - i + 1
-
-        weight = cum_w[js + 1] - cum_w[i]
-        volume = cum_v[js + 1] - cum_v[i]
-        loading = cum_load[js + 1] - cum_load[i]
-        unloading = cum_unload[js + 1] - cum_unload[i]
-        service = unloading + (loading if p.loading_counts_as_work_time else 0.0)
-        distance = d0[i] + (cum_d[js] - cum_d[i]) + dback[js]
-        if road_mode:
-            road_drive = t0[i] + (cum_t[js] - cum_t[i]) + tback[js]
-
-        count_pen = (
-            w.per_customer_under_min * np.maximum(0, min_customers - cnt)
-            + w.per_customer_over_max * np.maximum(0, cnt - max_customers)
-        )
-
-        best = np.full(len(js), np.inf, dtype=np.float64)
-        for k in range(data.n_vehicles):
-            if road_mode:
-                time = road_drive + service
-            else:
-                time = distance * (60.0 / speeds[k]) + service
-            base = (
-                distance * (fuel_rates[k] * fuel_price + maint[k])
-                + wages[k] * (time / 60.0)
-            )
-            overtime = (
-                np.maximum(0.0, time - shift_min)
-                * (wages[k] * ot_extra_rate / 60.0)
-            )
-            # Soft penalty for using the 10 % reserve (search only).
-            overflow_pen = overflow_rate * np.clip(
-                volume - cap_v[k], 0.0, cap_v_full[k] - cap_v[k]
-            )
-            total = base + overtime + overflow_pen + count_pen
-            # Hard capacity: a segment that does not fit vehicle k is
-            # impossible on k (no penalty can buy it).
-            fits = (weight <= cap_w[k] + CAPACITY_TOL) & (
-                volume <= cap_v_full[k] + CAPACITY_TOL
-            )
-            total = np.where(fits, total, np.inf)
-            np.minimum(best, total, out=best)
-
-        if config.dp_trip_fixed_cost:
-            best += config.dp_trip_fixed_cost
-
-        cand = dp[i] + best
-        target = js + 1
-        better = cand < dp[target] - 1e-9
-        if np.any(better):
-            idx = target[better]
-            dp[idx] = cand[better]
-            prev[idx] = i
+    # The DP itself runs in compiled code (src/kernels.py).  Per segment and
+    # vehicle it prices: fuel + maintenance + wages + trip overtime, the
+    # soft volume-reserve and customer-count penalties; a segment that does
+    # not fit vehicle k (weight or 100 % volume) is impossible on k.
+    vec = _vehicle_arrays(data)
+    dp, prev = split_dp_kernel(
+        n, min_len, max_len,
+        _f64(cum_w), _f64(cum_v), _f64(cum_load), _f64(cum_unload),
+        _f64(d0), _f64(dback), _f64(cum_d),
+        road_mode, _f64(t0), _f64(tback), _f64(cum_t),
+        bool(p.loading_counts_as_work_time),
+        vec["speeds"], vec["wages"], vec["fuel_rates"], vec["maint"],
+        vec["cap_w"], vec["cap_v"], vec["cap_v_full"],
+        float(p.volume_overflow_eur_per_m3),
+        float(p.shift_minutes),
+        float(max(0.0, p.overtime_multiplier - 1.0)),
+        float(p.fuel_price_per_l),
+        int(p.min_customers_per_trip), int(p.max_customers_per_trip),
+        float(w.per_customer_under_min), float(w.per_customer_over_max),
+        float(config.dp_trip_fixed_cost or 0.0),
+        float(CAPACITY_TOL),
+    )
 
     if not np.isfinite(dp[n]) or prev[n] < 0:
         # No partition exists (only possible with enforce_min, when the
@@ -640,18 +602,6 @@ def assign_trips(
     shift_min = data.params.shift_minutes
     shift_w = weights.per_minute_over_shift
 
-    def day_obj(k: int, t: float, r: float) -> float:
-        """Overtime/night premium + daily-window penalty of one vehicle-day."""
-        dm = day_metrics(data, k, t, r, weights)
-        return dm.extra_cost + dm.penalty + shift_w * max(0.0, t - shift_min)
-
-    def max_ret(k: int, exclude: tuple[int, ...] = (), add: int = -1) -> float:
-        best = rets[add, k] if add >= 0 else 0.0
-        for idx in np.flatnonzero(assign == k):
-            if idx not in exclude and rets[idx, k] > best:
-                best = rets[idx, k]
-        return float(best)
-
     # Most constrained first: large volume, then large weight, then count.
     order = sorted(
         range(m),
@@ -662,137 +612,29 @@ def assign_trips(
         ),
     )
 
-    assign = np.full(m, -1, dtype=np.int64)
-    vehicle_times = np.zeros(V, dtype=np.float64)
-    vehicle_rets = np.zeros(V, dtype=np.float64)
-
-    for i in order:
-        best_k = -1
-        best_delta = np.inf
-        best_time = np.inf
-        for k in range(V):
-            if not fits[i, k]:
-                continue
-            t_new = vehicle_times[k] + times[i, k]
-            r_new = max(vehicle_rets[k], rets[i, k])
-            delta = (
-                base[i, k]
-                + pens[i, k]
-                + day_obj(k, t_new, r_new)
-                - day_obj(k, vehicle_times[k], vehicle_rets[k])
-            )
-            # Equal-cost assignments go to the less-loaded vehicle, so the
-            # fleet is not needlessly concentrated on one van.
-            if (
-                delta < best_delta - 1e-9
-                or (
-                    abs(delta - best_delta) <= 1e-9
-                    and vehicle_times[k] < best_time - 1e-9
-                )
-            ):
-                best_delta = delta
-                best_time = vehicle_times[k]
-                best_k = k
-        if best_k < 0:
-            # Unreachable: every trip fits at least one vehicle (checked above).
-            best_k = int(np.flatnonzero(fits[i])[0])
-        assign[i] = best_k
-        vehicle_times[best_k] += times[i, best_k]
-        vehicle_rets[best_k] = max(vehicle_rets[best_k], rets[i, best_k])
-
-    # Move local search: relocate one trip to another vehicle.
-    if config.assignment_refine:
-        for _ in range(max(1, config.assignment_passes)):
-            improved = False
-            for i in range(m):
-                a = int(assign[i])
-                Ta = vehicle_times[a]
-                Ra_new = max_ret(a, exclude=(i,))
-                old_max = float(vehicle_times.max())
-                best_b = -1
-                best_delta = 0.0
-                best_new_max = old_max
-                for b in range(V):
-                    if b == a or not fits[i, b]:
-                        continue
-                    Tb = vehicle_times[b]
-                    old = (
-                        base[i, a]
-                        + pens[i, a]
-                        + day_obj(a, Ta, vehicle_rets[a])
-                        + day_obj(b, Tb, vehicle_rets[b])
-                    )
-                    new = (
-                        base[i, b]
-                        + pens[i, b]
-                        + day_obj(a, Ta - times[i, a], Ra_new)
-                        + day_obj(b, Tb + times[i, b], max(vehicle_rets[b], rets[i, b]))
-                    )
-                    delta = new - old
-                    trial = vehicle_times.copy()
-                    trial[a] -= times[i, a]
-                    trial[b] += times[i, b]
-                    new_max = float(trial.max())
-                    if (
-                        delta < best_delta - 1e-9
-                        or (
-                            abs(delta - best_delta) <= 1e-9
-                            and new_max < best_new_max - 1e-9
-                        )
-                    ):
-                        best_delta = delta
-                        best_new_max = new_max
-                        best_b = b
-                if best_b >= 0:
-                    vehicle_times[a] -= times[i, a]
-                    vehicle_times[best_b] += times[i, best_b]
-                    assign[i] = best_b
-                    vehicle_rets[a] = max_ret(a)
-                    vehicle_rets[best_b] = max_ret(best_b)
-                    improved = True
-            if not improved:
-                break
-
-    # Optional swap local search (useful for the final best solution).
-    if config.assignment_swaps and m > 1:
-        for _ in range(max(1, config.assignment_passes)):
-            improved = False
-            for i in range(m):
-                a = int(assign[i])
-                for j in range(i + 1, m):
-                    b = int(assign[j])
-                    if a == b or not (fits[i, b] and fits[j, a]):
-                        continue
-                    Ta = vehicle_times[a]
-                    Tb = vehicle_times[b]
-                    old = (
-                        base[i, a]
-                        + base[j, b]
-                        + pens[i, a]
-                        + pens[j, b]
-                        + day_obj(a, Ta, vehicle_rets[a])
-                        + day_obj(b, Tb, vehicle_rets[b])
-                    )
-                    new = (
-                        base[i, b]
-                        + base[j, a]
-                        + pens[i, b]
-                        + pens[j, a]
-                        + day_obj(a, Ta - times[i, a] + times[j, a],
-                                  max_ret(a, exclude=(i,), add=j))
-                        + day_obj(b, Tb - times[j, b] + times[i, b],
-                                  max_ret(b, exclude=(j,), add=i))
-                    )
-                    if new < old - 1e-9:
-                        vehicle_times[a] += times[j, a] - times[i, a]
-                        vehicle_times[b] += times[i, b] - times[j, b]
-                        assign[i], assign[j] = b, a
-                        vehicle_rets[a] = max_ret(a)
-                        vehicle_rets[b] = max_ret(b)
-                        improved = True
-                        a = b
-            if not improved:
-                break
+    # Greedy construction (equal-cost ties go to the less-loaded vehicle),
+    # then move and swap local search on the assignment.  Each vehicle-day
+    # is scored as overtime/night premium + daily-window penalty
+    # (cost.day_metrics).  Runs in compiled code (src/kernels.py).
+    p = data.params
+    night_from = p.night_from_min
+    last_by = p.last_delivery_min
+    day_end = p.day_end_min
+    assign = assign_kernel(
+        _f64(times), _f64(base), _f64(pens), np.ascontiguousarray(fits), _f64(rets),
+        np.asarray(order, dtype=np.int64),
+        _f64([v.wage_per_h / 60.0 for v in data.vehicles]),
+        float(shift_min),
+        night_from is not None, float(night_from or 0.0),
+        float(max(0.0, p.overtime_multiplier - 1.0)),
+        float(max(0.0, float(p.night_multiplier) - 1.0)) if night_from is not None else 0.0,
+        last_by is not None, float(last_by or 0.0),
+        day_end is not None, float(day_end or 0.0),
+        float(weights.per_minute_late_delivery), float(weights.per_minute_past_day_end),
+        float(shift_w),
+        bool(config.assignment_refine), bool(config.assignment_swaps),
+        int(config.assignment_passes),
+    )
 
     # Trip order inside each vehicle-day: keep the decoded order, but run the
     # trip with the longest return leg last (earliest possible last delivery).
