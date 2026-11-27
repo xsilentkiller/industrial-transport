@@ -1,0 +1,8 @@
+4 instance(s), methods ['current', 'B_discrete'], seeds [1, 2, 3], budget 20000: 24 runs (0 already done)
+[1/24] current    road_tune_7001   seed 1: 1,358.17 EUR (obj 1,358.17)  169.18 s
+[2/24] B_discrete road_tune_7001   seed 1: 1,384.60 EUR (obj 1,384.60)  180.9 s
+[3/24] current    road_tune_7001   seed 2: 1,422.06 EUR (obj 1,422.06)  183.66 s
+[4/24] current    road_tune_7001   seed 3: 1,363.99 EUR (obj 1,363.99)  184.35 s
+[5/24] current    road_tune_7002   seed 1: 1,448.72 EUR (obj 1,448.72)  187.84 s
+[6/24] B_discrete road_tune_7001   seed 3: 1,392.84 EUR (obj 1,392.84)  190.36 s
+[7/24] B_discrete road_tune_7001   seed 2: 1,419.31 EUR (obj 1,419.33)  194.55 s
