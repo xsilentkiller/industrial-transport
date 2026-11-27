@@ -1,10 +1,10 @@
 ﻿section,key,value
-Real cost,Fuel,134.16 EUR
-Real cost,Maintenance,109.75 EUR
-Real cost,Wages (base rate),904.90 EUR
-Real cost,Overtime premium,376.90 EUR
+Real cost,Fuel,117.90 EUR
+Real cost,Maintenance,96.99 EUR
+Real cost,Wages (base rate),871.25 EUR
+Real cost,Overtime premium,343.25 EUR
 Real cost,Night premium,0.00 EUR
-Real cost,Total real cost,"1,525.72 EUR"
+Real cost,Total real cost,"1,429.38 EUR"
 Penalty,Fewer than min customers per trip (soft),0.00
 Penalty,More than max customers per trip (soft),0.00
 Penalty,10 % volume reserve used (90-100 % full) (soft),0.00
@@ -12,31 +12,31 @@ Penalty,Last delivery after the deadline (hard),0.00
 Penalty,Back at the depot after day end (hard),0.00
 Penalty,Minutes over the shift (weight 0 by default) (hard),0.00
 Penalty,Total penalty,"0.00 (soft 0.00, hard 0.00)"
-Search,Objective (real cost + penalty),"1,525.72"
+Search,Objective (real cost + penalty),"1,429.38"
 Solution,Feasible,yes
-Solution,Trips,17
-Solution,Distance,856.6 km
-Solution,Working time,68.01 h
-Solution,Overtime,28.01 h
-Solution,Vehicle-day overtime cost,376.90 EUR
+Solution,Trips,15
+Solution,Distance,777.6 km
+Solution,Working time,65.63 h
+Solution,Overtime,25.63 h
+Solution,Vehicle-day overtime cost,343.25 EUR
 Solution,Total weight,"5,265.2 kg"
 Solution,Total volume,123.98 m3
-Solution,Method,trip-2opt
+Solution,Method,split-soft
 Daily window,Rule,"start 08:00, overtime 2x after 8 h, last delivery by None, back by 24:00"
-Daily window,Longest vehicle-day,15.87 h
-Daily window,Unavoidable overtime,28.01 h
+Daily window,Longest vehicle-day,15.99 h
+Daily window,Unavoidable overtime,25.63 h
 Daily window,Avoidable overtime,0.00 h
-Daily window,Vehicle 1,"08:00-17:19, last delivery 16:59"
-Daily window,Vehicle 2,"08:00-21:14, last delivery 20:52"
-Daily window,Vehicle 3,"08:00-23:52, last delivery 23:21"
-Daily window,Vehicle 4,"08:00-23:08, last delivery 22:38"
-Daily window,Vehicle 5,"08:00-22:27, last delivery 22:06"
-Search,Runtime,9.2 s
-Search,Decoder evaluations,"1,924"
-Search,Best feasible cost,"1,525.72 EUR"
+Daily window,Vehicle 1,"08:00-16:25, last delivery 16:08"
+Daily window,Vehicle 2,"08:00-20:23, last delivery 20:00"
+Daily window,Vehicle 3,"08:00-23:59, last delivery 23:28"
+Daily window,Vehicle 4,"08:00-23:52, last delivery 23:29"
+Daily window,Vehicle 5,"08:00-20:58, last delivery 20:34"
+Search,Runtime,77.0 s
+Search,Decoder evaluations,"17,878"
+Search,Best feasible cost,"1,429.38 EUR"
 Search,Final check_solution,no errors
-Config,Swarm size,20
+Config,Swarm size,30
 Config,Iterations,300
 Config,Seed,42
 Config,Local search,"every 1 iterations, budget 40"
-Config,Final local search budget,120
+Config,Final local search budget,150

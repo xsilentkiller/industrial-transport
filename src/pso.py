@@ -36,7 +36,7 @@ class PSOConfig:
     # Defaults set by hand after the tuning in experiments/tune.py
     # (tuning/main/): swarm 40, patience 20, local search every 1st
     # iteration, at most 300 iterations and 600 s.
-    swarm_size: int = 20
+    swarm_size: int = 30
     iterations: int = 300
     inertia: float = 0.72
     c1: float = 1.49
@@ -47,7 +47,7 @@ class PSOConfig:
     local_search_interval: int = 1
     local_search_budget: int = 40
     local_search_neighbors: int = 8
-    final_local_search_budget: int = 120
+    final_local_search_budget: int = 150
 
     reinit_interval: int = 30
     reinit_fraction: float = 0.10

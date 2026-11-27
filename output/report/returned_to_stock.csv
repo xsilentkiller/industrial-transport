@@ -1,4 +1,4 @@
 ﻿vehicle,trip,stop,arrive,leave,order_id,address,district,items,weight_kg,volume_m3,status
-2 VW Caddy Cargo SWB,1,16,11:36,11:41,175,"Károly körút 3c, 1075 Budapest, Hungary",7,Dining Chair,14.243,0.2284,Refused
-5 MAN TGL 12.190 box,1,10,10:13,10:18,106,"Ady Endre út 92, 1215 Budapest, Hungary",21,"Wall Cabinet, Bar Stool",14.366,0.3724,Refused
-5 MAN TGL 12.190 box,3,20,18:58,19:04,152,"Váci utca 7, 1052 Budapest, Hungary",5,"Counter Stool, Footstool",12.247,0.3506,Refused
+2 VW Caddy Cargo SWB,2,4,14:00,14:05,246,"Galagonya utca 4, 1036 Budapest, Hungary",3,Storage Ottoman,4.491,0.0566,Refused
+5 MAN TGL 12.190 box,1,8,10:38,10:45,15,"Veres Péter út 114, 1165 Budapest, Hungary",16,"Dining Chair, Coffee Table",23.587,0.5674,Refused
+5 MAN TGL 12.190 box,2,23,18:59,19:05,83,"Csiki-hegyek utca 8, 1118 Budapest, Hungary",11,End Table,6.985,0.0666,Refused
