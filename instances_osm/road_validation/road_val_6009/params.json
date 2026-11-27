@@ -1,0 +1,26 @@
+{
+  "currency": "EUR",
+  "distance_unit": "km",
+  "time_unit": "min",
+  "depot_id": 0,
+  "num_customers": 250,
+  "shift_hours": 8,
+  "overtime_multiplier": 2.0,
+  "day_start": "08:00",
+  "hard_day_end": "24:00",
+  "fuel_price_per_l": 1.6,
+  "packing_mode": 1,
+  "required_free_volume_ratio": 0.1,
+  "volume_overflow_eur_per_m3": 100.0,
+  "min_customers_per_trip": 10,
+  "max_customers_per_trip": 50,
+  "allow_multiple_trips_per_vehicle": true,
+  "must_return_to_depot": true,
+  "loading_counts_as_work_time": true,
+  "distance_source": "road",
+  "instance": {
+    "name": "road_val_6009",
+    "seed": 6009,
+    "generator": "experiments/make_road_instances.py"
+  }
+}

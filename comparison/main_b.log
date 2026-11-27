@@ -1,0 +1,137 @@
+21 instance(s), methods ['current', 'B_discrete', 'C_cluster'], seeds [1, 2, 3, 4, 5], budget 20000: 405 runs (270 already done)
+[1/135] B_discrete data/osm         seed 5: 1,456.30 EUR (obj 1,456.30)  178.52 s
+[2/135] B_discrete data/osm         seed 1: 1,460.95 EUR (obj 1,460.95)  183.05 s
+[3/135] B_discrete data/osm         seed 3: 1,455.28 EUR (obj 1,456.79)  186.32 s
+[4/135] B_discrete data/osm         seed 4: 1,476.33 EUR (obj 1,476.33)  189.06 s
+[5/135] B_discrete data/osm         seed 2: 1,492.24 EUR (obj 1,492.39)  189.27 s
+[6/135] B_discrete road_val_6001    seed 2: 1,476.65 EUR (obj 1,476.65)  195.27 s
+[7/135] B_discrete road_val_6001    seed 1: 1,475.49 EUR (obj 1,475.49)  196.58 s
+[8/135] B_discrete road_val_6001    seed 5: 1,452.24 EUR (obj 1,452.58)  178.23 s
+[9/135] B_discrete road_val_6001    seed 4: 1,427.79 EUR (obj 1,427.79)  188.59 s
+[10/135] B_discrete road_val_6001    seed 3: 1,467.58 EUR (obj 1,467.58)  195.15 s
+[11/135] B_discrete road_val_6002    seed 2: 1,440.94 EUR (obj 1,440.94)  190.53 s
+[12/135] B_discrete road_val_6002    seed 3: 1,421.42 EUR (obj 1,421.42)  184.9 s
+[13/135] B_discrete road_val_6002    seed 1: 1,478.40 EUR (obj 1,478.87)  193.29 s
+[14/135] B_discrete road_val_6002    seed 4: 1,443.39 EUR (obj 1,443.39)  190.54 s
+[15/135] B_discrete road_val_6003    seed 3: 1,385.53 EUR (obj 1,385.53)  169.45 s
+[16/135] B_discrete road_val_6002    seed 5: 1,438.22 EUR (obj 1,438.25)  186.8 s
+[17/135] B_discrete road_val_6004    seed 1: 1,452.92 EUR (obj 1,453.11)  166.07 s
+[18/135] B_discrete road_val_6003    seed 2: 1,395.32 EUR (obj 1,395.32)  184.17 s
+[19/135] B_discrete road_val_6003    seed 1: 1,385.08 EUR (obj 1,385.08)  188.15 s
+[20/135] B_discrete road_val_6003    seed 4: 1,396.06 EUR (obj 1,396.06)  184.01 s
+[21/135] B_discrete road_val_6003    seed 5: 1,393.19 EUR (obj 1,393.19)  189.65 s
+[22/135] B_discrete road_val_6004    seed 2: 1,447.05 EUR (obj 1,447.05)  157.35 s
+[23/135] B_discrete road_val_6004    seed 3: 1,443.01 EUR (obj 1,443.58)  155.84 s
+[24/135] B_discrete road_val_6004    seed 5: 1,452.97 EUR (obj 1,453.04)  153.43 s
+[25/135] B_discrete road_val_6004    seed 4: 1,442.66 EUR (obj 1,442.73)  164.22 s
+[26/135] B_discrete road_val_6005    seed 2: 1,419.55 EUR (obj 1,419.55)  154.67 s
+[27/135] B_discrete road_val_6005    seed 1: 1,410.33 EUR (obj 1,410.33)  159.98 s
+[28/135] B_discrete road_val_6005    seed 3: 1,389.72 EUR (obj 1,389.72)  148.17 s
+[29/135] B_discrete road_val_6006    seed 3: 1,390.65 EUR (obj 1,390.65)  151.41 s
+[30/135] B_discrete road_val_6005    seed 4: 1,415.85 EUR (obj 1,415.85)  179.48 s
+[31/135] B_discrete road_val_6005    seed 5: 1,379.45 EUR (obj 1,379.45)  181.71 s
+[32/135] B_discrete road_val_6006    seed 2: 1,396.57 EUR (obj 1,396.57)  174.48 s
+[33/135] B_discrete road_val_6006    seed 1: 1,433.86 EUR (obj 1,433.86)  190.95 s
+[34/135] B_discrete road_val_6006    seed 5: 1,444.38 EUR (obj 1,447.63)  199.97 s
+[35/135] B_discrete road_val_6006    seed 4: 1,430.11 EUR (obj 1,430.11)  201.3 s
+[36/135] B_discrete road_val_6007    seed 1: 1,463.19 EUR (obj 1,463.41)  185.96 s
+[37/135] B_discrete road_val_6007    seed 2: 1,461.03 EUR (obj 1,461.03)  177.54 s
+[38/135] B_discrete road_val_6007    seed 3: 1,463.85 EUR (obj 1,463.85)  178.03 s
+[39/135] B_discrete road_val_6007    seed 5: 1,450.61 EUR (obj 1,450.61)  174.22 s
+[40/135] B_discrete road_val_6007    seed 4: 1,443.97 EUR (obj 1,443.97)  191.79 s
+[41/135] B_discrete road_val_6008    seed 1: 1,413.84 EUR (obj 1,413.84)  170.81 s
+[42/135] B_discrete road_val_6008    seed 2: 1,511.75 EUR (obj 1,512.56)  204.85 s
+[43/135] B_discrete road_val_6009    seed 2: 1,368.39 EUR (obj 1,368.39)  144.09 s
+[44/135] B_discrete road_val_6008    seed 3: 1,504.44 EUR (obj 1,504.44)  179.61 s
+[45/135] B_discrete road_val_6009    seed 3: 1,366.40 EUR (obj 1,366.40)  154.56 s
+[46/135] B_discrete road_val_6008    seed 4: 1,519.69 EUR (obj 1,520.50)  184.22 s
+[47/135] B_discrete road_val_6009    seed 1: 1,374.58 EUR (obj 1,374.58)  182.2 s
+[48/135] B_discrete road_val_6008    seed 5: 1,505.88 EUR (obj 1,505.88)  201.37 s
+[49/135] B_discrete road_val_6009    seed 4: 1,385.95 EUR (obj 1,385.95)  162.19 s
+[50/135] B_discrete road_val_6009    seed 5: 1,363.53 EUR (obj 1,363.53)  155.2 s
+[51/135] B_discrete road_val_6010    seed 3: 1,431.20 EUR (obj 1,431.20)  163.0 s
+[52/135] B_discrete road_val_6010    seed 1: 1,468.48 EUR (obj 1,468.48)  176.85 s
+[53/135] B_discrete road_val_6010    seed 4: 1,433.16 EUR (obj 1,433.16)  164.1 s
+[54/135] B_discrete road_val_6010    seed 5: 1,457.07 EUR (obj 1,457.07)  167.04 s
+[55/135] B_discrete road_val_6010    seed 2: 1,461.91 EUR (obj 1,462.05)  193.38 s
+[56/135] B_discrete road_val_6011    seed 1: 1,425.54 EUR (obj 1,426.00)  176.15 s
+[57/135] B_discrete road_val_6011    seed 2: 1,434.14 EUR (obj 1,434.14)  186.29 s
+[58/135] B_discrete road_val_6011    seed 3: 1,434.32 EUR (obj 1,434.32)  171.0 s
+[59/135] B_discrete road_val_6012    seed 2: 1,476.67 EUR (obj 1,477.48)  165.74 s
+[60/135] B_discrete road_val_6011    seed 5: 1,460.20 EUR (obj 1,460.20)  184.79 s
+[61/135] B_discrete road_val_6011    seed 4: 1,435.47 EUR (obj 1,435.47)  199.72 s
+[62/135] B_discrete road_val_6012    seed 1: 1,471.29 EUR (obj 1,471.29)  198.7 s
+[63/135] B_discrete road_val_6012    seed 3: 1,469.77 EUR (obj 1,469.77)  173.0 s
+[64/135] B_discrete road_val_6012    seed 4: 1,485.73 EUR (obj 1,485.73)  170.05 s
+[65/135] B_discrete road_val_6012    seed 5: 1,488.13 EUR (obj 1,488.13)  195.18 s
+[66/135] B_discrete road_val_6013    seed 1: 1,445.52 EUR (obj 1,445.56)  190.3 s
+[67/135] B_discrete road_val_6013    seed 3: 1,451.70 EUR (obj 1,451.81)  183.83 s
+[68/135] B_discrete road_val_6013    seed 2: 1,438.66 EUR (obj 1,440.45)  194.75 s
+[69/135] B_discrete road_val_6013    seed 5: 1,420.63 EUR (obj 1,420.63)  167.23 s
+[70/135] B_discrete road_val_6013    seed 4: 1,419.22 EUR (obj 1,419.22)  174.23 s
+[71/135] B_discrete road_val_6014    seed 1: 1,431.48 EUR (obj 1,431.48)  190.58 s
+[72/135] B_discrete road_val_6014    seed 2: 1,396.84 EUR (obj 1,396.84)  197.45 s
+[73/135] B_discrete road_val_6015    seed 1: 1,397.46 EUR (obj 1,397.46)  171.65 s
+[74/135] B_discrete road_val_6015    seed 2: 1,390.66 EUR (obj 1,390.66)  171.05 s
+[75/135] B_discrete road_val_6014    seed 3: 1,431.44 EUR (obj 1,431.44)  191.68 s
+[76/135] B_discrete road_val_6014    seed 5: 1,451.86 EUR (obj 1,451.94)  189.84 s
+[77/135] B_discrete road_val_6014    seed 4: 1,444.63 EUR (obj 1,444.68)  201.39 s
+[78/135] B_discrete road_val_6015    seed 3: 1,386.55 EUR (obj 1,387.66)  154.01 s
+[79/135] B_discrete road_val_6016    seed 1: 1,408.15 EUR (obj 1,408.21)  163.6 s
+[80/135] B_discrete road_val_6015    seed 5: 1,376.14 EUR (obj 1,376.14)  182.3 s
+[81/135] B_discrete road_val_6016    seed 2: 1,420.56 EUR (obj 1,420.87)  173.17 s
+[82/135] B_discrete road_val_6015    seed 4: 1,389.42 EUR (obj 1,390.87)  186.79 s
+[83/135] B_discrete road_val_6016    seed 3: 1,427.18 EUR (obj 1,427.73)  193.13 s
+[84/135] B_discrete road_val_6016    seed 4: 1,416.97 EUR (obj 1,416.97)  197.74 s
+[85/135] B_discrete road_val_6016    seed 5: 1,400.04 EUR (obj 1,400.62)  180.52 s
+[86/135] B_discrete road_val_6017    seed 1: 1,401.26 EUR (obj 1,401.26)  175.01 s
+[87/135] B_discrete road_val_6017    seed 4: 1,413.73 EUR (obj 1,413.83)  169.63 s
+[88/135] B_discrete road_val_6017    seed 5: 1,387.37 EUR (obj 1,387.37)  151.07 s
+[89/135] B_discrete road_val_6017    seed 2: 1,375.70 EUR (obj 1,376.61)  187.76 s
+[90/135] B_discrete road_val_6017    seed 3: 1,422.01 EUR (obj 1,422.01)  187.34 s
+[91/135] B_discrete road_val_6018    seed 1: 1,442.90 EUR (obj 1,442.90)  167.81 s
+[92/135] B_discrete road_val_6018    seed 2: 1,458.52 EUR (obj 1,458.52)  159.2 s
+[93/135] B_discrete road_val_6018    seed 3: 1,425.10 EUR (obj 1,425.31)  178.87 s
+[94/135] B_discrete road_val_6018    seed 4: 1,415.24 EUR (obj 1,415.45)  179.43 s
+[95/135] B_discrete road_val_6018    seed 5: 1,431.65 EUR (obj 1,431.65)  177.48 s
+[96/135] B_discrete road_val_6019    seed 2: 1,454.25 EUR (obj 1,454.25)  183.41 s
+[97/135] B_discrete road_val_6019    seed 1: 1,453.10 EUR (obj 1,454.15)  185.85 s
+[98/135] B_discrete road_val_6019    seed 3: 1,464.90 EUR (obj 1,465.15)  190.7 s
+[99/135] B_discrete road_val_6019    seed 4: 1,481.71 EUR (obj 1,481.71)  159.06 s
+[100/135] B_discrete road_val_6019    seed 5: 1,437.91 EUR (obj 1,437.91)  167.04 s
+[101/135] B_discrete road_val_6020    seed 1: 1,490.78 EUR (obj 1,490.78)  187.37 s
+[102/135] B_discrete road_val_6020    seed 2: 1,461.17 EUR (obj 1,461.17)  187.71 s
+[103/135] B_discrete road_val_6020    seed 4: 1,452.69 EUR (obj 1,452.69)  189.33 s
+[104/135] B_discrete road_val_6020    seed 3: 1,448.12 EUR (obj 1,448.12)  193.67 s
+[105/135] B_discrete road_val_6020    seed 5: 1,455.21 EUR (obj 1,455.21)  196.58 s
+[106/135] B_discrete data/osm         seed 1 frozen: 1,512.30 EUR (obj 1,512.30)  205.93 s
+[107/135] B_discrete data/osm         seed 2 frozen: 1,543.75 EUR (obj 1,545.08)  205.09 s
+[108/135] B_discrete data/osm         seed 3 frozen: 1,540.32 EUR (obj 1,540.32)  205.53 s
+[109/135] B_discrete data/osm         seed 4 frozen: 1,538.18 EUR (obj 1,543.15)  203.97 s
+[110/135] B_discrete data/osm         seed 5 frozen: 1,534.67 EUR (obj 1,538.79)  205.45 s
+[111/135] B_discrete road_val_6001    seed 1 frozen: 1,509.63 EUR (obj 1,509.63)  203.54 s
+[112/135] B_discrete road_val_6001    seed 2 frozen: 1,510.16 EUR (obj 1,510.16)  205.06 s
+[113/135] B_discrete road_val_6001    seed 3 frozen: 1,457.60 EUR (obj 1,457.60)  203.64 s
+[114/135] B_discrete road_val_6001    seed 4 frozen: 1,508.20 EUR (obj 1,508.20)  204.21 s
+[115/135] B_discrete road_val_6001    seed 5 frozen: 1,505.14 EUR (obj 1,506.06)  201.52 s
+[116/135] B_discrete road_val_6002    seed 1 frozen: 1,513.97 EUR (obj 1,516.50)  203.29 s
+[117/135] B_discrete road_val_6002    seed 2 frozen: 1,513.97 EUR (obj 1,516.50)  204.19 s
+[118/135] B_discrete road_val_6002    seed 3 frozen: 1,513.97 EUR (obj 1,516.50)  203.56 s
+[119/135] B_discrete road_val_6002    seed 4 frozen: 1,513.97 EUR (obj 1,516.50)  203.35 s
+[120/135] B_discrete road_val_6002    seed 5 frozen: 1,513.97 EUR (obj 1,516.50)  203.89 s
+[121/135] B_discrete road_val_6003    seed 1 frozen: 1,410.51 EUR (obj 1,410.51)  205.4 s
+[122/135] B_discrete road_val_6003    seed 2 frozen: 1,413.40 EUR (obj 1,413.40)  205.98 s
+[123/135] B_discrete road_val_6003    seed 3 frozen: 1,410.26 EUR (obj 1,410.26)  205.66 s
+[124/135] B_discrete road_val_6003    seed 4 frozen: 1,415.98 EUR (obj 1,415.98)  205.0 s
+[125/135] B_discrete road_val_6003    seed 5 frozen: 1,405.76 EUR (obj 1,405.76)  205.92 s
+[126/135] B_discrete road_val_6004    seed 1 frozen: 1,528.75 EUR (obj 1,528.75)  203.44 s
+[127/135] B_discrete road_val_6004    seed 2 frozen: 1,526.09 EUR (obj 1,526.09)  204.42 s
+[128/135] B_discrete road_val_6004    seed 3 frozen: 1,526.31 EUR (obj 1,526.31)  205.34 s
+[129/135] B_discrete road_val_6004    seed 4 frozen: 1,534.01 EUR (obj 1,534.01)  202.19 s
+[130/135] B_discrete road_val_6004    seed 5 frozen: 1,531.56 EUR (obj 1,531.56)  202.79 s
+[131/135] B_discrete road_val_6005    seed 2 frozen: 1,460.27 EUR (obj 1,460.27)  198.3 s
+[132/135] B_discrete road_val_6005    seed 1 frozen: 1,476.10 EUR (obj 1,476.39)  199.86 s
+[133/135] B_discrete road_val_6005    seed 3 frozen: 1,460.26 EUR (obj 1,464.82)  188.13 s
+[134/135] B_discrete road_val_6005    seed 4 frozen: 1,468.08 EUR (obj 1,468.08)  166.56 s
+[135/135] B_discrete road_val_6005    seed 5 frozen: 1,463.65 EUR (obj 1,463.65)  119.67 s
+Saved comparison\main\report.html

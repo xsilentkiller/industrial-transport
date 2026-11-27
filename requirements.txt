@@ -2,5 +2,7 @@ numpy>=1.24
 matplotlib>=3.7
 # compiles the solver's inner loops (Split DP, assignment, 2-opt): ~18x faster
 numba>=0.61
+# Wilcoxon tests in experiments/tune.py and experiments/compare_methods.py
+scipy>=1.11
 # optional: only experiments/osm_from_geofabrik.py (OSM road extract from Geofabrik)
 # osmium>=4.0
