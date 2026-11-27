@@ -1,0 +1,32 @@
+Tuning on 4 instance(s): road_tune_7001, road_tune_7002, road_tune_7003, road_tune_7004
+1 combinations, 1 round(s), seeds per round [5], workers 7
+Results: tuning\check_s20_p40_i200
+
+Round 1/1: 1 combination(s) x 4 instance(s) x seeds [1, 2, 3, 4, 5] = 20 runs (0 already done)
+[1/20] s20_p40_ls5_i200             road_tune_7002   seed 1   1,509.12 EUR  80 it (early stop)  509 s
+[2/20] s20_p40_ls5_i200             road_tune_7001   seed 1   1,382.42 EUR  145 it (early stop)  799 s
+[3/20] s20_p40_ls5_i200             road_tune_7001   seed 3   1,428.97 EUR  155 it (early stop)  854 s
+[4/20] s20_p40_ls5_i200             road_tune_7001   seed 4   1,408.40 EUR  180 it (early stop)  1017 s
+[5/20] s20_p40_ls5_i200             road_tune_7001   seed 2   1,446.22 EUR  180 it (early stop)  1041 s
+[6/20] s20_p40_ls5_i200             road_tune_7002   seed 3   1,496.38 EUR  95 it (early stop)  549 s
+[7/20] s20_p40_ls5_i200             road_tune_7001   seed 5   1,430.99 EUR  200 it  1103 s
+[8/20] s20_p40_ls5_i200             road_tune_7002   seed 2   1,496.04 EUR  200 it  1129 s
+[9/20] s20_p40_ls5_i200             road_tune_7002   seed 5   1,525.17 EUR  55 it (early stop)  339 s
+[10/20] s20_p40_ls5_i200             road_tune_7003   seed 1   1,557.51 EUR  130 it (early stop)  866 s
+[11/20] s20_p40_ls5_i200             road_tune_7003   seed 5   1,579.71 EUR  115 it (early stop)  756 s
+[12/20] s20_p40_ls5_i200             road_tune_7002   seed 4   1,450.15 EUR  200 it  1225 s
+[13/20] s20_p40_ls5_i200             road_tune_7004   seed 1   1,457.26 EUR  140 it (early stop)  902 s
+[14/20] s20_p40_ls5_i200             road_tune_7003   seed 4   1,484.45 EUR  170 it (early stop)  1069 s
+[15/20] s20_p40_ls5_i200             road_tune_7003   seed 3   1,479.28 EUR  175 it (early stop)  1174 s
+[16/20] s20_p40_ls5_i200             road_tune_7004   seed 2   1,515.56 EUR  55 it (early stop)  352 s
+[17/20] s20_p40_ls5_i200             road_tune_7003   seed 2   1,465.77 EUR  200 it  1197 s
+[18/20] s20_p40_ls5_i200             road_tune_7004   seed 5   1,524.22 EUR  45 it (early stop)  217 s
+[19/20] s20_p40_ls5_i200             road_tune_7004   seed 3   1,410.68 EUR  200 it  765 s
+[20/20] s20_p40_ls5_i200             road_tune_7004   seed 4   1,450.64 EUR  190 it (early stop)  654 s
+
+  #  combination                  status         runs  median gap %   max gap %   iters   time s
+  1  s20_p40_ls5_i200             finalist         20          3.24        8.05     162      860
+
+Best tested combination: s20_p40_ls5_i200  (median gap 3.24 %, suggested iterations 165)
+Note: 5 winner run(s) hit the 200-iteration cap without stopping early; consider a higher --max-iterations.
+Saved tuning\check_s20_p40_i200\runs.csv, tuning\check_s20_p40_i200\summary.csv, tuning\check_s20_p40_i200\tuning.png, tuning\check_s20_p40_i200\best_config.json

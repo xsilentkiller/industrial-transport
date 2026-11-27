@@ -1,0 +1,34 @@
+{
+  "final": true,
+  "winner": "s20_p40_ls5_i200",
+  "baseline_ranks_higher": false,
+  "swarm_size": 20,
+  "patience": 40,
+  "local_search_interval": 5,
+  "max_iterations": 200,
+  "suggested_iterations": 165,
+  "median_iterations_used": 162.5,
+  "runs_hitting_iteration_cap": 5,
+  "median_gap_pct": 3.2449152675215753,
+  "max_gap_pct": 8.048584626966937,
+  "median_runtime_s": 859.8517477499845,
+  "baseline": null,
+  "baseline_median_gap_pct": null,
+  "baseline_median_runtime_s": null,
+  "wilcoxon_p_vs_baseline": null,
+  "instances": [
+    "road_tune_7001",
+    "road_tune_7002",
+    "road_tune_7003",
+    "road_tune_7004"
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "runs": 20,
+  "time_limit_s": 0.0
+}

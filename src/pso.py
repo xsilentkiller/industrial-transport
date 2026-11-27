@@ -32,8 +32,11 @@ from .decoder import (
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
 class PSOConfig:
-    swarm_size: int = 20
-    iterations: int = 60
+    # Defaults set by hand after the tuning in experiments/tune.py
+    # (tuning/main/): swarm 30, patience 20, local search every 5th
+    # iteration, at most 300 iterations and 600 s.
+    swarm_size: int = 30
+    iterations: int = 300
     inertia: float = 0.72
     c1: float = 1.49
     c2: float = 1.49
@@ -67,7 +70,13 @@ class PSOConfig:
     diversity_threshold: float = 0.0
     diversity_restart_fraction: float = 0.3
 
-    max_seconds: float = 0.0
+    # Time limit for the PSO loop in seconds (0 = off).  The final polish
+    # still runs after it.
+    max_seconds: float = 600.0
+    # Early stopping: end the run after this many iterations without a new
+    # global best (0 = off, always run all `iterations`).  The final polish
+    # still runs.  `iterations` then acts as an upper limit.
+    patience: int = 20
     verbose: bool = True
     log_interval: int = 10
 
@@ -84,6 +93,8 @@ class PSOResult:
     runtime_sec: float
     evaluations: int
     seed_solution: Solution | None
+    iterations_run: int = 0        # iterations actually performed
+    stopped_early: bool = False    # True when patience ended the run
 
 
 @dataclass
@@ -653,6 +664,8 @@ class MemeticPSO:
 
         n = self.n
         cfg = self.config
+        iterations_run = 0
+        stopped_early = False
 
         for iteration in range(1, cfg.iterations + 1):
             self._iteration = iteration
@@ -721,8 +734,18 @@ class MemeticPSO:
                 self.restarts += 1
 
             self._record(iteration)
+            iterations_run = iteration
             if cfg.verbose and (iteration % cfg.log_interval == 0 or iteration == 1):
                 self._log(iteration)
+
+            # Early stopping (patience): no new global best for too long.
+            if cfg.patience > 0 and iteration - self._last_improvement >= cfg.patience:
+                stopped_early = True
+                if cfg.verbose:
+                    if iteration % cfg.log_interval != 0:
+                        self._log(iteration)
+                    print(f"early stop: no improvement for {cfg.patience} iterations")
+                break
 
         # Final polish: full decoder on the best tour, then a longer local
         # search on the best feasible tour.
@@ -747,6 +770,8 @@ class MemeticPSO:
             runtime_sec=runtime,
             evaluations=self.evaluations,
             seed_solution=self.seed_solution,
+            iterations_run=iterations_run,
+            stopped_early=stopped_early,
         )
 
     def _final_polish(self) -> None:

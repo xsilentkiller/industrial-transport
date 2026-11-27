@@ -1,0 +1,2 @@
+rank,combo,status,runs,infeasible_runs,median_gap,mean_gap,min_gap,max_gap,median_runtime,median_iterations,early_stops
+1,s20_p40_ls5_i200,finalist,20,0,3.2449,3.3407,0.0,8.0486,859.8517,162.5,15
