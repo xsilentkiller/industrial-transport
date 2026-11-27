@@ -32,8 +32,11 @@ from .decoder import (
 # ---------------------------------------------------------------------------
 @dataclass(frozen=True)
 class PSOConfig:
-    swarm_size: int = 20
-    iterations: int = 60
+    # Defaults set by hand after the tuning in experiments/tune.py
+    # (tuning/main/): swarm 30, patience 20, local search every 5th
+    # iteration, at most 300 iterations and 600 s.
+    swarm_size: int = 30
+    iterations: int = 300
     inertia: float = 0.72
     c1: float = 1.49
     c2: float = 1.49
@@ -67,11 +70,13 @@ class PSOConfig:
     diversity_threshold: float = 0.0
     diversity_restart_fraction: float = 0.3
 
-    max_seconds: float = 0.0
+    # Time limit for the PSO loop in seconds (0 = off).  The final polish
+    # still runs after it.
+    max_seconds: float = 600.0
     # Early stopping: end the run after this many iterations without a new
     # global best (0 = off, always run all `iterations`).  The final polish
     # still runs.  `iterations` then acts as an upper limit.
-    patience: int = 0
+    patience: int = 20
     verbose: bool = True
     log_interval: int = 10
 

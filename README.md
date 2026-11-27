@@ -526,10 +526,13 @@ the trip-level polish runs after the last PSO iteration.
 Dataset: 250 customers, 5 vehicles, total demand **5,265.18 kg / 123.98 m³**,
 total loading + unloading service time **2,525.6 min (42.1 h)**.
 
-Default configuration (`python main.py`): swarm 20, 60 iterations, inertia
-0.72, `c1 = c2 = 1.49`, `v_max = 0.25`, local search every 5 iterations with
-budget 40, final local-search budget 120, seed 42; `polish_candidates` and
-`seeded_init` on.
+Default configuration (`python main.py`): swarm 30, at most 300 iterations,
+early stop after 20 iterations without improvement (`--patience 20`), time
+limit 600 s (`--time-limit 600`), inertia 0.72, `c1 = c2 = 1.49`,
+`v_max = 0.25`, local search every 5 iterations with budget 40, final
+local-search budget 120, seed 42; `polish_candidates` and `seeded_init` on.
+The tuning results that informed these values are in `tuning/main/`
+(`python -m experiments.tune`).
 
 Result on **`data/osm`** (our OSM road data, the default; the run in `output/`):
 
