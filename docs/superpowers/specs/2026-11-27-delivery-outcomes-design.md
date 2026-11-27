@@ -24,10 +24,9 @@ Confirmed by the user: not home 5 %, refused 2 %.
 ## Goals
 
 - Planned arrival time for every stop (the plan does not store it today).
-- One simulated day with outcomes, actual times and actual real cost next to
-  the planned ones.
-- Monte Carlo over many simulated days: expected failures, extra time and
-  cost, chance of a van finishing after 24:00.
+- One simulated day with an outcome for every stop.
+- Monte Carlo over many simulated days: expected number of attempted and
+  refused deliveries and of re-deliveries (with ranges).
 - Re-delivery list (not home → tomorrow) and returned-to-stock list
   (refused), as CSV files.
 - Everything reproducible from a seed; rebuildable with `--mode report`.
@@ -38,6 +37,9 @@ Confirmed by the user: not home 5 %, refused 2 %.
   planned real cost stays the benchmark number.
 - No same-day re-delivery and no re-planning during the day (option 3; later,
   together with rush orders).
+- No change to times or cost: a failed stop takes the same time as a
+  delivery (user's decision: "stop time will count as same as delivery
+  time"), and no extra depot time is added.  The dataset is not modified.
 - No invented customer names: customers are shown by order ID and address
   (the data has no names).
 - No change to the instructor's rules (16 h day 08:00–24:00, 2× overtime
@@ -86,29 +88,22 @@ otherwise delivered. Drawn with `numpy.random.default_rng(seed)`.
 
 | Outcome | Time at the stop | Item |
 |---|---|---|
-| Delivered | its unloading time | delivered |
-| Attempted (not home) | 5 min wait, no unloading | stays in the van |
-| Refused | 5 min, no unloading | stays in the van |
+| Delivered | its unloading time (as planned) | delivered |
+| Attempted (not home) | the same time as a delivery | stays in the van |
+| Refused | the same time as a delivery | stays in the van |
 
-Back at the depot after a trip, every failed item is unloaded using that
-order's loading time (handling time in the data) before the next trip is
-loaded. Times after a failure shift (earlier or later); the route itself does
-not change.
-
-### Actual real cost
-
-Same km (fuel, maintenance unchanged). Wages and the 2× overtime / night
-premiums are recomputed from each van's actual working minutes with the
-existing `day_metrics`. Reported: planned vs actual real cost and the
-difference; actual finish time per van; a warning if a van would end after
-24:00.
+Times are exactly the planned times for every outcome (user's decision), so
+the day's schedule and real cost do not change.  The failed items ride back
+to the depot and are listed as returned there when the trip ends (time of the
+return = the trip's planned end); no extra unloading time is added.  A failed
+item is never put on a later trip.
 
 ### Monte Carlo
 
 N simulated days (default 1,000; seeds derived from the base seed). Reported:
-mean and 5 %/95 % range of attempted, refused, extra minutes, actual real
-cost; share of days on which any van finishes after 24:00 (and the worst
-finish time).
+mean and 5 %/95 % range of attempted, refused and re-delivery counts; the
+share of days with at least one failed delivery per van; the orders most
+often affected are not reported (each stop has the same probability).
 
 ## Configuration
 
@@ -119,7 +114,6 @@ finish time).
 |---|---|---|
 | `p_not_home` | 0.05 | `--not-home` |
 | `p_refused` | 0.02 | `--refused` |
-| `attempt_min` | 5.0 | `--attempt-min` |
 | `seed` | 42 | `--sim-seed` |
 | `monte_carlo_days` | 1000 | `--sim-days` |
 | enabled | on | `--no-sim` switches it off |
@@ -127,12 +121,12 @@ finish time).
 ## Outputs
 
 `best_solution.json` gains `delivery_simulation`: config, per-stop records,
-per-vehicle actual day, depot returns, Monte Carlo summary.
+depot returns, Monte Carlo summary.
 
 `output/report/` gains:
 
-- `deliveries.csv`: one row per stop — vehicle, trip, stop, planned arrival,
-  actual arrival, order ID, address, district, items (names), kg, m³,
+- `deliveries.csv`: one row per stop — vehicle, trip, stop, arrival and
+  departure time, order ID, address, district, items (names), kg, m³,
   status.
 - `redelivery.csv`: not-home orders for tomorrow.
 - `returned_to_stock.csv`: refused orders.
@@ -140,8 +134,8 @@ per-vehicle actual day, depot returns, Monte Carlo summary.
 `report.html` gains a section **"Delivery records (simulated day)"**:
 
 - count cards: delivered / attempted (not home) / refused / re-deliveries
-  tomorrow; planned vs actual real cost;
-- Monte Carlo table (expected values and 5–95 % ranges, 24:00 risk);
+  tomorrow;
+- Monte Carlo table (expected counts and 5–95 % ranges);
 - the records table, sortable/filterable by status with a small inline
   script (works offline, no libraries), and a line per depot return.
 
@@ -151,19 +145,20 @@ Sketch:
 Delivery records — simulated day (seed 42, not home 5 %, refused 2 %)
   Delivered 233   Attempted (not home) 12   Refused 5   Re-deliveries tomorrow 12
   [All | Delivered | Attempted | Refused]   [search]
-  Van       Trip Stop Planned Actual Order Customer (address)          Items           kg   m³   Status
-  1 Caddy   1    1    08:52   08:52  #175  Tímár utca 1, 1036 (III.)   Dining Chair ×2 23.0 0.48 Delivered
+  Van       Trip Stop Arrive Leave Order Customer (address)          Items           kg   m³   Status
+  1 Caddy   1    1    08:52  09:01 #175  Tímár utca 1, 1036 (III.)   Dining Chair ×2 23.0 0.48 Delivered
   ...
-  Back at depot 11:24: unloaded #67 (Wardrobe) → re-delivery list
+  Back at depot 11:24: returned #67 (Wardrobe) → re-delivery list
 ```
 
 ## Testing
 
 - Planned stop times add up to each trip's `time_min` and to the vehicle's
   total; first stop / last return consistent with `day_schedule`.
-- p = 0 → every stop delivered, actual = planned times and cost exactly.
+- p = 0 → every stop delivered.
 - p_not_home = 1 → every stop attempted, nothing delivered, all orders on
-  the re-delivery list, depot unloading added.
+  the re-delivery list.
+- Times and real cost are identical for every outcome mix.
 - Same seed → same outcomes; different seed → different outcomes.
 - Capacity: a failed item is never added to a later trip's load.
 - Monte Carlo: deterministic for a seed; mean failure rate close to 7 % over

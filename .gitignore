@@ -7,3 +7,5 @@ instances/*
 !instances/road_manifest.json
 # OSM extract and routed address pool (rebuilt by experiments/build_road_pool.py)
 cache/
+# Resumable routing chunks of the pool build (the merged data/osm_pool/road_pool.npz is committed)
+data/osm_pool/parts/

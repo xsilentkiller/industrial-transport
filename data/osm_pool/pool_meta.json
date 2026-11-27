@@ -1,0 +1,44 @@
+{
+ "built": "2026-11-27",
+ "points": 1501,
+ "usable_places": 1497,
+ "excluded": {
+  "39": "snapped 586 m from the road",
+  "367": "snapped 155 m from the road",
+  "1263": "snapped 290 m from the road"
+ },
+ "max_snap_m": 150.0,
+ "max_round_trip_min": 180.0,
+ "osm_file": "cache\\budapest_osm.json",
+ "osm_raw_sha256": "d3283df7c5fbe34c3f45677391087f9cf1b3f7b1f5f70e13b90c461121fc63ba",
+ "osm_is_ga_extract": false,
+ "osm_extract_source": {
+  "query": "[out:json][timeout:90];way[highway][highway!~\"^(footway|path|cycleway|steps|pedestrian|construction|proposed|track|bridleway)$\"](47.36,18.91,47.64,19.26);(._;>;);out body;",
+  "bbox_wsen": [
+   18.91,
+   47.36,
+   19.26,
+   47.64
+  ],
+  "download": "Overpass, 4x4 bbox tiles merged by element id"
+ },
+ "graph_vertices": 230083,
+ "core_vertices": 223175,
+ "speed_assumptions_kmh": {
+  "motorway": 60,
+  "motorway_link": 40,
+  "trunk": 50,
+  "trunk_link": 40,
+  "primary": 40,
+  "primary_link": 30,
+  "secondary": 35,
+  "secondary_link": 30,
+  "tertiary": 30,
+  "tertiary_link": 25,
+  "residential": 25,
+  "unclassified": 25,
+  "living_street": 15,
+  "service": 15
+ },
+ "pool_sha256": "7b33fc3d6feb81fd3ee5e67d7563f1cfa88d83f8d29ce98fb2bbe8c5e42dcee9"
+}

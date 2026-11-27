@@ -1,0 +1,37 @@
+using cached extract cache\budapest_osm.json
+OSM sha256 d3283df7c5fb (differs from the GA team's extract)
+reading the road graph...
+graph: 230083 vertices, drivable core around the depot: 223175
+routing 1501 points: 0/31 chunks cached, 31 to do with 7 worker(s)
+  chunk 1/31 done, 0.9 min, ~27.6 min left
+  chunk 2/31 done, 0.9 min, ~13.5 min left
+  chunk 3/31 done, 0.9 min, ~8.7 min left
+  chunk 4/31 done, 0.9 min, ~6.3 min left
+  chunk 5/31 done, 0.9 min, ~4.9 min left
+  chunk 6/31 done, 0.9 min, ~3.9 min left
+  chunk 7/31 done, 0.9 min, ~3.2 min left
+  chunk 8/31 done, 1.8 min, ~5.1 min left
+  chunk 9/31 done, 1.8 min, ~4.4 min left
+  chunk 10/31 done, 1.8 min, ~3.7 min left
+  chunk 11/31 done, 1.8 min, ~3.3 min left
+  chunk 12/31 done, 1.8 min, ~2.8 min left
+  chunk 13/31 done, 1.8 min, ~2.5 min left
+  chunk 14/31 done, 1.8 min, ~2.2 min left
+  chunk 15/31 done, 2.7 min, ~2.8 min left
+  chunk 16/31 done, 2.7 min, ~2.5 min left
+  chunk 17/31 done, 2.7 min, ~2.2 min left
+  chunk 18/31 done, 2.7 min, ~1.9 min left
+  chunk 19/31 done, 2.7 min, ~1.7 min left
+  chunk 20/31 done, 2.7 min, ~1.5 min left
+  chunk 21/31 done, 2.7 min, ~1.3 min left
+  chunk 22/31 done, 3.5 min, ~1.4 min left
+  chunk 23/31 done, 3.5 min, ~1.2 min left
+  chunk 24/31 done, 3.5 min, ~1.0 min left
+  chunk 25/31 done, 3.5 min, ~0.8 min left
+  chunk 26/31 done, 3.5 min, ~0.7 min left
+  chunk 27/31 done, 3.5 min, ~0.5 min left
+  chunk 28/31 done, 3.5 min, ~0.4 min left
+  chunk 29/31 done, 3.5 min, ~0.2 min left
+  chunk 30/31 done, 3.8 min, ~0.1 min left
+  chunk 31/31 done, 3.8 min, ~0.0 min left
+saved data\osm_pool\road_pool.npz: 1497 usable places, 3 excluded

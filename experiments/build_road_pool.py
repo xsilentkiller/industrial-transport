@@ -15,9 +15,9 @@ Pipeline (every step is cached under ``cache/`` and skipped when done):
    core vertex.
 5. Time-minimising Dijkstra (src/road_geometry.paths_from) from every
    point to every point, in parallel, saved in resumable chunks.
-6. ``cache/road_pool/road_pool.npz`` (index 0 = depot, i = pool row i-1):
+6. ``data/osm_pool/road_pool.npz`` (index 0 = depot, i = pool row i-1):
    place_id, vertex, snap_m, usable, km (directed), min (directed);
-   ``cache/road_pool/pool_meta.json``: OSM checksum, query, graph size,
+   ``data/osm_pool/pool_meta.json``: OSM checksum, query, graph size,
    excluded places and why.
 
 A place is *usable* if it snapped within --max-snap-m and its depot round
@@ -50,7 +50,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DATASET = ROOT / "data" / "base"
 GA_META = ROOT / "data" / "road_ga" / "road_meta.json"
 OSM_FILE = ROOT / "cache" / "budapest_osm.json"
-POOL_DIR = ROOT / "cache" / "road_pool"
+# Committed to git so colleagues do not have to route the pool themselves.
+POOL_DIR = ROOT / "data" / "osm_pool"
 CHUNK = 50
 EARTH_M = 6371000.0
 

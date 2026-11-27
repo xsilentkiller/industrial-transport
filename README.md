@@ -58,6 +58,8 @@ Useful options:
 python main.py --mode pso --swarm 30 --iterations 120 --seed 42
 python main.py --mode pso --time-limit 60
 python main.py --mode pso --no-geometry           # map with straight lines (no OSM extract needed)
+python main.py --not-home 0.05 --refused 0.02 --sim-seed 42 --sim-days 1000   # delivery outcomes (defaults)
+python main.py --no-sim                           # skip the delivery-outcome simulation
 python main.py --mode report --input output/best_solution.json --report-dir somewhere/report
 ```
 
@@ -114,8 +116,11 @@ exactly (1,472.0597 EUR, `tests/test_road.py`).
 taken from OpenStreetMap, **all 1500 addresses** of
 `data/base/places_pool.csv` are routed once (a "pool"), and a dataset is a
 slice of that pool (no re-routing). Same road classes, speeds, one-way rules
-and time-shortest Dijkstra as the GA team. Everything heavy is cached in
-`cache/` (not committed).
+and time-shortest Dijkstra as the GA team. **The routed pool is committed in
+`data/osm_pool/`** (1,501 × 1,501 directed km and minutes, 30 MB; see its
+README), so a new road dataset needs neither the map file nor the routing:
+`python -m experiments.make_osm_dataset --out data/osm_s9 --seed 9`. Only the
+raw map and the OSM extract are cached in `cache/` (not committed).
 
 ```powershell
 # once: the Geofabrik Hungary map file (316 MB) and pyosmium
@@ -145,7 +150,7 @@ Checks (Geofabrik extract of 25 Nov 2026, all in `tests/test_road.py::TestOsmDat
 * a PSO solution draws 269/269 legs exactly on the cost matrix.
 
 Pool places that snap more than 150 m from a road or have a depot round trip
-over 180 min are excluded (3 of 1500; listed in `cache/road_pool/pool_meta.json`).
+over 180 min are excluded (3 of 1500; listed in `data/osm_pool/pool_meta.json`).
 `make_osm_dataset` refuses to finish (no `params.json`) unless every order fits
 the largest vehicle and every customer can be served alone inside the day.
 
@@ -302,6 +307,35 @@ delivery and finish time, and overtime against the unavoidable minimum
 
 ---
 
+## Delivery outcomes (simulated)
+
+The optimiser plans the day at 08:00 and cannot know which customers will not
+be home or will refuse the furniture. After the PSO, `main.py` runs
+`src/delivery_sim.py` on the chosen plan (`--no-sim` switches it off):
+
+* **Stop times:** the planned arrival and departure of every stop (each trip
+  loads at the depot, drives stop to stop, unloads each order, drives back);
+  they add up exactly to the trip times of the plan.
+* **Simulated day:** every stop is independently **not home** with
+  probability 5 % (status *attempted*) or **refused** with 2 % (status
+  *refused*), otherwise *delivered* (`--not-home`, `--refused`, seed
+  `--sim-seed`). The driver keeps a failed item, finishes the trip and brings
+  it back to the depot. A failed stop takes the same time as a delivery, so
+  **times and real cost do not change**: the benchmark number is the plan's.
+  Not-home orders go to a re-delivery list (tomorrow), refused orders back to
+  stock.
+* **Monte Carlo:** 1,000 simulated days (`--sim-days`): expected attempted,
+  refused and failed deliveries per day with 5–95 % ranges, and for each van
+  the share of days on which it brings at least one item back.
+
+Results are stored in `best_solution.json` (`delivery_simulation`), so
+`--mode report` rebuilds them. The report gains a section **Delivery records
+(simulated day)** with count cards, the Monte Carlo table, every delivery
+(van, trip, stop, arrival, departure, order, address, district, items, kg,
+m³, status; filter by status and search) and the items returned to the depot,
+plus `deliveries.csv`, `redelivery.csv` and `returned_to_stock.csv`.
+Customers are shown by order ID and address (the data has no names).
+
 ## Benchmark instances
 
 `python -m experiments.make_instances` builds the 100 test instances
@@ -439,10 +473,11 @@ src/decoder.py                   random keys, greedy cut, Split DP, assignment, 
 src/pso.py                       PSO, construction heuristics, local search, polish
 src/kernels.py                   Numba-compiled inner loops: Split DP, assignment, 2-opt
 src/report.py                    HTML/PNG/CSV report, street/satellite route map
+src/delivery_sim.py              stop times, simulated delivery outcomes, Monte Carlo
 src/road_geometry.py             OSM road graph and Dijkstra (shared by pool and map)
 
 experiments/osm_from_geofabrik.py   Geofabrik map file -> cache/budapest_osm.json
-experiments/build_road_pool.py      route depot + 1500 pool addresses -> cache/road_pool/
+experiments/build_road_pool.py      route depot + 1500 pool addresses -> data/osm_pool/
 experiments/make_osm_dataset.py     slice the pool -> data/osm/ (feasibility gate)
 experiments/road_geometry.py        street geometry of a solution (route_geometry.json)
 experiments/import_road.py          one-time import of the GA road file -> data/road_ga/
@@ -454,6 +489,7 @@ tests/test_day_window.py         working day, 2x overtime, day-end rules
 tests/test_decoder.py            first-20, full-250, Split/coverage/timing
 tests/test_convergence.py        PSO fixes (fast 2-opt, scoring, seeding)
 tests/test_kernels.py            Numba kernels give exactly the original results
+tests/test_delivery_sim.py       stop times, outcomes, Monte Carlo, main.py integration
 tests/test_report.py             report files, tables, charts
 tests/test_instances.py          straight-line instance generator
 tests/test_road.py               road mode, GA cross-check, OSM data, OSM pipeline
@@ -461,6 +497,7 @@ tests/test_road.py               road mode, GA cross-check, OSM data, OSM pipeli
 data/base/                       straight-line instance + source data (places pool, furniture, generators)
 data/road_ga/                    same instance on the GA team's road matrices (shared reference)
 data/osm/                        same instance on our own OSM road matrices (main.py default)
+data/osm_pool/                   routed OSM pool: 1501 x 1501 km + minutes (depot + 1500 addresses)
 instances/                       benchmark manifests (instance folders rebuilt from seeds)
 instances_osm/                   4 road instances on data/osm
 cache/                           OSM map file, extract and routed pool (local, not committed)
