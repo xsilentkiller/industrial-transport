@@ -861,6 +861,195 @@ def _plot_route_map(
 # ---------------------------------------------------------------------------
 # HTML
 # ---------------------------------------------------------------------------
+DELIVERY_COLUMNS = [
+    "vehicle", "trip", "stop", "arrive", "leave", "order_id", "address",
+    "district", "items", "weight_kg", "volume_m3", "status",
+]
+DELIVERY_FILES = ("deliveries.csv", "redelivery.csv", "returned_to_stock.csv")
+_STATUS_LABEL = {
+    "delivered": "Delivered",
+    "attempted": "Attempted (not home)",
+    "refused": "Refused",
+}
+
+_DELIVERY_CSS = """
+<style>
+#deliveries .filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 10px; }
+#deliveries .filters button { border: 1px solid var(--line); background: #fff; color: var(--ink);
+  border-radius: 999px; padding: 5px 12px; font-size: 13px; cursor: pointer; }
+#deliveries .filters button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+#deliveries .filters input { border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px;
+  font-size: 13px; min-width: 240px; }
+#deliveries .status { display: inline-block; border-radius: 999px; padding: 1px 9px; font-size: 12px; font-weight: 600; }
+#deliveries .status.delivered { background: #f1f5f9; color: #334155; }
+#deliveries .status.attempted { background: #fef3c7; color: #92400e; }
+#deliveries .status.refused { background: #fee2e2; color: #991b1b; }
+#deliveries .returns { margin: 12px 0 0; padding-left: 18px; }
+#deliveries td.wrap { white-space: normal; min-width: 260px; }
+</style>
+"""
+
+_DELIVERY_JS = """
+<script>
+(function () {
+  var box = document.getElementById("deliveries");
+  if (!box) return;
+  var rows = box.querySelectorAll("tbody tr[data-status]");
+  var buttons = box.querySelectorAll(".filters button");
+  var search = box.querySelector(".filters input");
+  var status = "all";
+  function apply() {
+    var q = (search.value || "").toLowerCase();
+    var shown = 0;
+    rows.forEach(function (tr) {
+      var ok = (status === "all" || tr.getAttribute("data-status") === status)
+        && (!q || tr.textContent.toLowerCase().indexOf(q) >= 0);
+      tr.style.display = ok ? "" : "none";
+      if (ok) shown++;
+    });
+    box.querySelector(".shown").textContent = shown + " of " + rows.length + " deliveries shown";
+  }
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () {
+      buttons.forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      status = b.getAttribute("data-filter");
+      apply();
+    });
+  });
+  search.addEventListener("input", apply);
+  apply();
+})();
+</script>
+"""
+
+
+def _delivery_csv_rows(records: list[dict]) -> list[dict]:
+    """Rows for deliveries.csv / redelivery.csv / returned_to_stock.csv."""
+    out = []
+    for r in records:
+        row = {c: r.get(c, "") for c in DELIVERY_COLUMNS}
+        row["weight_kg"] = round(_num(r.get("weight_kg")), 3)
+        row["volume_m3"] = round(_num(r.get("volume_m3")), 4)
+        row["status"] = _STATUS_LABEL.get(r.get("status"), r.get("status"))
+        out.append(row)
+    return out
+
+
+def _delivery_section(sim: dict | None) -> str:
+    """HTML section with the simulated day's delivery records ("" if none)."""
+    if not sim:
+        return ""
+    esc = html.escape
+    cfg = sim.get("config", {})
+    counts = sim.get("counts", {})
+    mc = sim.get("monte_carlo") or {}
+    cards = [
+        ("Delivered", counts.get("delivered", 0), "good"),
+        ("Attempted (not home)", counts.get("attempted", 0), "warn"),
+        ("Refused", counts.get("refused", 0), "bad"),
+        ("Re-deliveries tomorrow", len(sim.get("redelivery", [])), ""),
+    ]
+    card_html = "".join(
+        f"<div class='card {cls}'><div class='label'>{esc(label)}</div>"
+        f"<div class='value'>{int(value):,}</div></div>"
+        for label, value, cls in cards
+    )
+
+    mc_html = ""
+    if mc.get("days"):
+        def spread(key: str) -> list[object]:
+            d = mc.get(key, {})
+            return [f"{_num(d.get('mean')):.1f}", f"{_num(d.get('p5')):.0f}",
+                    f"{_num(d.get('p95')):.0f}"]
+
+        mc_rows = [
+            ["Attempted (not home)", *spread("attempted")],
+            ["Refused", *spread("refused")],
+            ["All failed deliveries", *spread("failed")],
+        ]
+        shares = mc.get("share_days_with_failure_by_vehicle") or []
+        share_text = ", ".join(
+            f"vehicle {k + 1}: {100 * _num(x):.0f} %" for k, x in enumerate(shares)
+        )
+        mc_html = (
+            f"<h3>Risk over {int(mc['days']):,} simulated days (Monte Carlo)</h3>"
+            + _html_table(["Per day", "Expected", "5 %", "95 %"], mc_rows, {1, 2, 3})
+            + "<p class='caption'>Share of days on which a van brings at least one "
+            f"item back to the depot: {esc(share_text)}.</p>"
+        )
+
+    headers = ["Van", "Trip", "Stop", "Arrive", "Leave", "Order", "Customer (address)",
+               "District", "Items", "kg", "m³", "Status"]
+    css_by_col = {1: "num", 2: "num", 9: "num", 10: "num", 6: "wrap", 8: "wrap"}
+    body = []
+    for r in sim.get("records", []):
+        st = str(r.get("status", ""))
+        order = r.get("order_id", "")
+        cells = [
+            esc(str(r.get("vehicle", ""))), str(r.get("trip", "")), str(r.get("stop", "")),
+            esc(str(r.get("arrive", ""))), esc(str(r.get("leave", ""))),
+            esc(f"#{order}" if order != "" else ""),
+            esc(str(r.get("address", ""))), esc(str(r.get("district", ""))),
+            esc(str(r.get("items", ""))),
+            f"{_num(r.get('weight_kg')):.1f}", f"{_num(r.get('volume_m3')):.2f}",
+            f"<span class='status {esc(st)}'>{esc(_STATUS_LABEL.get(st, st))}</span>",
+        ]
+        tds = "".join(
+            f"<td class='{css_by_col.get(i, '')}'>{c}</td>" for i, c in enumerate(cells)
+        )
+        body.append(f'<tr data-status="{esc(st)}">{tds}</tr>')
+    table = (
+        "<div class='table-wrap'><table><thead><tr>"
+        + "".join(f"<th>{esc(h)}</th>" for h in headers)
+        + "</tr></thead><tbody>" + "".join(body) + "</tbody></table></div>"
+    )
+
+    returns = []
+    for ret in sim.get("depot_returns", []):
+        orders = "; ".join(
+            f"#{o.get('order_id')} {o.get('items', '')} "
+            f"({'re-delivery list' if o.get('status') == 'attempted' else 'returned to stock'})"
+            for o in ret.get("orders", [])
+        )
+        returns.append(
+            f"<li>{esc(str(ret.get('vehicle', '')))}, trip {ret.get('trip')}, back at the "
+            f"depot {esc(str(ret.get('time', '')))}: {esc(orders)}</li>"
+        )
+    returns_html = (
+        "<h3>Items back at the depot</h3><ul class='returns note'>" + "".join(returns) + "</ul>"
+        if returns else ""
+    )
+
+    total = int(counts.get("total", 0))
+    caption = (
+        f"Simulated day (seed {cfg.get('seed')}): each stop is independently not home "
+        f"with probability {100 * _num(cfg.get('p_not_home')):.0f} % and refused with "
+        f"{100 * _num(cfg.get('p_refused')):.0f} %. A failed stop takes the same time as "
+        "a delivery and the item rides back to the depot, so times and real cost are the "
+        "planned ones. Not-home orders go to redelivery.csv (tomorrow), refused orders to "
+        "returned_to_stock.csv. Customers are shown by order and address."
+    )
+    filters = (
+        "<div class='filters'>"
+        "<button type='button' class='on' data-filter='all'>All</button>"
+        "<button type='button' data-filter='delivered'>Delivered</button>"
+        "<button type='button' data-filter='attempted'>Attempted</button>"
+        "<button type='button' data-filter='refused'>Refused</button>"
+        "<input type='search' placeholder='Search address, order, item, van'>"
+        f"<span class='note shown'>{total} deliveries</span></div>"
+    )
+    return (
+        _DELIVERY_CSS
+        + '<section id="deliveries"><h2>Delivery records (simulated day)</h2>'
+        + f"<p class='caption'>{esc(caption)}</p>"
+        + f"<div class='cards'>{card_html}</div>"
+        + mc_html
+        + "<h3>Every delivery</h3>" + filters + table + returns_html
+        + "</section>" + _DELIVERY_JS
+    )
+
+
 def _build_html(
     payload: dict,
     solution: dict,
@@ -1040,6 +1229,8 @@ def _build_html(
         "trip_capacity.png",
         "route_map.png",
     ]
+    if payload.get("delivery_simulation"):
+        file_links.extend(DELIVERY_FILES)
     links_html = "".join(
         f"<a href='{html.escape(name)}'>{html.escape(name)}</a>"
         for name in file_links
@@ -1053,6 +1244,7 @@ def _build_html(
             + "</ul></section>"
         )
 
+    delivery_html = _delivery_section(payload.get("delivery_simulation"))
     dataset = html.escape(str(payload.get("dataset", "dataset")))
     generated = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -1213,6 +1405,8 @@ tbody tr:hover {{ background: #f8fafc; }}
   full cargo volume (above 90 % a fee of 100 EUR per m3 is charged and is
   included in the trip cost; 100 % is the hard limit).</p>
 </section>
+
+{delivery_html}
 
 {errors_html}
 
@@ -1385,6 +1579,16 @@ def generate_report(
             "feasible",
         ],
     )
+
+    # Delivery records of the simulated day (src/delivery_sim.py).  Files of
+    # an earlier run are removed so the folder never mixes two runs.
+    sim = payload.get("delivery_simulation")
+    for name, key in zip(DELIVERY_FILES, ("records", "redelivery", "returned_to_stock")):
+        path = out_dir / name
+        if sim:
+            _write_csv(path, _delivery_csv_rows(sim.get(key, [])), DELIVERY_COLUMNS)
+        else:
+            path.unlink(missing_ok=True)
 
     charts = {
         "convergence": out_dir / "convergence.png",

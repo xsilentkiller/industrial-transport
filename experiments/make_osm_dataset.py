@@ -3,7 +3,8 @@
     python -m experiments.make_osm_dataset --out data/osm               # same 250 customers + orders as data/base/
     python -m experiments.make_osm_dataset --out data/osm_s9 --customers 250 --seed 9
 
-Needs ``cache/road_pool/road_pool.npz`` from experiments/build_road_pool.py.
+Needs ``data/osm_pool/road_pool.npz`` (committed; rebuilt by
+experiments/build_road_pool.py).
 Writes the same files as data/road_ga/ (so main.py, the report and
 experiments/road_geometry.py work unchanged):
 
@@ -37,7 +38,7 @@ from src.data_loader import load_problem
 ROOT = Path(__file__).resolve().parents[1]
 DATASET = ROOT / "data" / "base"
 ROAD = ROOT / "data" / "road_ga"
-POOL_DIR = ROOT / "cache" / "road_pool"
+POOL_DIR = ROOT / "data" / "osm_pool"
 
 
 def load_pool(pool_dir: Path) -> tuple[dict, dict]:

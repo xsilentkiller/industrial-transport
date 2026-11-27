@@ -29,6 +29,7 @@ import numpy as np
 from src.data_loader import ProblemData, load_problem
 from src.decoder import DecoderConfig, check_solution, decode_tour
 from src.pso import MemeticPSO, PSOConfig, nearest_neighbor_tour
+from src.delivery_sim import SimConfig, build_simulation
 from src.report import generate_report, load_payload
 from src.road_geometry import load_geometry
 
@@ -227,6 +228,16 @@ def run_pso(data: ProblemData, args: argparse.Namespace) -> None:
         "overtime_summary": chosen.overtime_summary(data),
         "history": result.history,
     }
+    if args.sim_config is not None:
+        sim = build_simulation(data, payload["best_solution"], args.dataset, args.sim_config)
+        payload["delivery_simulation"] = sim
+        c, mc = sim["counts"], sim["monte_carlo"]
+        print(
+            f"\nDelivery simulation (seed {args.sim_config.seed}): delivered {c['delivered']}, "
+            f"attempted {c['attempted']}, refused {c['refused']}; "
+            f"Monte Carlo {mc['days']} days: failed mean {mc['failed']['mean']:.1f} "
+            f"(5-95 %: {mc['failed']['p5']:.0f}-{mc['failed']['p95']:.0f})"
+        )
     path = out_dir / "best_solution.json"
     with path.open("w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2)
@@ -368,7 +379,24 @@ def main(argv: list[str] | None = None) -> int:
                         help="stop after this many iterations without improvement "
                              "(0 = off; --iterations is then an upper limit)")
     parser.add_argument("--log-interval", type=int, default=pso.log_interval)
+    # Delivery outcomes after the PSO (src/delivery_sim.py); never changes the plan.
+    sim = SimConfig()
+    parser.add_argument("--not-home", type=float, default=sim.p_not_home,
+                        help="chance a customer is not home (attempted, re-deliver tomorrow)")
+    parser.add_argument("--refused", type=float, default=sim.p_refused,
+                        help="chance a customer refuses the order (returned to stock)")
+    parser.add_argument("--sim-seed", type=int, default=sim.seed)
+    parser.add_argument("--sim-days", type=int, default=sim.monte_carlo_days,
+                        help="simulated days for the Monte Carlo risk estimate")
+    parser.add_argument("--no-sim", action="store_true",
+                        help="skip the delivery-outcome simulation")
     args = parser.parse_args(argv)
+    args.sim_config = None
+    if not args.no_sim:
+        try:
+            args.sim_config = SimConfig(args.not_home, args.refused, args.sim_seed, args.sim_days)
+        except ValueError as e:
+            parser.error(str(e))
 
     if args.mode == "tests":
         return run_tests()
