@@ -34,9 +34,9 @@ from .decoder import (
 @dataclass(frozen=True)
 class PSOConfig:
     # Defaults set by hand after the tuning in experiments/tune.py
-    # (tuning/main/): swarm 30, patience 20, local search every 5th
+    # (tuning/main/): swarm 40, patience 20, local search every 1st
     # iteration, at most 300 iterations and 600 s.
-    swarm_size: int = 30
+    swarm_size: int = 20
     iterations: int = 300
     inertia: float = 0.72
     c1: float = 1.49
@@ -44,7 +44,7 @@ class PSOConfig:
     v_max: float = 0.25
     seed: int = 42
 
-    local_search_interval: int = 5
+    local_search_interval: int = 1
     local_search_budget: int = 40
     local_search_neighbors: int = 8
     final_local_search_budget: int = 120
