@@ -99,6 +99,56 @@ def resolve_method(name: str):
     raise KeyError(f"unknown method {name!r}")
 
 
+def method_signature(name: str) -> str | None:
+    """The configuration a method name stands for (seed and budget left out).
+
+    Stored per comparison folder in methods.json, so a folder is never
+    resumed with runs of a method whose defaults have changed since.
+    None for names without a known config (they are not checked).
+    """
+    if name == "current":
+        from src.pso import PSOConfig
+
+        return repr(PSOConfig(seed=0, verbose=False, patience=0, max_seconds=0.0, iterations=10**7))
+    if name == "B_discrete":
+        from src.pso_discrete import DiscretePSOConfig
+
+        return repr(DiscretePSOConfig(seed=0, max_evaluations=0))
+    if name == "C_cluster":
+        from src.pso_cluster import ClusterPSOConfig
+
+        return repr(ClusterPSOConfig(seed=0, max_evaluations=0))
+    from experiments.b_variants import VARIANTS
+
+    if name in VARIANTS:
+        from src.pso_discrete import DiscretePSOConfig
+
+        return repr(DiscretePSOConfig(seed=0, max_evaluations=0, **VARIANTS[name]))
+    return None
+
+
+def check_signatures(folder: Path, methods: list[str], rows: list[dict]) -> None:
+    """Refuse to resume a folder whose runs were made with other configs."""
+    path = folder / "methods.json"
+    stored = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+    if stored is None and rows:
+        raise SystemExit(f"{folder} has runs but no methods.json, so their configs cannot be "
+                         f"checked; use a new --name")
+    stored = stored or {}
+    done_methods = {r["method"] for r in rows}
+    for m in methods:
+        sig = method_signature(m)
+        if sig is None:
+            continue
+        if m in stored and stored[m] != sig:
+            raise SystemExit(f"method {m!r} has a different config than the runs in {folder}; "
+                             f"use a new --name")
+        if m not in stored and m in done_methods:
+            raise SystemExit(f"{folder} has runs of {m!r} with an unknown config; use a new --name")
+        stored[m] = sig
+    path.write_text(json.dumps(stored, indent=1), encoding="utf-8")
+
+
 def run_key(method: str, instance: str, seed: int, freeze: bool) -> str:
     return f"{method}|{instance}|{seed}|{int(bool(freeze))}"
 
@@ -609,6 +659,7 @@ def main(argv: list[str] | None = None) -> Path:
 
     runs_path = folder / "runs.csv"
     curves_path = folder / "curves.json"
+    check_signatures(folder, args.methods, load_rows(runs_path))
     curves = json.loads(curves_path.read_text(encoding="utf-8")) if curves_path.exists() else {}
     done = {run_key(r["method"], r["instance"], int(r["seed"]), bool(int(r["freeze"])))
             for r in load_rows(runs_path)}

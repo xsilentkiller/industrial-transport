@@ -90,5 +90,36 @@ class TestCompareMethods(unittest.TestCase):
             cm.resolve_method("nope")
 
 
+    def test_methods_json_records_configs(self):
+        import json
+        sigs = json.loads((self.folder / "methods.json").read_text(encoding="utf-8"))
+        self.assertEqual(set(sigs), {"current", "C_cluster"})
+        self.assertEqual(sigs["current"], cm.method_signature("current"))
+        self.assertNotEqual(cm.method_signature("B_discrete"), cm.method_signature("B_original"))
+        self.assertIsNone(cm.method_signature("nope"))
+
+    def test_resume_refuses_changed_config(self):
+        import json
+        import shutil
+        folder = self.out / "t_changed"
+        shutil.copytree(self.folder, folder)
+        sigs = json.loads((folder / "methods.json").read_text(encoding="utf-8"))
+        sigs["current"] = "something else"
+        (folder / "methods.json").write_text(json.dumps(sigs), encoding="utf-8")
+        argv = [a if a != "t" else "t_changed" for a in self.argv]
+        with self.assertRaises(SystemExit) as ctx:
+            cm.main(argv)
+        self.assertIn("current", str(ctx.exception))
+
+    def test_resume_refuses_folder_without_methods_json(self):
+        import shutil
+        folder = self.out / "t_legacy"
+        shutil.copytree(self.folder, folder)
+        (folder / "methods.json").unlink()
+        argv = [a if a != "t" else "t_legacy" for a in self.argv]
+        with self.assertRaises(SystemExit):
+            cm.main(argv)
+
+
 if __name__ == "__main__":
     unittest.main()

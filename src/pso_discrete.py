@@ -58,6 +58,7 @@ the settings above (B 1448.0; current method 1430.3):
                                                    1443.8    -4.2   7/12
     2      restarts after 20 / 50 stale iters      1463.2   +15.2   2/12
                                                    1452.0    +4.0   6/12
+    2      ring k = 4 + restarts after 50          1448.4    +0.4   7/12
     3      c1 = c2 = 1.5 / 2.0                     1439.7    -8.2   6/12
                                                    1436.8   -11.2   8/12
     3      mutation_moves 1                        1436.6   -11.4   9/12
@@ -66,14 +67,22 @@ the settings above (B 1448.0; current method 1430.3):
                                                    1445.8    -2.2   8/12
     4      c 2, moves 1                            1432.7   -15.3   9/12
     4      c 3, moves 1                            1431.7   -16.3   7/12
+    4      c 2, moves 1, inertia 0.4               1441.9    -6.1   7/12
+    4      c 2, moves 1, inertia 0.4 -> 0.1        1443.4    -4.6   6/12
     4      c 2, moves 1, swarm 40                  1426.1   -21.9  10/12
 
 Diversity mechanisms (ring, restarts, high early inertia) did not help; more
 intensification (stronger pulls, single-move mutation, a larger swarm) did.
-Confirmed on fresh seeds 4-5 (comparison/tune_b_confirm): c 2 / moves 1 /
-swarm 40 beat the old settings by 13.4 EUR (6/8); over all 20 runs by
-18.5 EUR (16/20), 5.4 EUR (0.4 %) behind the current method, swarm share
-95 %.  Those are the defaults now.  The ring topology, inertia schedule and
+The 12 runs above also chose the winner, so its numbers there are
+optimistic (winner's curse).  On fresh seeds 4-5 only
+(comparison/tune_b_confirm, 8 runs), c 2 / moves 1 / swarm 40 beat the old
+settings by 13.4 EUR (6/8) but stayed 19.7 EUR (1.4 %) behind the current
+method (2/8 wins; old settings: 33.1 EUR, 0/8).  The ranking is noisy:
+there c 2 / moves 1 went from -15.3 to +17.2 EUR and c 3 / moves 1 (-15.1)
+was about as good as the winner.  Pooled over all 20 runs the winner is
+18.5 EUR better than the old settings (16/20) and 5.4 EUR (0.4 %) behind
+the current method, but that pool includes the selection runs.  Swarm
+share 95 %.  Those settings are the defaults now.  The ring topology, inertia schedule and
 restarts stay available as opt-in fields (off by default); the old settings
 are the preset ``B_original`` in experiments/b_variants.py.
 """
