@@ -42,6 +42,40 @@ inertia 0.2, c1 1.0, c2 1.0.  The swarm did the work there: of the total
 improvement over the best start tour, the loop found 46 / 46 / 99 / 69 EUR
 and the final polish 22 / 31 / 0 / 0 EUR.  C lies on the edge of the tested
 grid (strongest pull, weakest mutation); stronger pulls were not tried.
+
+Second tuning, 2026-11-28 (branch pso-b-swarm)
+----------------------------------------------
+Full budget (20,000 loop evaluations), road_tune_7001..7004, seeds 1-3, run
+with ``experiments.compare_methods`` (results in comparison/tune_b).  Mean
+objective in EUR over the 12 runs; "vs B" is the paired mean difference to
+the settings above (B 1448.0; current method 1430.3):
+
+    round  variant                                   mean     vs B   wins
+    1      ring topology, k = 1 / 2 / 4            1460.2   +12.3   4/12
+                                                   1449.6    +1.7   8/12
+                                                   1444.3    -3.6   7/12
+    2      inertia 0.6 -> 0.05 / 0.4 -> 0.1        1452.4    +4.4   6/12
+                                                   1443.8    -4.2   7/12
+    2      restarts after 20 / 50 stale iters      1463.2   +15.2   2/12
+                                                   1452.0    +4.0   6/12
+    3      c1 = c2 = 1.5 / 2.0                     1439.7    -8.2   6/12
+                                                   1436.8   -11.2   8/12
+    3      mutation_moves 1                        1436.6   -11.4   9/12
+    3      inertia 0.1                             1457.4    +9.4   5/12
+    3      swarm 10 / 40                           1462.5   +14.6   7/12
+                                                   1445.8    -2.2   8/12
+    4      c 2, moves 1                            1432.7   -15.3   9/12
+    4      c 3, moves 1                            1431.7   -16.3   7/12
+    4      c 2, moves 1, swarm 40                  1426.1   -21.9  10/12
+
+Diversity mechanisms (ring, restarts, high early inertia) did not help; more
+intensification (stronger pulls, single-move mutation, a larger swarm) did.
+Confirmed on fresh seeds 4-5 (comparison/tune_b_confirm): c 2 / moves 1 /
+swarm 40 beat the old settings by 13.4 EUR (6/8); over all 20 runs by
+18.5 EUR (16/20), 5.4 EUR (0.4 %) behind the current method, swarm share
+95 %.  Those are the defaults now.  The ring topology, inertia schedule and
+restarts stay available as opt-in fields (off by default); the old settings
+are the preset ``B_original`` in experiments/b_variants.py.
 """
 
 from __future__ import annotations
@@ -70,18 +104,18 @@ _EPS = 1e-9
 
 @dataclass(frozen=True)
 class DiscretePSOConfig:
-    swarm_size: int = 20
+    swarm_size: int = 40       # tuned 2026-11-28 (was 20)
     seed: int = 42
     max_evaluations: int = 20_000
     patience: int = 0          # iterations without improvement, 0 = off
     max_seconds: float = 0.0   # 0 = off
     freeze_swarm: bool = False
     verbose: bool = False
-    # inertia / c1 / c2: chosen on road_tune_7001..7004 (module docstring).
+    # inertia / c1 / c2 / mutation_moves: tuned on road_tune_7001..7004 (module docstring).
     inertia: float = 0.2       # chance per particle and step of k random swap/insert moves
-    c1: float = 1.0            # cognitive pull (toward pbest)
-    c2: float = 1.0            # social pull (toward gbest)
-    mutation_moves: int = 2
+    c1: float = 2.0            # cognitive pull (toward pbest); was 1.0
+    c2: float = 2.0            # social pull (toward gbest); was 1.0
+    mutation_moves: int = 1    # was 2
     final_local_search_budget: int = 150
     # Opt-in swarm mechanisms (defaults = the original B, bit for bit).
     topology: str = "global"   # "global": social guide = gbest; "ring": best pbest of i-k..i+k

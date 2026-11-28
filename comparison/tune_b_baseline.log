@@ -6,3 +6,21 @@
 [5/24] current    road_tune_7002   seed 1: 1,448.72 EUR (obj 1,448.72)  187.84 s
 [6/24] B_discrete road_tune_7001   seed 3: 1,392.84 EUR (obj 1,392.84)  190.36 s
 [7/24] B_discrete road_tune_7001   seed 2: 1,419.31 EUR (obj 1,419.33)  194.55 s
+[8/24] B_discrete road_tune_7002   seed 1: 1,512.21 EUR (obj 1,512.21)  185.52 s
+[9/24] current    road_tune_7002   seed 2: 1,420.54 EUR (obj 1,420.54)  199.7 s
+[10/24] current    road_tune_7002   seed 3: 1,448.65 EUR (obj 1,448.65)  200.31 s
+[11/24] B_discrete road_tune_7002   seed 2: 1,476.24 EUR (obj 1,476.24)  203.56 s
+[12/24] current    road_tune_7003   seed 1: 1,481.48 EUR (obj 1,481.48)  210.46 s
+[13/24] B_discrete road_tune_7002   seed 3: 1,490.63 EUR (obj 1,490.63)  218.86 s
+[14/24] B_discrete road_tune_7003   seed 1: 1,440.81 EUR (obj 1,440.81)  216.14 s
+[15/24] current    road_tune_7003   seed 2: 1,441.14 EUR (obj 1,441.14)  194.81 s
+[16/24] current    road_tune_7003   seed 3: 1,482.17 EUR (obj 1,482.17)  185.89 s
+[17/24] B_discrete road_tune_7003   seed 2: 1,464.90 EUR (obj 1,464.90)  209.78 s
+[18/24] B_discrete road_tune_7003   seed 3: 1,488.20 EUR (obj 1,489.48)  204.53 s
+[19/24] current    road_tune_7004   seed 2: 1,434.94 EUR (obj 1,434.94)  184.66 s
+[20/24] B_discrete road_tune_7004   seed 1: 1,428.92 EUR (obj 1,429.27)  192.83 s
+[21/24] current    road_tune_7004   seed 1: 1,405.52 EUR (obj 1,408.93)  200.96 s
+[22/24] B_discrete road_tune_7004   seed 2: 1,449.54 EUR (obj 1,449.54)  127.77 s
+[23/24] current    road_tune_7004   seed 3: 1,452.78 EUR (obj 1,452.78)  113.35 s
+[24/24] B_discrete road_tune_7004   seed 3: 1,425.85 EUR (obj 1,425.85)  105.79 s
+Saved comparison\tune_b_baseline\report.html

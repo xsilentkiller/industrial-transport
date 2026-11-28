@@ -1,0 +1,3 @@
+method,best_cost,errors,feasible_pct,mean_cost,median_cost,median_gap_pct,median_improvement,median_runtime_s,runs,share_final_polish_pct,share_local_search_pct,share_swarm_pct,worst_cost,worst_gap_pct
+current,1358.17,0,100.0,1430.01,1438.04,1.91,131.08,186.9,12,0.0,95.9,4.1,1482.17,4.7
+B_discrete,1384.6,0,100.0,1447.84,1445.17,2.72,106.48,193.7,12,4.8,0.0,95.2,1512.21,6.45

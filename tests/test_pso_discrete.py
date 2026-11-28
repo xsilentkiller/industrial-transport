@@ -229,8 +229,18 @@ class TestSwarmMechanisms(unittest.TestCase):
         cls.data = load_problem("data/osm")
         cls.cfg = replace(SMALL, max_evaluations=120, final_local_search_budget=10)
 
+    def test_tuned_defaults(self):
+        cfg = DiscretePSOConfig()
+        self.assertEqual((cfg.swarm_size, cfg.inertia, cfg.c1, cfg.c2, cfg.mutation_moves),
+                         (40, 0.2, 2.0, 2.0, 1))
+        self.assertEqual((cfg.topology, cfg.inertia_end, cfg.restart_after),
+                         ("global", None, 0))
+
     def test_default_fingerprint(self):
-        opt = DiscretePSO(self.data, SMALL)
+        # The original B (before the 2026-11-28 tuning) is still reproducible
+        # by pinning its coefficients.
+        original = replace(SMALL, c1=1.0, c2=1.0, mutation_moves=2)
+        opt = DiscretePSO(self.data, original)
         res = opt.run()
         self.assertEqual(res.best_score, 1510.8894215600003)
         self.assertEqual(res.evaluations, 300)
