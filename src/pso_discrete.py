@@ -83,6 +83,12 @@ class DiscretePSOConfig:
     c2: float = 1.0            # social pull (toward gbest)
     mutation_moves: int = 2
     final_local_search_budget: int = 150
+    # Opt-in swarm mechanisms (defaults = the original B, bit for bit).
+    topology: str = "global"   # "global": social guide = gbest; "ring": best pbest of i-k..i+k
+    neighbourhood: int = 2     # k, ring neighbours on each side
+    inertia_end: float | None = None  # None = constant inertia; else linear inertia -> inertia_end over the budget
+    restart_after: int = 0     # 0 = off; restart a particle whose pbest is stale for this many iterations
+    restart_moves: int = 20    # mutation moves applied to the copied pbest on a restart
 
 
 @dataclass
@@ -92,6 +98,7 @@ class _Particle:
     pbest_tour: list[int]
     pbest_score: float
     pbest_solution: Solution
+    last_improved: int = 0     # iteration of the last pbest improvement
 
 
 # ---------------------------------------------------------------------------
@@ -110,6 +117,16 @@ def mutate_tour(tour: list[int], rng: np.random.Generator, moves: int) -> list[i
         else:                    # insert: move the customer at i to position j
             out.insert(j, out.pop(i))
     return out
+
+
+def ring_neighbours(i: int, n: int, k: int) -> list[int]:
+    """Indices i-k..i+k on a ring of n particles, without duplicates."""
+    if n <= 0:
+        return []
+    k = max(0, int(k))
+    if 2 * k + 1 >= n:
+        return list(range(n))
+    return [(i + d) % n for d in range(-k, k + 1)]
 
 
 def relink_tour(tour: list[int], guide: list[int], rng: np.random.Generator) -> list[int]:
@@ -136,6 +153,8 @@ def relink_tour(tour: list[int], guide: list[int], rng: np.random.Generator) -> 
 class DiscretePSO:
     def __init__(self, data: ProblemData, cfg: DiscretePSOConfig = DiscretePSOConfig()) -> None:
         self.data = data
+        if cfg.topology not in ("global", "ring"):
+            raise ValueError(f"unknown topology {cfg.topology!r} (use 'global' or 'ring')")
         self.cfg = cfg
         self.config = cfg
         self.rng = np.random.default_rng(cfg.seed)
@@ -147,6 +166,7 @@ class DiscretePSO:
         self.evaluations = 0
         self.polish_evaluations = 0
         self.attraction_moves = 0
+        self.restarts = 0
         self.history: list[dict] = []
         self.credits = {"construction": 0.0, "swarm": 0.0, "local_search": 0.0, "final_polish": 0.0}
 
@@ -235,18 +255,56 @@ class DiscretePSO:
     # ------------------------------------------------------------------
     # Main loop
     # ------------------------------------------------------------------
-    def _step(self, p: _Particle) -> None:
+    def _inertia_now(self) -> float:
+        """Mutation probability now: constant, or linear over the loop budget."""
+        cfg = self.cfg
+        if cfg.inertia_end is None:
+            return cfg.inertia
+        budget = max(1, cfg.max_evaluations)
+        t = min(1.0, max(0.0, self.evaluations / budget))
+        return cfg.inertia + (cfg.inertia_end - cfg.inertia) * t
+
+    def _social_guide(self, idx: int) -> list[int]:
+        if self.cfg.topology == "global":
+            return self.gbest_tour
+        nb = ring_neighbours(idx, len(self.particles), self.cfg.neighbourhood)
+        best = min(nb, key=lambda j: self.particles[j].pbest_score)
+        return self.particles[best].pbest_tour
+
+    def _maybe_restart(self, idx: int, p: _Particle) -> bool:
+        """Restart a stale particle from a mutated copy of another particle's pbest."""
+        cfg = self.cfg
+        if cfg.restart_after <= 0 or cfg.freeze_swarm or len(self.particles) < 2:
+            return False
+        if self._iteration - p.last_improved < cfg.restart_after:
+            return False
+        if p.pbest_score <= self.gbest_score + _EPS:   # holds the global best: keep it
+            return False
+        others = [j for j in range(len(self.particles)) if j != idx]
+        src = self.particles[others[int(self.rng.integers(len(others)))]]
+        tour = mutate_tour(src.pbest_tour, self.rng, cfg.restart_moves)
+        score, sol = self._evaluate_tour(tour)
+        p.tour, p.score = tour, score
+        p.pbest_tour, p.pbest_score, p.pbest_solution = list(tour), score, sol
+        p.last_improved = self._iteration
+        self.restarts += 1
+        self._offer(sol, tour, "swarm")
+        return True
+
+    def _step(self, p: _Particle, idx: int = 0) -> None:
         cfg = self.cfg
         rng = self.rng
+        if self._maybe_restart(idx, p):
+            return
         tour = p.tour
-        if rng.random() < cfg.inertia:
+        if rng.random() < self._inertia_now():
             tour = mutate_tour(tour, rng, cfg.mutation_moves)
         if not cfg.freeze_swarm:
             if rng.random() < cfg.c1 * rng.random():
                 tour = relink_tour(tour, p.pbest_tour, rng)
                 self.attraction_moves += 1
             if rng.random() < cfg.c2 * rng.random():
-                tour = relink_tour(tour, self.gbest_tour, rng)
+                tour = relink_tour(tour, self._social_guide(idx), rng)
                 self.attraction_moves += 1
         p.tour = tour
         score, sol = self._evaluate_tour(tour)
@@ -255,6 +313,7 @@ class DiscretePSO:
             p.pbest_score = score
             p.pbest_tour = list(tour)
             p.pbest_solution = sol
+            p.last_improved = self._iteration
         self._offer(sol, tour, "swarm")
 
     def run(self) -> PSOResult:
@@ -270,8 +329,8 @@ class DiscretePSO:
         while self.evaluations < cfg.max_evaluations:
             iteration += 1
             self._iteration = iteration
-            for p in self.particles:
-                self._step(p)
+            for idx, p in enumerate(self.particles):
+                self._step(p, idx)
             self._record(iteration)
             iterations_run = iteration
             if cfg.verbose and (iteration == 1 or iteration % 10 == 0):

@@ -20,6 +20,7 @@ from src.pso_discrete import (
     DiscretePSOConfig,
     mutate_tour,
     relink_tour,
+    ring_neighbours,
 )
 
 N = 250
@@ -214,6 +215,109 @@ class TestDiscretePSOBehaviour(unittest.TestCase):
         _, res = self._run(cfg)
         self.assertTrue(res.stopped_early)
         self.assertEqual(res.iterations_run, 2)
+
+
+class TestSwarmMechanisms(unittest.TestCase):
+    """Opt-in ring topology, inertia schedule and restarts.
+
+    With every new field at its default, B must behave exactly as before
+    (fingerprint recorded on commit 3ad6c38 before the fields existed).
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = load_problem("data/osm")
+        cls.cfg = replace(SMALL, max_evaluations=120, final_local_search_budget=10)
+
+    def test_default_fingerprint(self):
+        opt = DiscretePSO(self.data, SMALL)
+        res = opt.run()
+        self.assertEqual(res.best_score, 1510.8894215600003)
+        self.assertEqual(res.evaluations, 300)
+        self.assertEqual(opt.attraction_moves, 317)
+        self.assertEqual(res.iterations_run, 49)
+        self.assertEqual(opt.restarts, 0)
+
+    def test_ring_neighbours(self):
+        self.assertEqual(ring_neighbours(0, 6, 2), [4, 5, 0, 1, 2])
+        self.assertEqual(sorted(ring_neighbours(1, 3, 5)), [0, 1, 2])
+        self.assertEqual(ring_neighbours(2, 6, 0), [2])
+        for i in range(7):
+            nb = ring_neighbours(i, 7, 3)
+            self.assertEqual(len(nb), len(set(nb)))
+
+    def test_ring_topology_run(self):
+        cfg = replace(self.cfg, topology="ring", neighbourhood=1)
+        opt_a, a = DiscretePSO(self.data, cfg), None
+        a = opt_a.run()
+        b = DiscretePSO(self.data, cfg).run()
+        self.assertEqual(a.best_score, b.best_score)
+        self.assertTrue(_is_permutation(_plan_tour(a.best_solution)))
+        self.assertEqual(check_solution(self.data, a.best_solution), [])
+        self.assertGreater(opt_a.attraction_moves, 0)
+        for p in opt_a.particles:
+            self.assertTrue(_is_permutation(p.tour))
+
+    def test_ring_wider_than_swarm(self):
+        res = DiscretePSO(self.data, replace(self.cfg, topology="ring", neighbourhood=10)).run()
+        self.assertTrue(_is_permutation(_plan_tour(res.best_solution)))
+
+    def test_inertia_schedule(self):
+        cfg = replace(self.cfg, inertia=0.6, inertia_end=0.1, max_evaluations=100)
+        opt = DiscretePSO(self.data, cfg)
+        for evals, want in ((0, 0.6), (50, 0.35), (100, 0.1), (130, 0.1)):
+            opt.evaluations = evals
+            self.assertAlmostEqual(opt._inertia_now(), want, places=9)
+        opt_const = DiscretePSO(self.data, replace(self.cfg, inertia=0.3))
+        opt_const.evaluations = 77
+        self.assertEqual(opt_const._inertia_now(), 0.3)
+
+    def test_inertia_schedule_run(self):
+        res = DiscretePSO(self.data, replace(self.cfg, inertia=0.6, inertia_end=0.05)).run()
+        self.assertEqual(check_solution(self.data, res.best_solution), [])
+
+    def test_restarts_happen_and_gbest_monotone(self):
+        cfg = replace(self.cfg, max_evaluations=200, restart_after=1, restart_moves=10)
+        opt = DiscretePSO(self.data, cfg)
+        res = opt.run()
+        self.assertGreater(opt.restarts, 0)
+        scores = [row["best_score"] for row in res.history]
+        self.assertTrue(all(b <= a + 1e-9 for a, b in zip(scores, scores[1:])))
+        for p in opt.particles:
+            self.assertTrue(_is_permutation(p.tour))
+            self.assertTrue(_is_permutation(p.pbest_tour))
+        self.assertTrue(_is_permutation(_plan_tour(res.best_solution)))
+        credits = res.history[-1]["credits"]
+        self.assertAlmostEqual(sum(credits.values()),
+                               res.history[0]["best_score"] - res.best_score, delta=1e-6)
+
+    def test_restart_never_touches_gbest_holder(self):
+        # Inside the loop the global best is always some particle's pbest,
+        # so a restart never threw the best plan away.
+        gaps = []
+
+        class Probe(DiscretePSO):
+            def _record(self, iteration):
+                if self.particles and iteration > 0:
+                    gaps.append(min(p.pbest_score for p in self.particles) - self.gbest_score)
+                super()._record(iteration)
+
+        cfg = replace(self.cfg, max_evaluations=200, restart_after=1, restart_moves=10)
+        opt = Probe(self.data, cfg)
+        opt.run()
+        self.assertGreater(opt.restarts, 0)
+        self.assertTrue(all(abs(g) < 1e-9 for g in gaps[:-1]), gaps)
+
+    def test_frozen_swarm_does_not_restart(self):
+        cfg = replace(self.cfg, freeze_swarm=True, restart_after=1)
+        opt = DiscretePSO(self.data, cfg)
+        opt.run()
+        self.assertEqual(opt.restarts, 0)
+        self.assertEqual(opt.attraction_moves, 0)
+
+    def test_unknown_topology_raises(self):
+        with self.assertRaises(ValueError):
+            DiscretePSO(self.data, replace(self.cfg, topology="star"))
 
 
 if __name__ == "__main__":
