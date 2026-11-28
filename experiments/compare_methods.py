@@ -86,6 +86,19 @@ def _run_c(data, seed, budget, freeze):
 METHODS = {"current": _run_current, "B_discrete": _run_b, "C_cluster": _run_c}
 
 
+def resolve_method(name: str):
+    """A built-in method, or a named Option B preset from experiments/b_variants.py."""
+    if name in METHODS:
+        return METHODS[name]
+    from functools import partial
+
+    from experiments.b_variants import VARIANTS, run_variant
+
+    if name in VARIANTS:
+        return partial(run_variant, name)
+    raise KeyError(f"unknown method {name!r}")
+
+
 def run_key(method: str, instance: str, seed: int, freeze: bool) -> str:
     return f"{method}|{instance}|{seed}|{int(bool(freeze))}"
 
@@ -101,7 +114,7 @@ def run_job(job: dict) -> tuple[dict, list]:
     t0 = perf_counter()
     try:
         data = load_problem(job["path"])
-        res, loop_evals = METHODS[job["method"]](data, job["seed"], job["budget"], job["freeze"])
+        res, loop_evals = resolve_method(job["method"])(data, job["seed"], job["budget"], job["freeze"])
         best = res.best_feasible_solution or res.best_solution
         credits = res.history[-1].get("credits", {})
         row.update(

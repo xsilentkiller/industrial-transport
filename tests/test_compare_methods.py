@@ -72,5 +72,23 @@ class TestCompareMethods(unittest.TestCase):
             cm.METHODS.pop("boom", None)
 
 
+    def _job(self, method):
+        return {"method": method, "instance": self.instances[0].name, "path": str(self.instances[0]),
+                "seed": 1, "freeze": False, "budget": 60}
+
+    def test_variant_method_runs(self):
+        from experiments.b_variants import VARIANTS
+        self.assertIn("B_ring", VARIANTS)
+        row, curve = cm.run_job(self._job("B_ring"))
+        self.assertEqual(row["error"], "")
+        self.assertTrue(curve)
+
+    def test_unknown_method_row_error(self):
+        row, _ = cm.run_job(self._job("nope"))
+        self.assertIn("KeyError", row["error"])
+        with self.assertRaises(KeyError):
+            cm.resolve_method("nope")
+
+
 if __name__ == "__main__":
     unittest.main()
