@@ -1,0 +1,38 @@
+4 instance(s), methods ['B_original', 'B_c2m1s40'], seeds [1, 2, 3], budget 20000: 48 runs (12 already done)
+[1/36] B_original road_tune_7002   seed 1: 1,512.21 EUR (obj 1,512.21)  128.84 s
+[2/36] B_original road_tune_7001   seed 1: 1,384.60 EUR (obj 1,384.60)  132.07 s
+[3/36] B_original road_tune_7002   seed 2: 1,476.24 EUR (obj 1,476.24)  141.17 s
+[4/36] B_original road_tune_7001   seed 3: 1,392.84 EUR (obj 1,392.84)  142.9 s
+[5/36] B_original road_tune_7001   seed 2: 1,419.31 EUR (obj 1,419.33)  144.61 s
+[6/36] B_original road_tune_7002   seed 3: 1,490.63 EUR (obj 1,490.63)  154.9 s
+[7/36] B_original road_tune_7003   seed 1: 1,440.81 EUR (obj 1,440.81)  153.96 s
+[8/36] B_original road_tune_7003   seed 2: 1,464.90 EUR (obj 1,464.90)  159.89 s
+[9/36] B_original road_tune_7004   seed 1: 1,428.92 EUR (obj 1,429.27)  149.92 s
+[10/36] B_original road_tune_7004   seed 2: 1,449.54 EUR (obj 1,449.54)  148.9 s
+[11/36] B_original road_tune_7003   seed 3: 1,488.20 EUR (obj 1,489.48)  155.83 s
+[12/36] B_original road_tune_7004   seed 3: 1,425.85 EUR (obj 1,425.85)  150.63 s
+[13/36] B_original road_tune_7001   seed 1 frozen: 1,452.45 EUR (obj 1,452.45)  177.43 s
+[14/36] B_c2m1s40  road_tune_7001   seed 1 frozen: 1,452.45 EUR (obj 1,452.45)  168.91 s
+[15/36] B_c2m1s40  road_tune_7001   seed 2 frozen: 1,459.16 EUR (obj 1,459.16)  168.81 s
+[16/36] B_original road_tune_7001   seed 2 frozen: 1,459.16 EUR (obj 1,459.16)  176.25 s
+[17/36] B_original road_tune_7001   seed 3 frozen: 1,471.64 EUR (obj 1,471.68)  176.72 s
+[18/36] B_c2m1s40  road_tune_7001   seed 3 frozen: 1,471.64 EUR (obj 1,471.68)  169.78 s
+[19/36] B_c2m1s40  road_tune_7002   seed 1 frozen: 1,527.93 EUR (obj 1,527.93)  144.68 s
+[20/36] B_c2m1s40  road_tune_7002   seed 2 frozen: 1,528.12 EUR (obj 1,528.12)  140.11 s
+[21/36] B_original road_tune_7002   seed 1 frozen: 1,545.44 EUR (obj 1,545.44)  150.46 s
+[22/36] B_original road_tune_7002   seed 2 frozen: 1,533.70 EUR (obj 1,533.70)  151.74 s
+[23/36] B_c2m1s40  road_tune_7002   seed 3 frozen: 1,544.90 EUR (obj 1,547.54)  144.94 s
+[24/36] B_original road_tune_7002   seed 3 frozen: 1,553.66 EUR (obj 1,553.66)  149.17 s
+[25/36] B_original road_tune_7003   seed 1 frozen: 1,595.84 EUR (obj 1,595.84)  149.03 s
+[26/36] B_c2m1s40  road_tune_7003   seed 1 frozen: 1,542.66 EUR (obj 1,542.66)  146.27 s
+[27/36] B_original road_tune_7003   seed 2 frozen: 1,510.49 EUR (obj 1,510.49)  147.39 s
+[28/36] B_c2m1s40  road_tune_7003   seed 2 frozen: 1,549.66 EUR (obj 1,549.72)  144.76 s
+[29/36] B_c2m1s40  road_tune_7003   seed 3 frozen: 1,545.22 EUR (obj 1,545.69)  143.37 s
+[30/36] B_original road_tune_7003   seed 3 frozen: 1,524.89 EUR (obj 1,524.89)  151.46 s
+[31/36] B_c2m1s40  road_tune_7004   seed 1 frozen: 1,497.20 EUR (obj 1,497.20)  147.03 s
+[32/36] B_c2m1s40  road_tune_7004   seed 2 frozen: 1,485.91 EUR (obj 1,490.18)  146.09 s
+[33/36] B_original road_tune_7004   seed 1 frozen: 1,497.20 EUR (obj 1,497.20)  152.25 s
+[34/36] B_original road_tune_7004   seed 2 frozen: 1,502.72 EUR (obj 1,502.72)  148.84 s
+[35/36] B_original road_tune_7004   seed 3 frozen: 1,510.50 EUR (obj 1,510.50)  145.49 s
+[36/36] B_c2m1s40  road_tune_7004   seed 3 frozen: 1,483.65 EUR (obj 1,483.86)  140.89 s
+Saved comparison\tune_b\report.html
